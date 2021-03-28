@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server;
 
 import za.co.wethinkcode.robot.server.Commands.Command;
+import za.co.wethinkcode.robot.server.Robot.Robot;
 
 import java.io.*;
 import java.net.*;
@@ -23,16 +24,25 @@ public class Server implements Runnable {
     }
 
     public void run() {
-        Position position = new Position();
         try {
+            Command command;
+            boolean shouldContinue = true;
+            out.println("What would you like to name your robot?");
+            String username = in.readLine();
+            MultiServer.world.addRobot(new Robot(username));
+            Robot robot = MultiServer.world.getRobot(username);
+            out.println(robot.getStatus() + robot.getName());
             String messageFromClient;
             while((messageFromClient = in.readLine()) != null) {
                 System.out.println("Message \"" + messageFromClient + "\" from " + clientMachine);
                 try {
-                    Command command = Command.create(messageFromClient);
-                    boolean status = command.execute(position);
-                    out.println("new position is (" + position.getX() + "," + position.getY() +
-                            ").");
+                    try {
+                        command = Command.create(messageFromClient);
+                        shouldContinue = robot.handleCommand(command);
+                    } catch (IllegalArgumentException e) {
+                        robot.setStatus("Sorry, I did not understand '" + messageFromClient + "'.");
+                    }
+                    out.println(robot + "____" + robot.getName());
                 } catch (IllegalArgumentException e) {
                     out.println("invalid command please try again.");
                 }

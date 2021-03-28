@@ -15,12 +15,11 @@ public class Client {
         {
             Scanner sc = new Scanner(System.in);
             while (true) {
+                String messageFromServer = in.readLine();
+                System.out.println("Response: " + messageFromServer);
                 String requestMessage = sc.nextLine();
                 out.println(requestMessage);
                 out.flush();
-                String messageFromServer = in.readLine();
-                if(messageFromServer.equals("off")) System.exit(0);
-                System.out.println("Response: " + messageFromServer);
             }
         } catch (IOException e) {
             e.printStackTrace();

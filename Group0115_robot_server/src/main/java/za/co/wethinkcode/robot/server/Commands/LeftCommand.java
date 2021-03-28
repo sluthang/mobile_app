@@ -1,29 +1,23 @@
 package za.co.wethinkcode.robot.server.Commands;
 
-import za.co.wethinkcode.robot.server.Position;
+import za.co.wethinkcode.robot.server.Robot.Robot;
 
-public class LeftCommand extends Command{
-
-    public LeftCommand(String name) {
-        super(name);
+public class LeftCommand extends Command {
+    /**
+     * Constructor for left command
+     * */
+    public LeftCommand() {
+        super("left");
     }
 
-    public boolean execute(Position position) {
-        switch (position.getDirection()) {
-            case "NORTH":
-                position.direction = "WEST";
-                break;
-            case "EAST":
-                position.direction = "NORTH";
-                break;
-            case "SOUTH":
-                position.direction = "EAST";
-                break;
-            case "WEST":
-                position.direction = "SOUTH";
-                break;
-        }
+    /**
+     * Overrides the execute command with:
+     * setting the current direction, based upon the previous direction, and which it should be facing.
+     * */
+    @Override
+    public boolean execute(Robot target) {
+        target.updateDirection(false);
+        target.setStatus("Turned left.");
         return true;
     }
 }
-
