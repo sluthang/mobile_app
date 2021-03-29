@@ -1,4 +1,4 @@
-package server.Robot;
+package za.co.wethinkcode.robot.server.Robot;
 
 public class Position {
     private final int x;

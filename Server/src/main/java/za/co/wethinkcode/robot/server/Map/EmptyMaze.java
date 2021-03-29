@@ -1,4 +1,4 @@
-package server.Map;
+package za.co.wethinkcode.robot.server.Map;
 
 
 public class EmptyMaze extends BaseMaze {

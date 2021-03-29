@@ -10,10 +10,10 @@
         <module name="Client" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="11">
       <module name="0115-robot-world" target="11" />
-      <module name="Client" target="1.5" />
-      <module name="Server" target="1.5" />
+      <module name="Client" target="11" />
+      <module name="Server" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

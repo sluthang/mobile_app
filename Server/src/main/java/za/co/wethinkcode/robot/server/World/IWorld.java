@@ -1,4 +1,4 @@
-package server.World;
+package za.co.wethinkcode.robot.server.World;
 
 import za.co.wethinkcode.robot.server.Map.Maze;
 import za.co.wethinkcode.robot.server.Map.Obstacle;

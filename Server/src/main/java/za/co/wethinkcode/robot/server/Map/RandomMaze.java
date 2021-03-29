@@ -1,4 +1,4 @@
-package server.Map;
+package za.co.wethinkcode.robot.server.Map;
 
 import za.co.wethinkcode.robot.server.Robot.Position;
 

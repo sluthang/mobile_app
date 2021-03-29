@@ -1,4 +1,4 @@
-package server;
+package za.co.wethinkcode.robot.server;
 
 import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.Robot.Robot;

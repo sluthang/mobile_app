@@ -1,4 +1,4 @@
-package server;
+package za.co.wethinkcode.robot.server;
 
 import za.co.wethinkcode.robot.server.Map.DesignedMaze;
 import za.co.wethinkcode.robot.server.Map.Maze;

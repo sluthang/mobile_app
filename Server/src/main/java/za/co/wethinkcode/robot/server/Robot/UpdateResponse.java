@@ -1,4 +1,4 @@
-package server.Robot;
+package za.co.wethinkcode.robot.server.Robot;
 
 /**
  * Enum that indicates response for updatePosition request

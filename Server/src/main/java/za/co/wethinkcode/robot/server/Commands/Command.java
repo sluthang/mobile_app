@@ -1,6 +1,6 @@
-package server.Commands;
+package za.co.wethinkcode.robot.server.Commands;
 
-import server.Robot.Robot;
+import za.co.wethinkcode.robot.server.Robot.Robot;
 
 public abstract class Command {
     private final String name;
