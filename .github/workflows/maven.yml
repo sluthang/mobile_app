@@ -21,6 +21,6 @@ jobs:
       with:
         java-version: 11
     - name: Build with Maven
-      run: mvn -B package --file Group0115_robot_client/pom.xml
+      run: mvn -B package --file Server/pom.xml
     - name: Build with Maven 2  
-      run: mvn -B package --file Group0115_robot_server/pom.xml
+      run: mvn -B package --file Client/pom.xml
