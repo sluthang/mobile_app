@@ -4,8 +4,8 @@ import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.MultiServer;
 
 public class Robot {
-    protected final Position TOP_LEFT = new Position(-100,200);
-    protected final Position BOTTOM_RIGHT = new Position(100,-200);
+    protected final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
+    protected final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
     private final String name;
     protected Direction currentDirection;
     protected Position position;

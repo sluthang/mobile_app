@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server;
 
 import za.co.wethinkcode.robot.server.Map.DesignedMaze;
+import za.co.wethinkcode.robot.server.Map.EmptyMaze;
 import za.co.wethinkcode.robot.server.Map.Maze;
 import za.co.wethinkcode.robot.server.World.IWorld;
 import za.co.wethinkcode.robot.server.World.World;
@@ -10,9 +11,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class MultiServer {
-    public static Maze maze = new DesignedMaze();
+    public static ConfigReader config = new ConfigReader();
+    public static Maze maze = new EmptyMaze();
     public static IWorld world = new World(maze);
-
 
     public static void main(String[] args) throws ClassNotFoundException, IOException {
         ServerSocket s = new ServerSocket(Server.PORT);

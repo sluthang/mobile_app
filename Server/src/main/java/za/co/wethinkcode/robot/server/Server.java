@@ -11,7 +11,7 @@ import java.net.Socket;
 
 public class Server implements Runnable {
 
-    public static final int PORT = 5000;
+    public static final int PORT = MultiServer.config.getPort();
     private final BufferedReader in;
     private final PrintStream out;
     private final String clientMachine;
