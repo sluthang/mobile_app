@@ -20,6 +20,7 @@ public class Client {
             while (true) {
                 String messageFromServer = in.readLine();
                 System.out.println("Response: " + messageFromServer);
+
                 String requestMessage = sc.nextLine();
                 out.println(requestMessage);
                 out.flush();
