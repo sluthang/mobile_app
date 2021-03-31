@@ -1,1 +1,1 @@
-Josh was here
+Toy Robot world project. Readme under constructions.
