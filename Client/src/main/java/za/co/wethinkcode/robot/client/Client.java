@@ -16,15 +16,12 @@ public class Client {
                         socket.getInputStream()))
         )
         {
-            Scanner sc = new Scanner(System.in);
-            while (true) {
-                String messageFromServer = in.readLine();
-                System.out.println("Response: " + messageFromServer);
+            Thread listener = new Thread(new ListenerThread(in));
+            listener.start();
 
-                String requestMessage = sc.nextLine();
-                out.println(requestMessage);
-                out.flush();
-            }
+            Thread output = new Thread(new OutputThread(out));
+            output.start();
+            while (true) {}
         } catch (IOException e) {
             e.printStackTrace();
         }
