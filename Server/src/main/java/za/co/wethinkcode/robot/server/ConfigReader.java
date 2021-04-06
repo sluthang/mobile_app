@@ -14,11 +14,14 @@ public class ConfigReader {
 
     public ConfigReader() {
         try {
+            // Create new properties object to store config in.
             Properties prop = new Properties();
             String propFileName = "config.properties";
 
+            // Create an input stream to grab the contents of the .properties file.
             inputStream = ConfigReader.class.getClassLoader().getResourceAsStream(propFileName);
 
+            // Error check the file.
             if (inputStream != null) {
                 prop.load(inputStream);
             } else {
@@ -26,7 +29,7 @@ public class ConfigReader {
             }
 
 
-            // get the property value and print it out
+            // get the property value and store them in fields of the class.
             this.width = Integer.parseInt(prop.getProperty("width"));
             this.height = Integer.parseInt(prop.getProperty("height"));
             this.visibility = Integer.parseInt(prop.getProperty("visibility"));
