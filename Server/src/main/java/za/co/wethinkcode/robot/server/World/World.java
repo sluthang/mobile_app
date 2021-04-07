@@ -2,7 +2,11 @@ package za.co.wethinkcode.robot.server.World;
 
 import za.co.wethinkcode.robot.server.Map.Maze;
 import za.co.wethinkcode.robot.server.Map.Obstacle;
+import za.co.wethinkcode.robot.server.Map.Pits;
 import za.co.wethinkcode.robot.server.Robot.Robot;
+
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 public class World extends AbstractWorld {
 
@@ -22,6 +26,10 @@ public class World extends AbstractWorld {
         return this.robots.get(name);
     }
 
+    public Hashtable<String, Robot> getRobots() {
+        return robots;
+    }
+
     /**
      * Shows the obstacles that are inside of the obstacle list.
      * printing them in the terminal at the positions of the obstacles.
@@ -29,7 +37,11 @@ public class World extends AbstractWorld {
     public void showObstacles() {
         maze.getObstacles();
         for (Obstacle maze : maze.getObstacles()) {
-            System.out.println("- At position "+ maze.getBottomLeftX()+ "," +maze.getBottomLeftY()+ " (to "+
+            System.out.println("Wall- At position "+ maze.getBottomLeftX()+ "," +maze.getBottomLeftY()+ " (to "+
+                    (maze.getBottomLeftX() + 4) + "," + (maze.getBottomLeftY() + 4) + ")");
+        }
+        for (Pits maze : maze.getPits()) {
+            System.out.println("Pit- At position "+ maze.getBottomLeftX()+ "," +maze.getBottomLeftY()+ " (to "+
                     (maze.getBottomLeftX() + 4) + "," + (maze.getBottomLeftY() + 4) + ")");
         }
     }

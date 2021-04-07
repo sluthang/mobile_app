@@ -6,6 +6,7 @@ import za.co.wethinkcode.robot.server.Robot.Position;
  * Defines an interface for obstacles you want to place in your world.
  */
 public interface Obstacle {
+
     /**
      * Get X coordinate of bottom left corner of obstacle.
      * @return x coordinate
