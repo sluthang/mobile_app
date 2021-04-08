@@ -141,10 +141,14 @@ public class Robot {
 
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
-        UpdateResponse blocked = MultiServer.maze.blocksPath(oldPosition, newPosition);
-        if (blocked == UpdateResponse.FAILED_BOTTOMLESS_PIT || blocked == UpdateResponse.FAILED_OBSTRUCTED
-                || blocked == UpdateResponse.FAILED_HIT_MINE) {
-            return blocked;
+        if (MultiServer.maze.blocksPath(oldPosition, newPosition) == UpdateResponse.FAILED_BOTTOMLESS_PIT) {
+            return UpdateResponse.FAILED_BOTTOMLESS_PIT;
+        } else if (MultiServer.maze.blocksPath(oldPosition, newPosition) == UpdateResponse.FAILED_OBSTRUCTED) {
+            return UpdateResponse.FAILED_OBSTRUCTED;
+        } else if (MultiServer.maze.blocksPath(oldPosition, newPosition) == UpdateResponse.FAILED_HIT_MINE) {
+            this.position = MultiServer.maze.hitMine(oldPosition, newPosition);
+            return UpdateResponse.FAILED_HIT_MINE;
+            // TODO: reduce health. send response for hitting mine.
         } else if (isNewPositionAllowed(newPosition)) {
             this.position = newPosition;
             return UpdateResponse.SUCCESS;
