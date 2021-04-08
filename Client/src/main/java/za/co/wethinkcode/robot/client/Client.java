@@ -26,7 +26,11 @@ public class Client {
             output.start();
 
             // Loop to keep the Client running. (must add a close for this.)
-            while (true) {}
+            while (true) {
+                if (!listener.isAlive()) {
+                    System.exit(69);
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

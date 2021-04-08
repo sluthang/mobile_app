@@ -24,6 +24,10 @@ public class ForwardCommand extends Command {
             target.setStatus("Moved forward by "+nrSteps+" steps.");
         } else if (response == UpdateResponse.FAILED_OBSTRUCTED){
             target.setStatus("Sorry, Obstacle in my way.");
+        } else if (response == UpdateResponse.FAILED_BOTTOMLESS_PIT) {
+            target.setStatus("GET REKT! Fell into a pit and died... Monke.");
+        } else if (response == UpdateResponse.FAILED_HIT_MINE) {
+            target.setStatus("OOF! hit mine... Monke.");
         } else {
             target.setStatus("Sorry, I cannot go outside my safe zone.");
         }

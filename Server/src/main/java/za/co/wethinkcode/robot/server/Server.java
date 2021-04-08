@@ -9,6 +9,7 @@ import java.net.Socket;
 public class Server implements Runnable {
 
     public static final int PORT = MultiServer.config.getPort();
+    private boolean running;
     private final String clientMachine;
     public final BufferedReader in;
     public final PrintStream out;
@@ -23,6 +24,7 @@ public class Server implements Runnable {
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
         System.out.println("Waiting for client...");
+        running = true;
     }
 
     public void run() {
@@ -37,7 +39,8 @@ public class Server implements Runnable {
             Robot robot = MultiServer.world.getRobot(username);
             out.println(robot.getStatus() + " " + robot.getName());
             String messageFromClient;
-            while((messageFromClient = in.readLine()) != null) {
+            while(running) {
+                messageFromClient = in.readLine();
                 System.out.println("Message \"" + messageFromClient + "\" from " + clientMachine);
                 try {
                     try {
@@ -56,6 +59,10 @@ public class Server implements Runnable {
         } finally {
             closeQuietly();
         }
+    }
+
+    public void closeThread() {
+        this.running = false;
     }
 
     private void closeQuietly() {

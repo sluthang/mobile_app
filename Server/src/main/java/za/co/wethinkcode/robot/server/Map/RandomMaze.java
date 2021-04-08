@@ -29,7 +29,7 @@ public class RandomMaze extends BaseMaze {
      * @return: true if overlaps start.
      * */
     public boolean overLappingStart(int bottomLeftX, int bottomLeftY) {
-        return (bottomLeftX >= -5 && bottomLeftX < 0) && (bottomLeftY >= -5 && bottomLeftY < 0);
+        return (bottomLeftX < -5 || bottomLeftX >= 0) || (bottomLeftY < -5 || bottomLeftY >= 0);
     }
 
     /**
@@ -44,10 +44,10 @@ public class RandomMaze extends BaseMaze {
                     (obstacle.blocksPosition(new Position(bottomLeftX + 4, bottomLeftY))) ||
                     (obstacle.blocksPosition(new Position(bottomLeftX, bottomLeftY + 4))) ||
                     (obstacle.blocksPosition(new Position(bottomLeftX + 4, bottomLeftY + 4)))){
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     /**
@@ -69,12 +69,20 @@ public class RandomMaze extends BaseMaze {
      * */
     public void generateList() {
         int counter = 0;
+        createMine(new Position(0,5));
         while (counter != getNumberOfObs()) {
             int bottomLeftX = generateRandomNumber(96,-100,100);
             int bottomLeftY = generateRandomNumber(196,-200,200);
-            if (!overLappingStart(bottomLeftX, bottomLeftY) && !overLappingObs(bottomLeftX, bottomLeftY)) {
+            if (overLappingStart(bottomLeftX, bottomLeftY) && overLappingObs(bottomLeftX, bottomLeftY)) {
                 createObstacles(new Position(bottomLeftX, bottomLeftY));
                 counter++;
+            }
+        }
+        while (pitsList.size() != 10) {
+            int bottomLeftX = generateRandomNumber(96,-100,100);
+            int bottomLeftY = generateRandomNumber(196,-200,200);
+            if (overLappingStart(bottomLeftX, bottomLeftY) && overLappingObs(bottomLeftX, bottomLeftY)) {
+                createPit(new Position(bottomLeftX, bottomLeftY));
             }
         }
     }

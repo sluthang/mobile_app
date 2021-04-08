@@ -22,14 +22,6 @@ public class Robot {
     }
 
     /**
-     * Checks if the command is a valid one that can be added to the history or not.
-     * */
-    public boolean checkValidHistory(Command command) {
-        String name = command.getName();
-        return name.equals("forward") || name.equals("back") || name.equals("left") || name.equals("right") || name.equals("sprint");
-    }
-
-    /**
      * Getter to fetch status
      * */
     public String getStatus() {
@@ -149,9 +141,10 @@ public class Robot {
 
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
-
-        if (MultiServer.maze.blocksPath(oldPosition, newPosition)) {
-            return UpdateResponse.FAILED_OBSTRUCTED;
+        UpdateResponse blocked = MultiServer.maze.blocksPath(oldPosition, newPosition);
+        if (blocked == UpdateResponse.FAILED_BOTTOMLESS_PIT || blocked == UpdateResponse.FAILED_OBSTRUCTED
+                || blocked == UpdateResponse.FAILED_HIT_MINE) {
+            return blocked;
         } else if (isNewPositionAllowed(newPosition)) {
             this.position = newPosition;
             return UpdateResponse.SUCCESS;
@@ -166,5 +159,9 @@ public class Robot {
      * */
     public boolean isNewPositionAllowed(Position position) {
         return position.isIn(TOP_LEFT, BOTTOM_RIGHT);
+    }
+
+    public Position getPosition() {
+        return position;
     }
 }

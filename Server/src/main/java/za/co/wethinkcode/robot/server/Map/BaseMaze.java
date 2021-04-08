@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Map;
 
 import za.co.wethinkcode.robot.server.Robot.Position;
+import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.List;
 public class BaseMaze implements Maze {
 
     protected List<Obstacle> obstaclesList = new ArrayList<>();
+    protected List<Pits> pitsList = new ArrayList<>();
+    protected List<Mines> minesList = new ArrayList<>();
 
     /**
      * setter to set the obstacles.
@@ -24,6 +27,12 @@ public class BaseMaze implements Maze {
         return this.obstaclesList;
     }
 
+    public List<Pits> getPits() {
+        return pitsList;
+    }
+
+    public List<Mines> getMines() { return minesList; }
+
     /**
      * Create the obstacles list, by adding in a new obstacles at the position.
      * @param position: takes in the position, and pass it into the new square position.
@@ -32,19 +41,39 @@ public class BaseMaze implements Maze {
         this.obstaclesList.add(new SquareObstacle(position.getX(), position.getY()));
     }
 
+    public void createPit(Position position) {
+        this.pitsList.add(new Pits(position.getX(), position.getY()));
+    }
+
+    public void createMine(Position position) {
+        this.minesList.add(new Mines(position.getX(), position.getY()));
+    }
+
+
+
     /**
      * Takes in 2 parameters, old and new position and checks if the path is blocked per each obstacle in the
      * obstacle list.
-     * @param a: the old position;
-     * @param b: the new position;
+     * @param a : the old position;
+     * @param b : the new position;
      * @return: returns true if the path is blocked.
      * */
-    public boolean blocksPath(Position a, Position b) {
-        for (Obstacle obst : this.obstaclesList) {
-            if (obst.blocksPath(a,b))
-                return true;
+    public UpdateResponse blocksPath(Position a, Position b) {
+        for (Pits pit : this.pitsList) {
+            if (pit.blocksPath(a,b))
+                return UpdateResponse.FAILED_BOTTOMLESS_PIT;
         }
-        return false;
+        for (Obstacle obst : this.obstaclesList) {
+            if (obst.blocksPath(a,b)) {
+                return UpdateResponse.FAILED_OBSTRUCTED;
+            }
+        }
+        for (Mines mine : this.minesList) {
+            if (mine.blocksPath(a,b)) {
+                return UpdateResponse.FAILED_HIT_MINE;
+            }
+        }
+        return UpdateResponse.SUCCESS;
     }
 }
 
