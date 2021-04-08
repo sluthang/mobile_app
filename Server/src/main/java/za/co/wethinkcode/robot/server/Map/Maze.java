@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Map;
 
 import za.co.wethinkcode.robot.server.Robot.Position;
+import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ public interface Maze {
      * @return the list of obstacles, or an empty list if no obstacles exist.
      */
     List<Obstacle> getObstacles();
+    List<Pits> getPits();
+    List<Mines> getMines();
 
     /**
      * Checks if this maze has at least one obstacle that blocks the path that goes from coordinate (x1, y1) to (x2, y2).
@@ -20,11 +23,5 @@ public interface Maze {
      * @param b second position
      * @return `true` if there is an obstacle is in the way
      */
-    boolean blocksPath(Position a, Position b);
-
-    /**
-     * Setter to set the obstacles.
-     * @param obstacle: takes a parameter of the obstacles it will set.
-     * */
-    void setObstacles(List<Obstacle> obstacle);
+    UpdateResponse blocksPath(Position a, Position b);
 }

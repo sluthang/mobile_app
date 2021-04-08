@@ -5,6 +5,8 @@ import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -32,5 +34,9 @@ public interface IWorld {
     void addRobot(Robot target);
 
     Robot getRobot(String name);
+
+    Hashtable<String, Robot> getRobots();
+
+    void removeRobot(String name);
 
 }
