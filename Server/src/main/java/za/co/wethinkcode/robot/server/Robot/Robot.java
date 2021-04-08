@@ -142,7 +142,8 @@ public class Robot {
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
         UpdateResponse blocked = MultiServer.maze.blocksPath(oldPosition, newPosition);
-        if (blocked == UpdateResponse.FAILED_BOTTOMLESS_PIT || blocked == UpdateResponse.FAILED_OBSTRUCTED) {
+        if (blocked == UpdateResponse.FAILED_BOTTOMLESS_PIT || blocked == UpdateResponse.FAILED_OBSTRUCTED
+                || blocked == UpdateResponse.FAILED_HIT_MINE) {
             return blocked;
         } else if (isNewPositionAllowed(newPosition)) {
             this.position = newPosition;

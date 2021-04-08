@@ -69,6 +69,7 @@ public class RandomMaze extends BaseMaze {
      * */
     public void generateList() {
         int counter = 0;
+        createMine(new Position(0,5));
         while (counter != getNumberOfObs()) {
             int bottomLeftX = generateRandomNumber(96,-100,100);
             int bottomLeftY = generateRandomNumber(196,-200,200);

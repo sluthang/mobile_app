@@ -14,6 +14,7 @@ public interface Maze {
      */
     List<Obstacle> getObstacles();
     List<Pits> getPits();
+    List<Mines> getMines();
 
     /**
      * Checks if this maze has at least one obstacle that blocks the path that goes from coordinate (x1, y1) to (x2, y2).

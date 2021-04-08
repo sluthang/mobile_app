@@ -10,6 +10,7 @@ public class BaseMaze implements Maze {
 
     protected List<Obstacle> obstaclesList = new ArrayList<>();
     protected List<Pits> pitsList = new ArrayList<>();
+    protected List<Mines> minesList = new ArrayList<>();
 
     /**
      * setter to set the obstacles.
@@ -26,10 +27,11 @@ public class BaseMaze implements Maze {
         return this.obstaclesList;
     }
 
-    @Override
     public List<Pits> getPits() {
         return pitsList;
     }
+
+    public List<Mines> getMines() { return minesList; }
 
     /**
      * Create the obstacles list, by adding in a new obstacles at the position.
@@ -42,6 +44,12 @@ public class BaseMaze implements Maze {
     public void createPit(Position position) {
         this.pitsList.add(new Pits(position.getX(), position.getY()));
     }
+
+    public void createMine(Position position) {
+        this.minesList.add(new Mines(position.getX(), position.getY()));
+    }
+
+
 
     /**
      * Takes in 2 parameters, old and new position and checks if the path is blocked per each obstacle in the
@@ -58,6 +66,11 @@ public class BaseMaze implements Maze {
         for (Obstacle obst : this.obstaclesList) {
             if (obst.blocksPath(a,b)) {
                 return UpdateResponse.FAILED_OBSTRUCTED;
+            }
+        }
+        for (Mines mine : this.minesList) {
+            if (mine.blocksPath(a,b)) {
+                return UpdateResponse.FAILED_HIT_MINE;
             }
         }
         return UpdateResponse.SUCCESS;
