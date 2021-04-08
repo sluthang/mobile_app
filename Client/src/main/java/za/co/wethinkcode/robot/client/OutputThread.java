@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class OutputThread implements Runnable{
     PrintStream output;
     Scanner sc;
+    String name;
 
     public OutputThread(PrintStream out) {
         this.output = out;
@@ -14,10 +15,20 @@ public class OutputThread implements Runnable{
     }
 
     public void run() {
+        name = getName();
+
         while (true) {
             String requestMessage = sc.nextLine();
+
+            requestMessage = JsonHandler.convertCommand(requestMessage, name);
+
             output.println(requestMessage);
             output.flush();
         }
+    }
+
+    private String getName() {
+        System.out.println("What is your robot's name?");
+        return sc.nextLine();
     }
 }

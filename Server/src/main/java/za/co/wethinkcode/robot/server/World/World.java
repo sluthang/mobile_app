@@ -1,17 +1,19 @@
 package za.co.wethinkcode.robot.server.World;
 
+import za.co.wethinkcode.robot.server.ConfigReader;
+import za.co.wethinkcode.robot.server.Map.EmptyMaze;
 import za.co.wethinkcode.robot.server.Map.Maze;
 import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
 public class World extends AbstractWorld {
+    // The map that the world will be using.
+    public static Maze maze = new EmptyMaze();
 
     /**
      * Constructor for the World Class.
-     * @param maze: the maze that it takes in;
      * */
-    public World(Maze maze) {
-        this.maze = maze;
+    public World() {
     }
 
     public void addRobot(Robot target) {

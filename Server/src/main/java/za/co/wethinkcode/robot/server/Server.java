@@ -2,19 +2,19 @@ package za.co.wethinkcode.robot.server;
 
 import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.Robot.Robot;
+import za.co.wethinkcode.robot.server.World.IWorld;
 
 import java.io.*;
 import java.net.Socket;
 
 public class Server implements Runnable {
 
-    public static final int PORT = MultiServer.config.getPort();
     private final String clientMachine;
     public final BufferedReader in;
     public final PrintStream out;
     public String clientName;
 
-    public Server(Socket socket) throws IOException {
+    public Server(Socket socket, IWorld world) throws IOException {
         // Constructor for the class will create the in and out streams.
         clientMachine = socket.getInetAddress().getHostName();
         System.out.println("Connection from " + clientMachine);
@@ -28,7 +28,6 @@ public class Server implements Runnable {
     public void run() {
         try {
             // Default "Play" of the current client.
-            Command command;
             boolean shouldContinue = true;
             out.println("What would you like to name your robot?");
             String username = in.readLine();
@@ -41,7 +40,7 @@ public class Server implements Runnable {
                 System.out.println("Message \"" + messageFromClient + "\" from " + clientMachine);
                 try {
                     try {
-                        command = Command.create(messageFromClient);
+                        Command command = Command.create(messageFromClient);
                         shouldContinue = robot.handleCommand(command);
                     } catch (IllegalArgumentException e) {
                         robot.setStatus("Sorry, I did not understand '" + messageFromClient + "'.");
