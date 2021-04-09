@@ -4,6 +4,7 @@ import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class BaseMaze implements Maze {
@@ -74,6 +75,19 @@ public class BaseMaze implements Maze {
             }
         }
         return UpdateResponse.SUCCESS;
+    }
+
+    public Position hitMine(Position a, Position b) {
+        Iterator<Mines> i = this.minesList.iterator();
+        while (i.hasNext()) {
+            Mines mine = i.next();
+            if (mine.blocksPath(a, b)) {
+                Position newPos = new Position(mine.getBottomLeftX(), mine.getBottomLeftY());
+                i.remove();
+                return newPos;
+            }
+        }
+        return b;
     }
 }
 

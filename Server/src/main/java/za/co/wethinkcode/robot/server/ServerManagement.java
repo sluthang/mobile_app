@@ -1,7 +1,5 @@
 package za.co.wethinkcode.robot.server;
 
-
-
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
 import java.util.*;
@@ -18,13 +16,15 @@ public class ServerManagement implements Runnable {
     public void run() {
         while (running) {
             String serverMessage = sc.nextLine();
+            List<String> inputString = Arrays.asList(serverMessage.split(" ", 3));
+            System.out.println(inputString);
 
             // if /message is used a direct message is sent to a user. the username must be included.
-            if (serverMessage.contains("/message")) {
+            if (inputString.get(0).equals("/message")) {
                 // /message <username> <message>, will fix later.
                 for (Server client : MultiServer.clients) {
-                    if (serverMessage.contains(client.clientName)) {
-                        client.out.println(serverMessage);
+                    if (inputString.get(1).equals(client.clientName)) {
+                        client.out.println(inputString.get(2));
                         client.out.flush();
                         System.out.println("Message sent to: " +
                                 " "+ serverMessage + " " + client.clientName);
@@ -32,14 +32,16 @@ public class ServerManagement implements Runnable {
                     }
                 }
                 // If /command is used it will issue server side methods.
-            } else if (serverMessage.contains("/command")) {
+            } else if (inputString.get(0).equals("/command")) {
                 //execute server commands that will alter the world.
-                if (serverMessage.contains("quit")) {
+                if (inputString.get(1).equals("quit")) {
                     quitServer();
-                } else if (serverMessage.contains("robots")) {
+                } else if (inputString.get(1).equals("robots")) {
                     listRobots();
-                } else if (serverMessage.contains("purge")) {
-                    purgeUser("hal");
+                } else if (inputString.get(1).equals("purge")) {
+                    purgeUser(inputString.get(2));
+                } else if (inputString.get(1).equals("clients")) {
+                    showUsers();
                 }
                 System.out.println("Issues command.");
             }
@@ -65,16 +67,19 @@ public class ServerManagement implements Runnable {
     }
 
     private void purgeUser(String username) {
-        int count = 0;
         for (Server client:MultiServer.clients) {
-            if (client.clientName.equals(username)) {
-                System.out.println(MultiServer.clients.toString());
+            if (client.clientName.equalsIgnoreCase(username)) {
                 client.closeThread();
-                MultiServer.clients.remove(count);
+                MultiServer.clients.remove(MultiServer.clients.indexOf(client));
                 MultiServer.world.removeRobot(username);
-                System.out.println(MultiServer.clients.toString());
+                break;
             }
-            count++;
+        }
+    }
+
+    private void showUsers() {
+        for (Server client : MultiServer.clients) {
+            System.out.println(client.clientName + ": " + client);
         }
     }
 }
