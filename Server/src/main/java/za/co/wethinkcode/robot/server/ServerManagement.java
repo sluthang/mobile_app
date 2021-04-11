@@ -1,7 +1,5 @@
 package za.co.wethinkcode.robot.server;
 
-
-
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
 import java.util.*;
@@ -55,7 +53,7 @@ public class ServerManagement implements Runnable {
     }
 
     private void listRobots() {
-        Hashtable<String, Robot> robotDict = MultiServer.world.getRobots();
+        Hashtable<String, Robot> robotDict = Server.world.getRobots();
         Set<String> robots = robotDict.keySet();
         for (String key:robots) {
             Robot robot = robotDict.get(key);
@@ -71,7 +69,7 @@ public class ServerManagement implements Runnable {
                 System.out.println(MultiServer.clients.toString());
                 client.closeThread();
                 MultiServer.clients.remove(count);
-                MultiServer.world.removeRobot(username);
+                Server.world.removeRobot(username);
                 System.out.println(MultiServer.clients.toString());
             }
             count++;

@@ -2,6 +2,7 @@ package za.co.wethinkcode.robot.server.Robot;
 
 import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.MultiServer;
+import za.co.wethinkcode.robot.server.Server;
 
 public class Robot {
     protected final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
@@ -141,7 +142,7 @@ public class Robot {
 
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
-        UpdateResponse blocked = MultiServer.maze.blocksPath(oldPosition, newPosition);
+        UpdateResponse blocked = Server.world.maze.blocksPath(oldPosition, newPosition);
         if (blocked == UpdateResponse.FAILED_BOTTOMLESS_PIT || blocked == UpdateResponse.FAILED_OBSTRUCTED
                 || blocked == UpdateResponse.FAILED_HIT_MINE) {
             return blocked;

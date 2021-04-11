@@ -1,5 +1,6 @@
 package za.co.wethinkcode.robot.server.Commands;
 
+import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
 public abstract class Command {
@@ -44,9 +45,11 @@ public abstract class Command {
      * checks if the args is just 1 (so like 'help' instead of 'forward 1'), and runs those commands.
      * else if does the commands and passes through their arguments.
      * if the arugment is illegal or unsupported then it will throw back an exception
-     * */
-    public static Command create(String instruction) {
-        String[] args = instruction.toLowerCase().trim().split(" ");
+     *
+     * @param instruction*/
+    public static Command create(JSONObject instruction) {
+        String name = instruction.get("command").toString();
+        String[] args = ((String[])instruction.get("arguments"));
 
         if (args.length == 1) {
             switch (args[0]) {

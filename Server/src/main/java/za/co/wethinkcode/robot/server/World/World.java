@@ -6,6 +6,7 @@ import za.co.wethinkcode.robot.server.Map.Maze;
 import za.co.wethinkcode.robot.server.Map.Mines;
 import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Map.Pits;
+import za.co.wethinkcode.robot.server.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
 import java.util.Dictionary;
@@ -14,6 +15,7 @@ import java.util.Hashtable;
 public class World extends AbstractWorld {
     // The map that the world will be using.
     public static Maze maze = new EmptyMaze();
+    // Builds a response for every  command input
 
     /**
      * Constructor for the World Class.
