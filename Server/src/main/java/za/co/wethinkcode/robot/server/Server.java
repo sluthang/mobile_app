@@ -47,17 +47,14 @@ public class Server implements Runnable {
                 JSONObject jsonMessage = (JSONObject) JSONValue.parse(messageFromClient);
                 System.out.println(messageFromClient);
 
+                Command command = null;
                 this.world.response = new ResponseBuilder();
                 try {
-                    try {
-                        Command command = Command.create(jsonMessage);
-                    } catch (IllegalArgumentException e) {
-//                        robot.setStatus("Sorry, I did not understand '" + messageFromClient + "'.");
-                    }
-
+                    command = Command.create(jsonMessage);
                 } catch (IllegalArgumentException e) {
-                    out.println("invalid command please try again.");
+//                        robot.setStatus("Sorry, I did not understand '" + messageFromClient + "'.");
                 }
+                command.execute(world);
             }
         } catch(IOException ex) {
             System.out.println("Shutting down single client server");

@@ -48,10 +48,10 @@ public abstract class Command {
      *
      * @param instruction*/
     public static Command create(JSONObject instruction) {
-        String name = instruction.get("command").toString();
+        String command = instruction.get("command").toString();
         String[] args = ((String[])instruction.get("arguments"));
 
-        if (args.length == 1) {
+        if (args.length == 0) {
             switch (args[0]) {
                 case "shutdown":
                 case "off":
