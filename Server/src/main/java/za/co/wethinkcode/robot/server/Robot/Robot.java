@@ -142,6 +142,7 @@ public class Robot {
 
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
+
         if (MultiServer.maze.blocksPath(oldPosition, newPosition) == UpdateResponse.FAILED_BOTTOMLESS_PIT) {
             return UpdateResponse.FAILED_BOTTOMLESS_PIT;
         } else if (MultiServer.maze.blocksPath(oldPosition, newPosition) == UpdateResponse.FAILED_OBSTRUCTED) {

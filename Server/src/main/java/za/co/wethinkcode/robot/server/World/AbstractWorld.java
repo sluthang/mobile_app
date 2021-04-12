@@ -2,18 +2,18 @@ package za.co.wethinkcode.robot.server.World;
 
 
 import za.co.wethinkcode.robot.server.Map.Maze;
-import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.ResponseBuilder;
+import za.co.wethinkcode.robot.server.Map.SquareObstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
-import java.util.Hashtable;
-import java.util.List;
+import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractWorld implements IWorld {
     protected static final Position CENTRE = new Position(0,0);
-    protected  Hashtable<String, Robot> robots = new Hashtable<>();
     public ResponseBuilder response;
+    protected ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
 
     public Maze maze;
 
@@ -31,10 +31,8 @@ public abstract class AbstractWorld implements IWorld {
         this.maze = maze;
     }
 
-    /**
-     * getter to return the list of obstacles.
-     * */
-    public List<Obstacle> getObstacles() {
+
+    public Collection<SquareObstacle> getObstacles() {
         return this.maze.getObstacles();
     }
 

@@ -3,6 +3,7 @@ package za.co.wethinkcode.robot.server.Map;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,9 +13,12 @@ public interface Maze {
     /**
      * @return the list of obstacles, or an empty list if no obstacles exist.
      */
-    List<Obstacle> getObstacles();
-    List<Pits> getPits();
-    List<Mines> getMines();
+    Collection<SquareObstacle> getObstacles();
+
+    Collection<Pits> getPits();
+
+    Collection<Mines> getMines();
+
     Position hitMine(Position a, Position b);
 
     /**
