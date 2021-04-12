@@ -2,12 +2,15 @@ package za.co.wethinkcode.robot.server.World;
 
 import za.co.wethinkcode.robot.server.Map.Maze;
 import za.co.wethinkcode.robot.server.Map.Obstacle;
+import za.co.wethinkcode.robot.server.Map.SquareObstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Your Text and Turtle worlds must implement this interface.
@@ -19,7 +22,7 @@ public interface IWorld {
     /**
      * @return the list of obstacles, or an empty list if no obstacles exist.
      */
-    List<Obstacle> getObstacles();
+    Collection<SquareObstacle> getObstacles();
 
     /**
      * Gives opportunity to world to draw or list obstacles.
@@ -35,7 +38,7 @@ public interface IWorld {
 
     Robot getRobot(String name);
 
-    Hashtable<String, Robot> getRobots();
+    ConcurrentHashMap<String, Robot> getRobots();
 
     void removeRobot(String name);
 

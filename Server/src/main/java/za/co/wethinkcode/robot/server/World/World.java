@@ -6,8 +6,8 @@ import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Map.Pits;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
-import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class World extends AbstractWorld {
 
@@ -27,7 +27,7 @@ public class World extends AbstractWorld {
         return this.robots.get(name);
     }
 
-    public Hashtable<String, Robot> getRobots() {
+    public ConcurrentHashMap<String, Robot> getRobots() {
         return robots;
     }
 
@@ -41,10 +41,12 @@ public class World extends AbstractWorld {
             System.out.println("Wall- At position "+ maze.getBottomLeftX()+ "," +maze.getBottomLeftY()+ " (to "+
                     (maze.getBottomLeftX() + 4) + "," + (maze.getBottomLeftY() + 4) + ")");
         }
+
         for (Pits pit : maze.getPits()) {
             System.out.println("Pit- At position "+ pit.getBottomLeftX()+ "," +pit.getBottomLeftY()+ " (to "+
                     (pit.getBottomLeftX() + 4) + "," + (pit.getBottomLeftY() + 4) + ")");
         }
+
         for (Mines mine : maze.getMines()) {
             System.out.println("Mine- At position "+ mine.getBottomLeftX()+ "," +mine.getBottomLeftY()+ " (to "+
                     (mine.getBottomLeftX()) + "," + (mine.getBottomLeftY()) + ")");
