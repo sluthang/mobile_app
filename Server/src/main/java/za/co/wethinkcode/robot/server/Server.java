@@ -1,5 +1,7 @@
 package za.co.wethinkcode.robot.server;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
@@ -8,14 +10,15 @@ import java.net.Socket;
 
 public class Server implements Runnable {
 
-    public static final int PORT = MultiServer.config.getPort();
     private boolean running;
     private final String clientMachine;
     public final BufferedReader in;
     public final PrintStream out;
     public String clientName;
+    public static World world;
+    public Robot robot;
 
-    public Server(Socket socket) throws IOException {
+    public Server(Socket socket, World world) throws IOException {
         // Constructor for the class will create the in and out streams.
         clientMachine = socket.getInetAddress().getHostName();
         System.out.println("Connection from " + clientMachine);
@@ -25,34 +28,43 @@ public class Server implements Runnable {
                 socket.getInputStream()));
         System.out.println("Waiting for client...");
         running = true;
+        this.world = world;
     }
 
     public void run() {
         try {
             // Default "Play" of the current client.
-            Command command;
             boolean shouldContinue = true;
-            out.println("What would you like to name your robot?");
-            String username = in.readLine();
-            this.clientName = username;
-            MultiServer.world.addRobot(new Robot(username));
-            Robot robot = MultiServer.world.getRobot(username);
-            out.println(robot.getStatus() + " " + robot.getName());
+
             String messageFromClient;
             while(running) {
                 messageFromClient = in.readLine();
-                System.out.println("Message \"" + messageFromClient + "\" from " + clientMachine);
+                JSONObject jsonMessage = (JSONObject) JSONValue.parse(messageFromClient);
+                System.out.println(messageFromClient);
+
+                this.robot = world.getRobot((String)jsonMessage.get("robot"));
+                this.robot.response =  new ResponseBuilder();
+                Command command = null;
+                this.robot.response = new ResponseBuilder();
                 try {
-                    try {
-                        command = Command.create(messageFromClient);
-                        shouldContinue = robot.handleCommand(command);
-                    } catch (IllegalArgumentException e) {
-                        robot.setStatus("Sorry, I did not understand '" + messageFromClient + "'.");
-                    }
-                    out.println(robot + "____" + robot.getName());
+                    command = Command.create(jsonMessage);
                 } catch (IllegalArgumentException e) {
-                    out.println("invalid command please try again.");
+                    this.robot.response.add("result", "ERROR");
+                    this.robot.response.add("message", "Unsupported command");
                 }
+                try {
+                    world.handleCommand(command, this);
+                } catch (IllegalArgumentException e) {
+                    this.robot.response.add("result", "ERROR");
+                    this.robot.response.add("message", "Could not parse arguments");
+                }
+                if (this.robot.response.getValue("result") == "") {
+                    this.robot.response.add("result", "ERROR");
+                    this.robot.response.add("message", "Could not parse arguments");
+                }
+                this.robot.response.add("status", this.robot.getState());
+
+                out.println(this.robot.response.toString());
             }
         } catch(IOException ex) {
             System.out.println("Shutting down single client server");

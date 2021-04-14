@@ -1,9 +1,11 @@
 package za.co.wethinkcode.robot.server.Map;
 
 import za.co.wethinkcode.robot.server.Robot.Position;
+import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BaseMaze implements Maze {
 
@@ -49,8 +51,6 @@ public class BaseMaze implements Maze {
         this.minesList.add(new Mines(position.getX(), position.getY()));
     }
 
-
-
     /**
      * Takes in 2 parameters, old and new position and checks if the path is blocked per each obstacle in the
      * obstacle list.
@@ -58,21 +58,37 @@ public class BaseMaze implements Maze {
      * @param b : the new position;
      * @return: returns true if the path is blocked.
      * */
-    public UpdateResponse blocksPath(Position a, Position b) {
-        for (Pits pit : this.pitsList) {
-            if (pit.blocksPath(a,b))
-                return UpdateResponse.FAILED_BOTTOMLESS_PIT;
-        }
+    public UpdateResponse blocksPath(Position a, Position b, ConcurrentHashMap<String, Robot> robots) {
+        int incX = 1;
+        int incY = 1;
+        if (a.getX() > b.getX()) incX = -1;
+        if (a.getY() > b.getY()) incY = -1;
 
-        for (Obstacle obst : this.obstaclesList) {
-            if (obst.blocksPath(a,b)) {
-                return UpdateResponse.FAILED_OBSTRUCTED;
-            }
-        }
+        for (int x = a.getX() + incX; x != b.getX(); x += incX) {
+            for (int y = a.getY() + incY; y != b.getY(); y += incY) {
+                for (Pits pit : this.pitsList) {
+                    if (pit.blocksPosition(new Position(x, y)))
+                        return UpdateResponse.FAILED_BOTTOMLESS_PIT;
+                }
 
-        for (Mines mine : this.minesList) {
-            if (mine.blocksPath(a,b)) {
-                return UpdateResponse.FAILED_HIT_MINE;
+                for (Obstacle obst : this.obstaclesList) {
+                    if (obst.blocksPosition(new Position(x, y))) {
+                        return UpdateResponse.FAILED_OBSTRUCTED;
+                    }
+                }
+
+                for (Mines mine : this.minesList) {
+                    if (mine.blocksPosition(new Position(x, y))) {
+                        return UpdateResponse.FAILED_HIT_MINE;
+                    }
+                }
+
+                Set<String> keys = robots.keySet();
+                for (String key : keys) {
+                    if (robots.get(key).blocksPosition(new Position(x, y))) {
+                        return UpdateResponse.FAILED_OBSTRUCTED;
+                    }
+                }
             }
         }
         return UpdateResponse.SUCCESS;
@@ -92,4 +108,3 @@ public class BaseMaze implements Maze {
         return b;
     }
 }
-

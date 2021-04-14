@@ -1,6 +1,8 @@
 package za.co.wethinkcode.robot.server.Commands;
 
-import za.co.wethinkcode.robot.server.Robot.Robot;
+import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.World;
 
 public class RightCommand extends Command {
     /**
@@ -15,10 +17,14 @@ public class RightCommand extends Command {
      * setting the current direction, based upon the previous direction, and which it should be facing.
      * */
     @Override
-    public boolean execute(Robot target) {
-        target.updateDirection(true);
-        target.setStatus("Turned right.");
-        return true;
+    public void execute(World world, Server server) {
+        JSONObject data = new JSONObject();
+
+        server.robot.updateDirection(true);
+        server.robot.setStatus("Turned right.");
+
+        data.put("message", "Done");
+        server.robot.response.addData(data);
     }
 }
 
