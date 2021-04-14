@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class OutputThread implements Runnable{
     PrintStream output;
     Scanner sc;
+    static String name;
 
     public OutputThread(PrintStream out) {
         this.output = out;
@@ -14,10 +15,29 @@ public class OutputThread implements Runnable{
     }
 
     public void run() {
+        boolean launched = false;
+
         while (true) {
+            System.out.println("What should I do next?");
             String requestMessage = sc.nextLine();
-            output.println(requestMessage);
-            output.flush();
+            try {
+                requestMessage = JsonHandler.convertCommand(requestMessage, name);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Something bonk");
+                continue;
+            }
+            if (launched || JsonHandler.isLaunch(requestMessage)) {
+                output.println(requestMessage);
+                output.flush();
+            }
+            else {
+                System.out.println("Please launch a robot first.");
+            }
         }
+    }
+
+    private String getName() {
+        System.out.println("What is your robot's name?");
+        return sc.nextLine();
     }
 }
