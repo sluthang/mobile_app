@@ -32,7 +32,9 @@ public class JsonHandler {
                     newInstruction.put("arguments", Arrays.asList(""));
                 }
             }
-        }
+            case "launch":
+                //TODO roelie is busy with it <3
+            }
 
         newInstruction.put("robot", name);
         newInstruction.put("command", command.toLowerCase());
