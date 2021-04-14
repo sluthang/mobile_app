@@ -10,13 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerManagement implements Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001b[31;1m";
     public static final String ANSI_GREEN = "\u001B[32;1m";
-    public static final String ANSI_YELLOW = "\u001b[33;1m";
     public static final String ANSI_BLUE = "\u001B[34;1m";
     public static final String ANSI_PURPLE = "\u001B[35;1m";
-    public static final String ANSI_CYAN = "\u001b[36;1m";
-    private Draw display;
+    private final Draw display;
     private final Scanner sc;
     boolean running;
 
@@ -29,21 +26,15 @@ public class ServerManagement implements Runnable {
     public void run() {
 
         System.out.println("Server is running and live!\n" +
-                ANSI_BLUE +
+                ANSI_PURPLE +
                 "Server can message clients individually by using the /message tag.\n" +
-                ANSI_RESET +
-                ANSI_RED +
-                "       eg. /message <clientname> <message>\n" +
-                ANSI_RESET +
-                ANSI_BLUE +
-                "Server can issue commands using the /command tag.\n" +
-                ANSI_RESET +
-                ANSI_RED +"       eg. /command <command> <tag>\n" + ANSI_RESET +
-                ANSI_RED+"       <purge> <client-name>"+ANSI_PURPLE+" - Purges the selected user from the server.\n" + ANSI_RESET +
-                ANSI_RED+"       <clients> <>         "+ANSI_PURPLE+" - Lists all the currently connected users and their username.\n" + ANSI_RESET +
-                ANSI_RED+"       <robots> <>          "+ANSI_PURPLE+" - Lists the robots currently on the map and their states.\n" + ANSI_RESET +
-                ANSI_RED+"       <quit> <>            "+ANSI_PURPLE+" - Closes all currently connected clients and threads. Quits program.\n" + ANSI_RESET +
-                ANSI_RESET);
+                ANSI_GREEN + "       eg. /message <clientname> <message>\n" +
+                ANSI_PURPLE + "Server can issue commands using the /command tag.\n" +
+                ANSI_GREEN +"       eg. /command <command> <tag>\n" + ANSI_RESET +
+                ANSI_GREEN+"       <purge> <client-name>"+ANSI_RESET+" - Purges the selected user from the server.\n" +
+                ANSI_GREEN+"       <clients> <>         "+ANSI_RESET+" - Lists all the currently connected users and their username.\n" +
+                ANSI_GREEN+"       <robots> <>          "+ANSI_RESET+" - Lists the robots currently on the map and their states.\n" +
+                ANSI_GREEN+"       <quit> <>            "+ANSI_RESET+" - Closes all currently connected clients and threads. Quits program.");
 
         while (running) {
             String serverMessage = sc.nextLine();
@@ -109,6 +100,7 @@ public class ServerManagement implements Runnable {
         for (Server client:MultiServer.clients) {
             if (client.clientName.equalsIgnoreCase(username)) {
                 client.closeThread();
+                //noinspection RedundantCollectionOperation
                 MultiServer.clients.remove(MultiServer.clients.indexOf(client));
                 MultiServer.world.removeRobot(username);
                 break;
@@ -124,6 +116,7 @@ public class ServerManagement implements Runnable {
 
     private void dump() {
         display.clear();
+
         display.drawObstacles(MultiServer.world.getObstacles(), Color.MAGENTA);
         display.drawObstacles(MultiServer.world.getMaze().getPits(), Color.BLACK);
         display.drawObstacles(MultiServer.world.getMaze().getMines(), Color.RED);
