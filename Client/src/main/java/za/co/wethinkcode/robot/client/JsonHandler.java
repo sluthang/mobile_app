@@ -15,7 +15,7 @@ public class JsonHandler {
 
     static public String convertCommand(String instruction, String name) {
         JSONObject newInstruction = new JSONObject();
-        String[] instructions = instruction.split(" ");
+        String[] instructions = instruction.split("");
 
         String command = instructions[0];
 
@@ -29,11 +29,17 @@ public class JsonHandler {
                 if (instructions.length > 1) {
                     newInstruction.put("arguments", Arrays.asList(instructions[1]));
                 } else {
-                    newInstruction.put("arguments", Arrays.asList(""));
+                    throw new IllegalArgumentException();
                 }
             }
             case "launch":
-                //TODO roelie is busy with it <3
+                if (instructions.length == 3) {
+                    OutputThread.name = instructions[2];
+                    newInstruction.put("arguments", KindCreator.getKind(instructions[1]));
+                }
+                else {
+                    throw new IllegalArgumentException();
+                }
             }
 
         newInstruction.put("robot", name);

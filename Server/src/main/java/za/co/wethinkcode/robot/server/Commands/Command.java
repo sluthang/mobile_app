@@ -62,6 +62,7 @@ public abstract class Command {
                     case "right":
                         return new RightCommand();
                 }
+            case "launch": new LaunchCommand();
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }

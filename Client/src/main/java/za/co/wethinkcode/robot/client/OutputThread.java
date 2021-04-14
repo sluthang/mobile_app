@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class OutputThread implements Runnable{
     PrintStream output;
     Scanner sc;
-    String name;
+    static String name;
 
     public OutputThread(PrintStream out) {
         this.output = out;
@@ -17,15 +17,17 @@ public class OutputThread implements Runnable{
     }
 
     public void run() {
-        name = getName();
         boolean launched = false;
 
         while (true) {
             System.out.println("What should I do next?");
             String requestMessage = sc.nextLine();
-
-            requestMessage = JsonHandler.convertCommand(requestMessage, name);
-
+            try {
+                requestMessage = JsonHandler.convertCommand(requestMessage, name);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Something bonk");
+                continue;
+            }
             if (launched || JsonHandler.isLaunch(requestMessage)) {
                 output.println(requestMessage);
                 output.flush();
