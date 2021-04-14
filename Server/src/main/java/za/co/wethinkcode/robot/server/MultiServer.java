@@ -1,12 +1,5 @@
 package za.co.wethinkcode.robot.server;
 
-import za.co.wethinkcode.robot.server.Map.EmptyMaze;
-import za.co.wethinkcode.robot.server.Map.Maze;
-import za.co.wethinkcode.robot.server.Map.RandomMaze;
-import za.co.wethinkcode.robot.server.World.AbstractWorld;
-import za.co.wethinkcode.robot.server.World.IWorld;
-import za.co.wethinkcode.robot.server.World.World;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,7 +11,7 @@ public class MultiServer {
     // All client threads will be stored in the Vector array allowing us to use them individually.
     static Vector<Server> clients = new Vector<>();
     // The loaded world with the map inserted, this will hold all the robots and data.
-    public static AbstractWorld world = new World();
+    public static World world = new World();
 
     public static void main(String[] args) throws IOException {
         // Create a new Socket that will be used for the server with the port given from config.

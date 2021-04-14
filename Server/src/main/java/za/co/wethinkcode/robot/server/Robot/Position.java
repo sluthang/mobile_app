@@ -1,5 +1,9 @@
 package za.co.wethinkcode.robot.server.Robot;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 public class Position {
     private final int x;
     private final int y;
@@ -50,5 +54,9 @@ public class Position {
         boolean withinLeft = this.x >= topLeft.getX();
         boolean withinRight = this.x <= bottomRight.getX();
         return withinTop && withinBottom && withinLeft && withinRight;
+    }
+
+    public List<Integer> getAsList(){
+        return Arrays.asList(this.x, this.y);
     }
 }

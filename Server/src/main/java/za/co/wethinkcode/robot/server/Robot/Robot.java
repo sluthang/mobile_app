@@ -1,16 +1,19 @@
 package za.co.wethinkcode.robot.server.Robot;
 
+import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.MultiServer;
+import za.co.wethinkcode.robot.server.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Server;
 
 public class Robot {
-    protected final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
-    protected final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
     private final String name;
     protected Direction currentDirection;
     protected Position position;
     private String status;
+    public ResponseBuilder response;
+    private int shields = 10;
+    private int shots = 10;
 
     /**
      * Constructor for Robot class
@@ -43,13 +46,6 @@ public class Robot {
      * */
     public String getName() {
         return name;
-    }
-
-    /**
-     * executes the command given by the user.
-     * */
-    public boolean handleCommand(Command command) {
-        return command.execute(this);
     }
 
     /**
@@ -112,62 +108,25 @@ public class Robot {
         }
     }
 
-    /**
-     * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
-     * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),
-     * lastly it returns a failed out of bounds otherwise.
-     * @param nrSteps: the number of steps the robot will move;
-     * @return: an UpdateResponse of what the result of moving the robot is.
-     * */
-    public UpdateResponse updatePosition(int nrSteps) {
-        int oldX = this.position.getX();
-        int oldY = this.position.getY();
-        int newX = this.position.getX();
-        int newY = this.position.getY();
-
-        switch (this.currentDirection) {
-            case UP:
-                newY = newY + nrSteps;
-                break;
-            case DOWN:
-                newY = newY - nrSteps;
-                break;
-            case LEFT:
-                newX = newX - nrSteps;
-                break;
-            case RIGHT:
-                newX = newX + nrSteps;
-                break;
-        }
-
-        Position oldPosition = new Position(oldX, oldY);
-        Position newPosition = new Position(newX, newY);
-
-        if (MultiServer.maze.blocksPath(oldPosition, newPosition) == UpdateResponse.FAILED_BOTTOMLESS_PIT) {
-            return UpdateResponse.FAILED_BOTTOMLESS_PIT;
-        } else if (MultiServer.maze.blocksPath(oldPosition, newPosition) == UpdateResponse.FAILED_OBSTRUCTED) {
-            return UpdateResponse.FAILED_OBSTRUCTED;
-        } else if (MultiServer.maze.blocksPath(oldPosition, newPosition) == UpdateResponse.FAILED_HIT_MINE) {
-            this.position = MultiServer.maze.hitMine(oldPosition, newPosition);
-            return UpdateResponse.FAILED_HIT_MINE;
-            // TODO: reduce health. send response for hitting mine.
-        } else if (isNewPositionAllowed(newPosition)) {
-            this.position = newPosition;
-            return UpdateResponse.SUCCESS;
-        }
-        return UpdateResponse.FAILED_OUTSIDE_WORLD;
-    }
-
-    /**
-     * This function checks if the position is allowed.
-     * @param position: takes in the position.
-     * @return: boolean true if allowed, false if not allowed.
-     * */
-    public boolean isNewPositionAllowed(Position position) {
-        return position.isIn(TOP_LEFT, BOTTOM_RIGHT);
-    }
-
     public Position getPosition() {
         return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public boolean blocksPosition(Position position) {
+        return this.position.equals(position);
+    }
+
+    public JSONObject getState(){
+        JSONObject state = new JSONObject();
+        state.put("position", this.position.getAsList());
+        state.put("direction", this.currentDirection.toString());
+        state.put("shields", this.shields);
+        state.put("shots", this.shots);
+        state.put("status", this.status);
+        return state;
     }
 }

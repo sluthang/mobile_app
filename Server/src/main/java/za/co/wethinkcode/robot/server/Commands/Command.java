@@ -1,13 +1,15 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.Robot.Robot;
+import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.World;
 
 public abstract class Command {
     private final String name;
     private String argument;
+    protected World world;
 
-    public abstract boolean execute(Robot target);
+    public abstract void execute(World world, Server server);
 
     /**
      * constructor for command with no arguments
@@ -26,17 +28,14 @@ public abstract class Command {
     }
 
     /**
-     * getter for the name
-     * */
-    public String getName() {                                                                           //<2>
-        return name;
-    }
-
-    /**
      * getter for the argument
      * */
     public String getArgument() {
         return this.argument;
+    }
+
+    public String getName(){
+        return this.name;
     }
 
     /**
@@ -51,27 +50,20 @@ public abstract class Command {
         String command = instruction.get("command").toString();
         String[] args = ((String[])instruction.get("arguments"));
 
-        if (args.length == 0) {
-            switch (args[0]) {
-                case "shutdown":
-                case "off":
-                    return new ShutdownCommand();
-                case "left":
-                    return new LeftCommand();
-                case "right":
-                    return new RightCommand();
-                default:
-                    throw new IllegalArgumentException("Unsupported command: " + instruction);
-            }
-        } else {
-            switch (args[0]) {
-                case "forward":
-                    return new ForwardCommand(args[1]);
-                case "back":
-                    return new BackCommand(args[1]);
-                default:
-                    throw new IllegalArgumentException("Unsupported command: " + instruction);
-            }
+        switch (command) {
+            case "forward":
+                return new ForwardCommand(args[1]);
+            case "back":
+                return new ForwardCommand("-" + args[1]);
+            case "turn":
+                switch (args[0]) {
+                    case "left":
+                        return new LeftCommand();
+                    case "right":
+                        return new RightCommand();
+                }
+            default:
+                throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
     }
 }

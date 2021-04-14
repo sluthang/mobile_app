@@ -1,5 +1,7 @@
 package za.co.wethinkcode.robot.client;
 
+import org.json.simple.JSONObject;
+
 import java.io.PrintStream;
 import java.util.Scanner;
 
@@ -16,14 +18,21 @@ public class OutputThread implements Runnable{
 
     public void run() {
         name = getName();
+        boolean launched = false;
 
         while (true) {
+            System.out.println("What should I do next?");
             String requestMessage = sc.nextLine();
 
             requestMessage = JsonHandler.convertCommand(requestMessage, name);
 
-            output.println(requestMessage);
-            output.flush();
+            if (launched || JsonHandler.isLaunch(requestMessage)) {
+                output.println(requestMessage);
+                output.flush();
+            }
+            else {
+                System.out.println("Please launch a robot first.");
+            }
         }
     }
 
