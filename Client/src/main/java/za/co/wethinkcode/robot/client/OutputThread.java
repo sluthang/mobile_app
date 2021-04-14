@@ -1,7 +1,5 @@
 package za.co.wethinkcode.robot.client;
 
-import org.json.simple.JSONObject;
-
 import java.io.PrintStream;
 import java.util.Scanner;
 

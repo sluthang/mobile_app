@@ -1,50 +1,42 @@
 package za.co.wethinkcode.robot.server;
 
+import za.co.wethinkcode.robot.server.Display.Draw;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerManagement implements Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_GREEN = "\u001B[32;1m";
+    public static final String ANSI_BLUE = "\u001B[34;1m";
+    public static final String ANSI_PURPLE = "\u001B[35;1m";
+    private final Draw display;
     private final Scanner sc;
     boolean running;
 
     public ServerManagement() {
-
         this.sc = new Scanner(System.in);
         running = true;
+        this.display = new Draw();
     }
 
     public void run() {
+
+        System.out.println("Server is running and live!\n" +
+                ANSI_PURPLE +
+                "Server can message clients individually by using the /message tag.\n" +
+                ANSI_GREEN + "       eg. /message <clientname> <message>\n" +
+                ANSI_PURPLE + "Server can issue commands using the /command tag.\n" +
+                ANSI_GREEN +"       eg. /command <command> <tag>\n" + ANSI_RESET +
+                ANSI_GREEN+"       <purge> <client-name>"+ANSI_RESET+" - Purges the selected user from the server.\n" +
+                ANSI_GREEN+"       <clients> <>         "+ANSI_RESET+" - Lists all the currently connected users and their username.\n" +
+                ANSI_GREEN+"       <robots> <>          "+ANSI_RESET+" - Lists the robots currently on the map and their states.\n" +
+                ANSI_GREEN+"       <quit> <>            "+ANSI_RESET+" - Closes all currently connected clients and threads. Quits program.");
+
         while (running) {
-
-            System.out.println("Server is running and live!\n" +
-                    ServerManagement.ANSI_CYAN +
-                    "Server can message clients individually by using the /message tag.\n" +
-                    ServerManagement.ANSI_RESET +
-                    ServerManagement.ANSI_YELLOW +
-                    "       eg. /message <clientname> <message>\n" +
-                    ServerManagement.ANSI_RESET +
-                    ServerManagement.ANSI_CYAN +
-                    "Server can issue commands using the /command tag.\n" +
-                    ServerManagement.ANSI_RESET +
-                    ServerManagement.ANSI_PURPLE +
-                    "       eg. /command <command> <tag>\n" +
-                    "       <purge> <client-name> - Purges the selected user from the server.\n" +
-                    "       <clients> <>          - Lists all the currently connected users and their username.\n" +
-                    "       <robots> <>           - Lists the robots currently on the map and their states.\n" +
-                    "       <quit> <>             -  Closes all currently connected clients and threads. Quits program.\n" +
-                    ServerManagement.ANSI_RESET);
-
             String serverMessage = sc.nextLine();
             List<String> inputString = Arrays.asList(serverMessage.split(" ", 3));
 
@@ -77,6 +69,9 @@ public class ServerManagement implements Runnable {
                     case "clients":
                         showUsers();
                         break;
+                    case "dump":
+                        dump();
+                        break;
                 }
             }
         }
@@ -105,6 +100,7 @@ public class ServerManagement implements Runnable {
         for (Server client:MultiServer.clients) {
             if (client.clientName.equalsIgnoreCase(username)) {
                 client.closeThread();
+                //noinspection RedundantCollectionOperation
                 MultiServer.clients.remove(MultiServer.clients.indexOf(client));
                 MultiServer.world.removeRobot(username);
                 break;
@@ -116,5 +112,14 @@ public class ServerManagement implements Runnable {
         for (Server client : MultiServer.clients) {
             System.out.println(client.clientName + ": " + client);
         }
+    }
+
+    private void dump() {
+        display.clear();
+
+        display.drawObstacles(MultiServer.world.getObstacles(), Color.MAGENTA);
+        display.drawObstacles(MultiServer.world.getMaze().getPits(), Color.BLACK);
+        display.drawObstacles(MultiServer.world.getMaze().getMines(), Color.RED);
+        display.drawRobots(MultiServer.world.getRobots(), Color.GREEN);
     }
 }

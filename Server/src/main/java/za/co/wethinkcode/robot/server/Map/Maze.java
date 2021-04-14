@@ -4,8 +4,7 @@ import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -15,11 +14,11 @@ public interface Maze {
     /**
      * @return the list of obstacles, or an empty list if no obstacles exist.
      */
-    Collection<SquareObstacle> getObstacles();
+    Vector<Obstacle> getObstacles();
 
-    Collection<Pits> getPits();
+    Vector<Obstacle> getPits();
 
-    Collection<Mines> getMines();
+    Vector<Obstacle> getMines();
 
     Position hitMine(Position a, Position b);
 

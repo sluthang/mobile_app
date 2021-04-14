@@ -1,10 +1,7 @@
 package za.co.wethinkcode.robot.server.Robot;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.Commands.Command;
-import za.co.wethinkcode.robot.server.MultiServer;
 import za.co.wethinkcode.robot.server.ResponseBuilder;
-import za.co.wethinkcode.robot.server.Server;
 
 public class Robot {
     private final String name;

@@ -11,6 +11,7 @@ import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class World{
@@ -36,7 +37,7 @@ public class World{
         this.maze = maze;
     }
 
-    public Collection<SquareObstacle> getObstacles() {
+    public Vector<Obstacle> getObstacles() {
         return this.maze.getObstacles();
     }
 
@@ -72,12 +73,12 @@ public class World{
                     (maze.getBottomLeftX() + 4) + "," + (maze.getBottomLeftY() + 4) + ")");
         }
 
-        for (Pits pit : maze.getPits()) {
+        for (Obstacle pit : maze.getPits()) {
             System.out.println("Pit- At position "+ pit.getBottomLeftX()+ "," +pit.getBottomLeftY()+ " (to "+
                     (pit.getBottomLeftX() + 4) + "," + (pit.getBottomLeftY() + 4) + ")");
         }
 
-        for (Mines mine : maze.getMines()) {
+        for (Obstacle mine : maze.getMines()) {
             System.out.println("Mine- At position "+ mine.getBottomLeftX()+ "," +mine.getBottomLeftY()+ " (to "+
                     (mine.getBottomLeftX()) + "," + (mine.getBottomLeftY()) + ")");
         }
