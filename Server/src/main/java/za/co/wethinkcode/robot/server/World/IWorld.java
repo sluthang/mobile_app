@@ -6,10 +6,7 @@ import za.co.wethinkcode.robot.server.Map.SquareObstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
-import java.util.Collection;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -22,7 +19,7 @@ public interface IWorld {
     /**
      * @return the list of obstacles, or an empty list if no obstacles exist.
      */
-    Collection<SquareObstacle> getObstacles();
+    Vector<Obstacle> getObstacles();
 
     /**
      * Gives opportunity to world to draw or list obstacles.

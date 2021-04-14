@@ -8,7 +8,7 @@ import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractWorld implements IWorld {
@@ -32,7 +32,7 @@ public abstract class AbstractWorld implements IWorld {
     }
 
 
-    public Collection<SquareObstacle> getObstacles() {
+    public Vector<Obstacle> getObstacles() {
         return this.maze.getObstacles();
     }
 

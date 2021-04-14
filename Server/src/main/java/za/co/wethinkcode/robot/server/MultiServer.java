@@ -1,6 +1,5 @@
 package za.co.wethinkcode.robot.server;
 
-import za.co.wethinkcode.robot.server.Map.EmptyMaze;
 import za.co.wethinkcode.robot.server.Map.Maze;
 import za.co.wethinkcode.robot.server.Map.RandomMaze;
 import za.co.wethinkcode.robot.server.World.IWorld;

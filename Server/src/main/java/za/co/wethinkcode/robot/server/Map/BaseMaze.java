@@ -7,31 +7,33 @@ import java.util.*;
 
 public class BaseMaze implements Maze {
 
-    Collection<SquareObstacle> obstaclesList = Collections.synchronizedCollection(new ArrayList<>());
-    Collection<Pits> pitsList = Collections.synchronizedCollection(new ArrayList<>());
-    Collection<Mines> minesList = Collections.synchronizedCollection(new ArrayList<>());
+    Vector<Obstacle> obstaclesList = new Vector<>();
+    Vector<Obstacle> pitsList = new Vector<>();
+    Vector<Obstacle> minesList = new Vector<>();
 
 
     /**
      * setter to set the obstacles.
      * @param obstacle: takes param of a list obstacle.
      * */
-    public void setObstacles(Collection<SquareObstacle> obstacle) {
+    public void setObstacles(Vector<Obstacle> obstacle) {
         this.obstaclesList = obstacle;
     }
 
     /**
      * getter to get the obstacles.
      * */
-    public Collection<SquareObstacle> getObstacles() {
+    public Vector<Obstacle> getObstacles() {
         return this.obstaclesList;
     }
 
-    public Collection<Pits> getPits() {
+    public Vector<Obstacle> getPits() {
         return pitsList;
     }
 
-    public Collection<Mines> getMines() { return minesList; }
+    public Vector<Obstacle> getMines() {
+        return minesList;
+    }
 
     /**
      * Create the obstacles list, by adding in a new obstacles at the position.
@@ -59,7 +61,7 @@ public class BaseMaze implements Maze {
      * @return: returns true if the path is blocked.
      * */
     public UpdateResponse blocksPath(Position a, Position b) {
-        for (Pits pit : this.pitsList) {
+        for (Obstacle pit : this.pitsList) {
             if (pit.blocksPath(a,b))
                 return UpdateResponse.FAILED_BOTTOMLESS_PIT;
         }
@@ -70,7 +72,7 @@ public class BaseMaze implements Maze {
             }
         }
 
-        for (Mines mine : this.minesList) {
+        for (Obstacle mine : this.minesList) {
             if (mine.blocksPath(a,b)) {
                 return UpdateResponse.FAILED_HIT_MINE;
             }
@@ -79,10 +81,10 @@ public class BaseMaze implements Maze {
     }
 
     public Position hitMine(Position a, Position b) {
-        Iterator<Mines> i = this.minesList.iterator();
+        Iterator<Obstacle> i = this.minesList.iterator();
 
         while (i.hasNext()) {
-            Mines mine = i.next();
+            Obstacle mine = i.next();
             if (mine.blocksPath(a, b)) {
                 Position newPos = new Position(mine.getBottomLeftX(), mine.getBottomLeftY());
                 i.remove();

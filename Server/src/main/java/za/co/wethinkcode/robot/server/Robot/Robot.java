@@ -169,4 +169,9 @@ public class Robot {
     public Position getPosition() {
         return position;
     }
+
+    public boolean blocksPosition(Position a) {
+        return (a.getX() >= position.getX() && a.getX() <= (position.getX())) &&
+                (a.getY() >= position.getY() && a.getY() <= (position.getY()));
+    }
 }

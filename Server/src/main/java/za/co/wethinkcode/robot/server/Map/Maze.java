@@ -3,8 +3,7 @@ package za.co.wethinkcode.robot.server.Map;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Vector;
 
 /**
  * Interface to represent a maze. A World will be loaded with a Maze, and will delegate the work to check if a path is blocked by certain obstacles etc to this maze instance.
@@ -13,11 +12,11 @@ public interface Maze {
     /**
      * @return the list of obstacles, or an empty list if no obstacles exist.
      */
-    Collection<SquareObstacle> getObstacles();
+    Vector<Obstacle> getObstacles();
 
-    Collection<Pits> getPits();
+    Vector<Obstacle> getPits();
 
-    Collection<Mines> getMines();
+    Vector<Obstacle> getMines();
 
     Position hitMine(Position a, Position b);
 
