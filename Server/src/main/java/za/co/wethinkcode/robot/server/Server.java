@@ -17,6 +17,7 @@ public class Server implements Runnable {
     public String clientName;
     public static World world;
     public Robot robot;
+    public String robotName;
     public ResponseBuilder response;
 
     public Server(Socket socket, World world) throws IOException {
@@ -40,31 +41,17 @@ public class Server implements Runnable {
             String messageFromClient;
             while(running) {
                 messageFromClient = in.readLine();
-                JSONObject jsonMessage = (JSONObject) JSONValue.parse(messageFromClient);
+                JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
                 System.out.println(messageFromClient);
 
-                this.robot = world.getRobot((String)jsonMessage.get("robot"));
-                this.response =  new ResponseBuilder();
-                Command command = null;
+                this.robotName = (String)jsonMessage.get("robot");
+                this.robot = world.getRobot(this.robotName);
                 this.response = new ResponseBuilder();
-                try {
-                    command = Command.create(jsonMessage);
-                } catch (IllegalArgumentException e) {
-                    this.response.add("result", "ERROR");
-                    this.response.add("message", "Unsupported command");
-                }
-                try {
-                    world.handleCommand(command, this);
-                } catch (IllegalArgumentException e) {
-                    this.response.add("result", "ERROR");
-                    this.response.add("message", "Could not parse arguments");
-                }
-                if (this.response.getValue("result") == "") {
-                    this.response.add("result", "ERROR");
-                    this.response.add("message", "Could not parse arguments");
-                }
-                this.response.add("status", this.robot.getState());
 
+                Command command = Command.create(jsonMessage);
+                world.handleCommand(command, this);
+
+                this.response.add("state", this.robot.getState());
                 out.println(this.response.toString());
             }
         } catch(IOException ex) {

@@ -109,4 +109,34 @@ public class BaseMaze implements Maze {
         }
         return b;
     }
+
+    public boolean blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName) {
+        for (Obstacle pit : this.pitsList) {
+            if (pit.blocksPosition(position))
+                return true;
+        }
+
+        for (Obstacle obst : this.obstaclesList) {
+            if (obst.blocksPosition(position)) {
+                return true;
+            }
+        }
+
+        for (Obstacle mine : this.minesList) {
+            if (mine.blocksPosition(position)) {
+                return true;
+            }
+        }
+
+        Set<String> keys = robots.keySet();
+        for (String key : keys) {
+            if (key.equals(robotName)) {
+                continue;
+            }
+            if (robots.get(key).blocksPosition(position)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

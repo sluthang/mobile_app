@@ -24,6 +24,7 @@ public class LeftCommand extends Command {
         server.robot.setStatus("Turned left.");
 
         data.put("message", "Done");
-        server.robot.response.addData(data);
+        server.response.addData(data);
+        server.response.add("result", "OK");
     }
 }

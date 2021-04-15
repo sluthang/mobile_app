@@ -8,8 +8,10 @@ public class Robot {
     protected Direction currentDirection;
     protected Position position;
     private String status;
-    private int shields = 10;
-    private int shots = 10;
+    private int maxShields = 10;
+    public int shields = 10;
+    private int maxShots = 10;
+    public int shots = 10;
 
     /**
      * Constructor for Robot class
@@ -17,7 +19,6 @@ public class Robot {
     public Robot(String name) {
         this.name = name;
         this.status = "Ready";
-        this.position = new Position(0, 0);
         this.currentDirection = Direction.UP;
     }
 
@@ -124,5 +125,10 @@ public class Robot {
         state.put("shots", this.shots);
         state.put("status", this.status);
         return state;
+    }
+
+    public void setMaxes(int maxShields, int maxShots) {
+        this.maxShields = maxShields;
+        this.maxShots = maxShots;
     }
 }

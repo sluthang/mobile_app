@@ -1,5 +1,6 @@
 package za.co.wethinkcode.robot.server.Commands;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Server;
 import za.co.wethinkcode.robot.server.World;
@@ -7,7 +8,6 @@ import za.co.wethinkcode.robot.server.World;
 public abstract class Command {
     private final String name;
     private String argument;
-    protected World world;
 
     public abstract void execute(World world, Server server);
 
@@ -48,21 +48,22 @@ public abstract class Command {
      * @param instruction*/
     public static Command create(JSONObject instruction) {
         String command = instruction.get("command").toString();
-        String[] args = ((String[])instruction.get("arguments"));
+        JSONArray args = (JSONArray) instruction.get("arguments");
 
         switch (command) {
             case "forward":
-                return new ForwardCommand(args[1]);
+                return new ForwardCommand(args.get(0).toString());
             case "back":
-                return new ForwardCommand("-" + args[1]);
+                return new ForwardCommand("-" + args.get(0).toString());
             case "turn":
-                switch (args[0]) {
+                switch (args.get(0).toString()) {
                     case "left":
                         return new LeftCommand();
                     case "right":
                         return new RightCommand();
                 }
-            case "launch": new LaunchCommand(args);
+            case "launch":
+                return new LaunchCommand(args);
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
