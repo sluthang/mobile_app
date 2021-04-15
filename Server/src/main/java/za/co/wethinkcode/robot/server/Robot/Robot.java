@@ -8,7 +8,6 @@ public class Robot {
     protected Direction currentDirection;
     protected Position position;
     private String status;
-    public ResponseBuilder response;
     private int shields = 10;
     private int shots = 10;
 
