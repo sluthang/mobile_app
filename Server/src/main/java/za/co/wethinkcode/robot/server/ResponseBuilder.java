@@ -17,11 +17,11 @@ public class ResponseBuilder {
         if (response.get(key) == null) {
             return "";
         }
-        else return (String)response.get(key);
+        else return response.get(key).toString();
     }
 
     public void addData(Object data) {
-        response.put("data", data);
+        this.response.put("data", data);
     }
 
     @Override

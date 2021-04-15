@@ -1,26 +1,24 @@
 package za.co.wethinkcode.robot.server;
 
-import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Commands.Command;
-import za.co.wethinkcode.robot.server.ConfigReader;
-import za.co.wethinkcode.robot.server.Map.*;
-import za.co.wethinkcode.robot.server.ResponseBuilder;
+import za.co.wethinkcode.robot.server.Map.BaseMaze;
+import za.co.wethinkcode.robot.server.Map.EmptyMaze;
+import za.co.wethinkcode.robot.server.Map.Maze;
+import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
-import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class World{
-    protected final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
-    protected final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
+    public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
+    public final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
     protected static final Position CENTRE = new Position(0,0);
     protected ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
     // The map that the world will be using.
-    public Maze maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
+    public Maze maze = new EmptyMaze();
 
 
     /**
@@ -33,7 +31,7 @@ public class World{
     /**
      * setter to set the maze.
      * */
-    public void setMaze(Maze maze) {
+    public void setMaze(BaseMaze maze) {
         this.maze = maze;
     }
 
@@ -88,7 +86,7 @@ public class World{
      * This function checks if the position is allowed.
      * @return: boolean true if allowed, false if not allowed.
      * */
-    public UpdateResponse isNewPositionAllowed(Position oldPosition, Position newPosition) {
+    public UpdateResponse isInWorld(Position oldPosition, Position newPosition) {
         if (newPosition.isIn(TOP_LEFT, BOTTOM_RIGHT)) return UpdateResponse.SUCCESS;
         else return UpdateResponse.FAILED_OUTSIDE_WORLD;
     }

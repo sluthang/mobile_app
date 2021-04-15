@@ -1,12 +1,68 @@
 package za.co.wethinkcode.robot.server.Commands;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.MultiServer;
+import za.co.wethinkcode.robot.server.Robot.Position;
+import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Server;
 import za.co.wethinkcode.robot.server.World;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 public class LaunchCommand extends Command{
+    JSONArray args;
+    public LaunchCommand(JSONArray args) {
+        super("launch");
+        this.args = args;
+    }
 
     @Override
     public void execute(World world, Server server) {
+        JSONObject data = new JSONObject();
+        if (server.robot == null){
+            server.robot = new Robot(server.robotName);
+            world.addRobot(server.robot);
+            int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), MultiServer.config.getMaxShieldStrength());;
+            int maxShot = Integer.parseInt(args.get(2).toString());
+            server.robot.setMaxes(maxShield, maxShot);
+        } else {
+            data.put("message", "Too many of you in this world");
+            server.response.addData(data);
+            server.response.add("result", "ERROR");
+            return;
+        }
 
+        Random random = new Random();
+
+        boolean positionSet = false;
+        for (int i = 0; i < 1000; i++) {
+            int x = random.nextInt(world.BOTTOM_RIGHT.getX() - world.TOP_LEFT.getX()) - world.BOTTOM_RIGHT.getX();
+            int y = random.nextInt(world.TOP_LEFT.getY() - world.BOTTOM_RIGHT.getY()) - world.TOP_LEFT.getY();
+
+            if (!world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName)){
+                server.robot.setPosition(new Position(x, y));
+                positionSet = true;
+                break;
+            }
+        }
+        if (!positionSet) {
+            data.put("message", "No more space in this world");
+            server.response.addData(data);
+            server.response.add("result", "ERROR");
+            return;
+        }
+
+        data.put("position", server.robot.getPosition().getAsList());
+        data.put("visibility", MultiServer.config.getVisibility());
+        data.put("reload", MultiServer.config.getReloadTime());
+        data.put("repair", MultiServer.config.getShieldRechargeTime());
+        data.put("mine", MultiServer.config.getMineSetTime());
+        data.put("shields", server.robot.shields);
+
+        server.response.addData(data);
+        server.response.add("result", "OK");
     }
 }

@@ -24,7 +24,8 @@ public class RightCommand extends Command {
         server.robot.setStatus("Turned right.");
 
         data.put("message", "Done");
-        server.robot.response.addData(data);
+        server.response.addData(data);
+        server.response.add("result", "OK");
     }
 }
 

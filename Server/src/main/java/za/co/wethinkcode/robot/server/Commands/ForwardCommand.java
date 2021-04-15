@@ -24,6 +24,7 @@ public class ForwardCommand extends Command {
      * */
     @Override
     public void execute(World world, Server server) {
+        JSONObject data = new JSONObject();
         int nrSteps = 0;
         try {
             String argument = getArgument();
@@ -32,17 +33,13 @@ public class ForwardCommand extends Command {
             }
             nrSteps = Integer.parseInt(argument);
         }catch (NumberFormatException e) {
-            throw new IllegalArgumentException();
+            data.put("message", "Could not parse arguments");
+            server.response.addData(data);
+            server.response.add("result", "ERROR");
+            return;
         }
 
-        String printedDirection = getName();
-        int printedSteps = nrSteps;
-        if (nrSteps < 0) {
-            printedSteps *= -1;
-            printedDirection = "back";
-        }
-
-        UpdateResponse response =  updatePosition(nrSteps, server);
+        UpdateResponse response =  updatePosition(nrSteps, server, world);
 
         String message = "";
         if (response == UpdateResponse.SUCCESS){
@@ -58,9 +55,10 @@ public class ForwardCommand extends Command {
         } else if (response == UpdateResponse.FAILED_OUTSIDE_WORLD){
             message = "Obstructed";
         }
-        JSONObject data = new JSONObject();
+
         data.put("message", message);
-        server.robot.response.addData(data);
+        server.response.addData(data);
+        server.response.add("result", "OK");
     }
 }
 

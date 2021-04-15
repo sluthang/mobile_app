@@ -23,17 +23,17 @@ public class LayMineCommand extends Command{
                     server.robot.getPosition().getY()));
             // Create a forward command to move the robot 1 step ahead after laying mine.
             Command forward1 = new ForwardCommand("1");
-            UpdateResponse response = forward1.updatePosition(1, server);
+            UpdateResponse response = forward1.updatePosition(1, server, world);
 
             if (!response.equals(UpdateResponse.SUCCESS)) {
                 world.getMaze().hitMine(server.robot.getPosition(), server.robot.getPosition(), server);
                 JSONObject data = new JSONObject();
                 data.put("message", "Mine");
-                server.robot.response.addData(data);
+                server.response.addData(data);
             } else {
                 JSONObject data = new JSONObject();
                 data.put("message", "Done");
-                server.robot.response.addData(data);
+                server.response.addData(data);
             }
         } else {
             throw new IllegalArgumentException("Unsupported command for class");
@@ -41,6 +41,7 @@ public class LayMineCommand extends Command{
     }
 
     private boolean canLay(Server server) {
-        return (server.robot.getShots() == 0);
+//        return (server.robot.getShots() == 0);
+        return true;
     }
 }

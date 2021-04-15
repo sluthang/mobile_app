@@ -29,15 +29,11 @@ public class OutputThread implements Runnable{
             if (launched || JsonHandler.isLaunch(requestMessage)) {
                 output.println(requestMessage);
                 output.flush();
+                launched = true;
             }
             else {
                 System.out.println("Please launch a robot first.");
             }
         }
-    }
-
-    private String getName() {
-        System.out.println("What is your robot's name?");
-        return sc.nextLine();
     }
 }

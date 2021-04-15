@@ -7,10 +7,11 @@ public class Robot {
     protected final String name;
     protected Direction currentDirection;
     protected Position position;
-    protected String status;
-    private int shields = 10;
-    private int shots = 10;
-    public ResponseBuilder response;
+    private String status;
+    private int maxShields = 10;
+    public int shields = 10;
+    private int maxShots = 10;
+    public int shots = 10;
 
     /**
      * Constructor for Robot class
@@ -18,7 +19,6 @@ public class Robot {
     public Robot(String name) {
         this.name = name;
         this.status = "Ready";
-        this.position = new Position(0, 0);
         this.currentDirection = Direction.UP;
     }
 
@@ -128,21 +128,8 @@ public class Robot {
         return state;
     }
 
-    public void isDead() {
-        if (this.shields < 0) {
-            setStatus("DEAD");
-        }
-    }
-
-    public int getShots() {
-        return this.shots;
-    }
-
-    public int getShields() {
-        return this.shields;
-    }
-
-    public void reduceShield(int damage) {
-        this.shields -= damage;
+    public void setMaxes(int maxShields, int maxShots) {
+        this.maxShields = maxShields;
+        this.maxShots = maxShots;
     }
 }
