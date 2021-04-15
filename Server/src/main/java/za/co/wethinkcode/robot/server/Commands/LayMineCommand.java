@@ -16,9 +16,12 @@ public class LayMineCommand extends Command{
     @SuppressWarnings("unchecked")
     @Override
     public void execute(World world, Server server) {
+        // Checks if the robot is allowed to lay mines.
         if (canLay(server)) {
+            // Creates the mine at the robots location.
             world.getMaze().createMine(new Position(server.robot.getPosition().getX(),
                     server.robot.getPosition().getY()));
+            // Create a forward command to move the robot 1 step ahead after laying mine.
             Command forward1 = new ForwardCommand("1");
             UpdateResponse response = forward1.updatePosition(1, server);
 
