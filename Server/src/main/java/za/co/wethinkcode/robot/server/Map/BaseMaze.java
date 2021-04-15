@@ -3,6 +3,7 @@ package za.co.wethinkcode.robot.server.Map;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
+import za.co.wethinkcode.robot.server.Server;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -96,17 +97,18 @@ public class BaseMaze implements Maze {
         return UpdateResponse.SUCCESS;
     }
 
-    public Position hitMine(Position a, Position b) {
+    public void hitMine(Position a, Position b, Server server) {
         Iterator<Obstacle> i = this.minesList.iterator();
 
         while (i.hasNext()) {
             Obstacle mine = i.next();
             if (mine.blocksPath(a, b)) {
                 Position newPos = new Position(mine.getBottomLeftX(), mine.getBottomLeftY());
+                server.robot.setPosition(newPos);
+                server.robot.reduceShield(3);
                 i.remove();
-                return newPos;
+                //TODO if shield is -1 send a dead state to user.
             }
         }
-        return b;
     }
 }

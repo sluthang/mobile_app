@@ -4,13 +4,13 @@ import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.ResponseBuilder;
 
 public class Robot {
-    private final String name;
+    protected final String name;
     protected Direction currentDirection;
     protected Position position;
-    private String status;
-    public ResponseBuilder response;
+    protected String status;
     private int shields = 10;
     private int shots = 10;
+    public ResponseBuilder response;
 
     /**
      * Constructor for Robot class
@@ -117,6 +117,7 @@ public class Robot {
         return this.position.equals(position);
     }
 
+    @SuppressWarnings("unchecked")
     public JSONObject getState(){
         JSONObject state = new JSONObject();
         state.put("position", this.position.getAsList());
@@ -125,5 +126,23 @@ public class Robot {
         state.put("shots", this.shots);
         state.put("status", this.status);
         return state;
+    }
+
+    public void isDead() {
+        if (this.shields < 0) {
+            setStatus("DEAD");
+        }
+    }
+
+    public int getShots() {
+        return this.shots;
+    }
+
+    public int getShields() {
+        return this.shields;
+    }
+
+    public void reduceShield(int damage) {
+        this.shields -= damage;
     }
 }

@@ -20,7 +20,7 @@ public class World{
     protected static final Position CENTRE = new Position(0,0);
     protected ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
     // The map that the world will be using.
-    public Maze maze = new EmptyMaze();
+    public Maze maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
 
 
     /**

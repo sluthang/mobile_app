@@ -28,7 +28,7 @@ public class ServerManagement implements Runnable {
         System.out.println("Server is running and live!\n" +
                 ANSI_PURPLE +
                 "Server can message clients individually by using the /message tag.\n" +
-                ANSI_GREEN + "       eg. /message <clientname> <message>\n" +
+                ANSI_GREEN + "       eg. /message <clientName> <message>\n" +
                 ANSI_PURPLE + "Server can issue commands using the /command tag.\n" +
                 ANSI_GREEN +"       eg. /command <command> <tag>\n" + ANSI_RESET +
                 ANSI_GREEN+"       <purge> <client-name>"+ANSI_RESET+" - Purges the selected user from the server.\n" +

@@ -62,49 +62,5 @@ public class ForwardCommand extends Command {
         data.put("message", message);
         server.robot.response.addData(data);
     }
-
-    /**
-     * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
-     * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),
-     * lastly it returns a failed out of bounds otherwise.
-     * @param nrSteps: the number of steps the robot will move;
-     * @return: an UpdateResponse of what the result of moving the robot is.
-     * */
-    public UpdateResponse updatePosition(int nrSteps, Server server) {
-        Position currentPosition = server.robot.getPosition();
-        Direction currentDirection = server.robot.getCurrentDirection();
-
-        int oldX = currentPosition.getX();
-        int oldY = currentPosition.getY();
-        int newX = currentPosition.getX();
-        int newY = currentPosition.getY();
-
-        switch (currentDirection) {
-            case UP:
-                newY = newY + nrSteps;
-                break;
-            case DOWN:
-                newY = newY - nrSteps;
-                break;
-            case LEFT:
-                newX = newX - nrSteps;
-                break;
-            case RIGHT:
-                newX = newX + nrSteps;
-                break;
-        }
-
-        Position oldPosition = new Position(oldX, oldY);
-        Position newPosition = new Position(newX, newY);
-
-        UpdateResponse response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots());
-        if (response != UpdateResponse.SUCCESS) return response;
-
-        response = world.isNewPositionAllowed(oldPosition, newPosition);
-        if (response != UpdateResponse.SUCCESS) return response;
-
-        server.robot.setPosition(newPosition);
-        return UpdateResponse.SUCCESS;
-    }
 }
 

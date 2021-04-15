@@ -6,13 +6,25 @@ import java.util.Random;
 
 public class RandomMaze extends BaseMaze {
     private final Random rand = new Random();
-    private final int numberOfObs = rand.nextInt(101);
+    private final int numberOfObs = rand.nextInt(25);
+    private final int upperX;
+    private final int upperY;
+    private final int lowerX;
+    private final int lowerY;
+    private final int maxX;
+    private final int maxY;
 
     /**
      * Constructor for the random maze.
      * */
-    public RandomMaze() {
+    public RandomMaze(Position TOP_LEFT, Position BOTTOM_RIGHT) {
         generateList();
+        this.upperX = BOTTOM_RIGHT.getX()-4;
+        this.upperY = TOP_LEFT.getY()-4;
+        this.lowerX = TOP_LEFT.getX();
+        this.lowerY = BOTTOM_RIGHT.getY();
+        this.maxX = BOTTOM_RIGHT.getX();
+        this.maxY = TOP_LEFT.getY();
     }
 
     /**
@@ -71,16 +83,16 @@ public class RandomMaze extends BaseMaze {
         int counter = 0;
         createMine(new Position(0,5));
         while (counter != getNumberOfObs()) {
-            int bottomLeftX = generateRandomNumber(96,-100,100);
-            int bottomLeftY = generateRandomNumber(196,-200,200);
+            int bottomLeftX = generateRandomNumber(upperX,lowerX,maxX);
+            int bottomLeftY = generateRandomNumber(upperY,lowerY,maxY);
             if (overLappingStart(bottomLeftX, bottomLeftY) && overLappingObs(bottomLeftX, bottomLeftY)) {
                 createObstacles(new Position(bottomLeftX, bottomLeftY));
                 counter++;
             }
         }
         while (pitsList.size() != 10) {
-            int bottomLeftX = generateRandomNumber(96,-100,100);
-            int bottomLeftY = generateRandomNumber(196,-200,200);
+            int bottomLeftX = generateRandomNumber(upperX,lowerX,maxX);
+            int bottomLeftY = generateRandomNumber(upperY,lowerY,maxY);
             if (overLappingStart(bottomLeftX, bottomLeftY) && overLappingObs(bottomLeftX, bottomLeftY)) {
                 createPit(new Position(bottomLeftX, bottomLeftY));
             }
