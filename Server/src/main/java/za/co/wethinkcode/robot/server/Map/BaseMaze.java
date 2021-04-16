@@ -68,7 +68,7 @@ public class BaseMaze implements Maze {
         if (a.getY() > b.getY()) incY = -1;
         if (a.getX() == b.getX()) incX = 0;
         if (a.getY() == b.getY()) incY = 0;
-
+        //TODO work
         for (int x = a.getX() + incX; x != b.getX(); x += incX) {
             for (int y = a.getY() + incY; y != b.getY(); y += incY) {
                 for (Obstacle pit : this.pitsList) {
