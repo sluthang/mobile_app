@@ -1,13 +1,16 @@
 package za.co.wethinkcode.robot.server.Commands;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.Robot.Direction;
+import za.co.wethinkcode.robot.server.Robot.Position;
+import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 public abstract class Command {
     private final String name;
     private String argument;
-    protected World world;
 
     public abstract void execute(World world, Server server);
 
@@ -48,24 +51,84 @@ public abstract class Command {
      * @param instruction*/
     public static Command create(JSONObject instruction) {
         String command = instruction.get("command").toString();
-        String[] args = ((String[])instruction.get("arguments"));
+        JSONArray args = (JSONArray) instruction.get("arguments");
 
         switch (command) {
+            case "state":
+                return new StateCommand();
             case "forward":
-                return new ForwardCommand(args[1]);
+                return new ForwardCommand(args.get(0).toString());
             case "back":
-                return new ForwardCommand("-" + args[1]);
+                return new ForwardCommand("-" + args.get(0).toString());
             case "turn":
-                switch (args[0]) {
+                switch (args.get(0).toString()) {
                     case "left":
                         return new LeftCommand();
                     case "right":
                         return new RightCommand();
                 }
-            case "launch": new LaunchCommand();
+            case "mine":
+                return new LayMineCommand();
+            case "repair":
+                return new RepairCommand();
+            case "launch":
+                return new LaunchCommand(args);
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
+    }
+
+    /**
+     * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
+     * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),
+     * lastly it returns a failed out of bounds otherwise.
+     * @param nrSteps: the number of steps the robot will move;
+     * @return: an UpdateResponse of what the result of moving the robot is.
+     * */
+    /**
+     * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
+     * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),
+     * lastly it returns a failed out of bounds otherwise.
+     * @param nrSteps: the number of steps the robot will move;
+     * @return: an UpdateResponse of what the result of moving the robot is.
+     * */
+    public UpdateResponse updatePosition(int nrSteps, Server server, World world) {
+        Position currentPosition = server.robot.getPosition();
+        Direction currentDirection = server.robot.getCurrentDirection();
+
+        int oldX = currentPosition.getX();
+        int oldY = currentPosition.getY();
+        int newX = currentPosition.getX();
+        int newY = currentPosition.getY();
+
+        switch (currentDirection) {
+            case UP:
+                newY = newY + nrSteps;
+                break;
+            case DOWN:
+                newY = newY - nrSteps;
+                break;
+            case LEFT:
+                newX = newX - nrSteps;
+                break;
+            case RIGHT:
+                newX = newX + nrSteps;
+                break;
+        }
+        System.out.println("test1");
+        Position oldPosition = new Position(oldX, oldY);
+        Position newPosition = new Position(newX, newY);
+
+        UpdateResponse response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots());
+        if (response == UpdateResponse.FAILED_HIT_MINE) world.maze.hitMine(oldPosition, newPosition, server);
+
+        if (response != UpdateResponse.SUCCESS) return response;
+
+        response = world.isInWorld(oldPosition, newPosition);
+        if (response != UpdateResponse.SUCCESS) return response;
+
+        server.robot.setPosition(newPosition);
+        return UpdateResponse.SUCCESS;
     }
 }
 

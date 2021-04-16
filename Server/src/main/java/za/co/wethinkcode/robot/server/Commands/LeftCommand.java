@@ -21,9 +21,9 @@ public class LeftCommand extends Command {
         JSONObject data = new JSONObject();
 
         server.robot.updateDirection(false);
-        server.robot.setStatus("Turned left.");
 
         data.put("message", "Done");
-        server.robot.response.addData(data);
+        server.response.addData(data);
+        server.response.add("result", "OK");
     }
 }

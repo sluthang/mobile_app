@@ -2,6 +2,7 @@ package za.co.wethinkcode.robot.server;
 
 import org.json.simple.JSONObject;
 
+@SuppressWarnings("unchecked")
 public class ResponseBuilder {
     JSONObject response;
     public ResponseBuilder(){
@@ -17,11 +18,11 @@ public class ResponseBuilder {
         if (response.get(key) == null) {
             return "";
         }
-        else return (String)response.get(key);
+        else return response.get(key).toString();
     }
 
     public void addData(Object data) {
-        response.put("data", data);
+        this.response.put("data", data);
     }
 
     @Override

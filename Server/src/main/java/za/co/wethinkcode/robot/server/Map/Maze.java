@@ -3,6 +3,7 @@ package za.co.wethinkcode.robot.server.Map;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
+import za.co.wethinkcode.robot.server.Server;
 
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +21,9 @@ public interface Maze {
 
     Vector<Obstacle> getMines();
 
-    Position hitMine(Position a, Position b);
+    void hitMine(Position a, Position b, Server server);
+
+    void createMine(Position position);
 
     /**
      * Checks if this maze has at least one obstacle that blocks the path that goes from coordinate (x1, y1) to (x2, y2).
@@ -30,4 +33,7 @@ public interface Maze {
      * @return `true` if there is an obstacle is in the way
      */
     UpdateResponse blocksPath(Position a, Position b, ConcurrentHashMap<String, Robot> robots);
+
+    boolean blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName);
+
 }

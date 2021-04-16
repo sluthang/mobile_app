@@ -21,10 +21,10 @@ public class RightCommand extends Command {
         JSONObject data = new JSONObject();
 
         server.robot.updateDirection(true);
-        server.robot.setStatus("Turned right.");
 
         data.put("message", "Done");
-        server.robot.response.addData(data);
+        server.response.addData(data);
+        server.response.add("result", "OK");
     }
 }
 

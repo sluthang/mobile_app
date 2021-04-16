@@ -3,6 +3,7 @@ package za.co.wethinkcode.robot.server.Map;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
+import za.co.wethinkcode.robot.server.Server;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -66,47 +67,75 @@ public class BaseMaze implements Maze {
         if (a.getX() > b.getX()) incX = -1;
         if (a.getY() > b.getY()) incY = -1;
 
-        for (int x = a.getX() + incX; x != b.getX(); x += incX) {
-            for (int y = a.getY() + incY; y != b.getY(); y += incY) {
                 for (Obstacle pit : this.pitsList) {
-                    if (pit.blocksPosition(new Position(x, y)))
+                    if (pit.blocksPath(a,b))
                         return UpdateResponse.FAILED_BOTTOMLESS_PIT;
                 }
 
                 for (Obstacle obst : this.obstaclesList) {
-                    if (obst.blocksPosition(new Position(x, y))) {
+                    if (obst.blocksPath(a,b)) {
                         return UpdateResponse.FAILED_OBSTRUCTED;
                     }
                 }
 
                 for (Obstacle mine : this.minesList) {
-                    if (mine.blocksPosition(new Position(x, y))) {
+                    if (mine.blocksPath(a,b)) {
                         return UpdateResponse.FAILED_HIT_MINE;
                     }
                 }
 
                 Set<String> keys = robots.keySet();
                 for (String key : keys) {
-                    if (robots.get(key).blocksPosition(new Position(x, y))) {
+                    if (robots.get(key).blocksPosition(new Position(b.getX(), b.getY()))) {
                         return UpdateResponse.FAILED_OBSTRUCTED;
-                    }
-                }
             }
         }
         return UpdateResponse.SUCCESS;
     }
 
-    public Position hitMine(Position a, Position b) {
+    public void hitMine(Position a, Position b, Server server) {
         Iterator<Obstacle> i = this.minesList.iterator();
 
         while (i.hasNext()) {
             Obstacle mine = i.next();
             if (mine.blocksPath(a, b)) {
                 Position newPos = new Position(mine.getBottomLeftX(), mine.getBottomLeftY());
+                server.robot.setPosition(newPos);
+                server.robot.shields -= 3;
                 i.remove();
-                return newPos;
+                System.out.println("boom");
+                //TODO if shield is -1 send a dead state to user.
             }
         }
-        return b;
+    }
+
+    public boolean blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName) {
+        for (Obstacle pit : this.pitsList) {
+            if (pit.blocksPosition(position))
+                return true;
+        }
+
+        for (Obstacle obst : this.obstaclesList) {
+            if (obst.blocksPosition(position)) {
+                return true;
+            }
+        }
+
+        for (Obstacle mine : this.minesList) {
+            if (mine.blocksPosition(position)) {
+                return true;
+            }
+        }
+
+        Set<String> keys = robots.keySet();
+        for (String key : keys) {
+            if (key.equals(robotName)) {
+                continue;
+            }
+            if (robots.get(key).blocksPosition(position)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -4,21 +4,21 @@ import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.ResponseBuilder;
 
 public class Robot {
-    private final String name;
+    protected final String name;
     protected Direction currentDirection;
     protected Position position;
     private String status;
-    public ResponseBuilder response;
-    private int shields = 10;
-    private int shots = 10;
+    private int maxShields = 10;
+    private int maxShots = 10;
+    public int shields = 10;
+    public int shots = 10;
 
     /**
      * Constructor for Robot class
      * */
     public Robot(String name) {
         this.name = name;
-        this.status = "Ready";
-        this.position = new Position(0, 0);
+        this.status = "NORMAL";
         this.currentDirection = Direction.UP;
     }
 
@@ -117,6 +117,7 @@ public class Robot {
         return this.position.equals(position);
     }
 
+    @SuppressWarnings("unchecked")
     public JSONObject getState(){
         JSONObject state = new JSONObject();
         state.put("position", this.position.getAsList());
@@ -125,5 +126,14 @@ public class Robot {
         state.put("shots", this.shots);
         state.put("status", this.status);
         return state;
+    }
+
+    public void setMaxes(int maxShields, int maxShots) {
+        this.maxShields = maxShields;
+        this.maxShots = maxShots;
+    }
+
+    public int getMaxShields() {
+        return this.maxShields;
     }
 }

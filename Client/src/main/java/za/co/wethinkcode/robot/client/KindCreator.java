@@ -8,8 +8,8 @@ public class KindCreator {
         String shields = "999";
         String shots = "0";
         switch (kind.toLowerCase()) {
-            case "sniper": shots = "1";
-            case "trooper": shots = "5";
+            case "sniper": shots = "1"; break;
+            case "trooper": shots = "5"; break;
             default: shots = "3";
         }
         return Arrays.asList(kind, shields, shots);
