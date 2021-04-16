@@ -68,15 +68,10 @@ public class BaseMaze implements Maze {
         if (a.getX() > b.getX()) incX = -1;
         if (a.getY() > b.getY()) incY = -1;
 
-        System.out.println("[" + a.getX() + ", " + a.getY() + "]" + " - " + "[" + b.getX() + ", " + b.getY() + "]");
-        System.out.println(incX + " " + incY);
-
         int x = a.getX();
         do {
             int y = a.getY();
             do {
-                System.out.println("please go here");
-                System.out.println(x + ", " + y);
                 for (Obstacle pit : this.pitsList) {
                     if (pit.blocksPosition(new Position(x, y)))
                         return UpdateResponse.FAILED_BOTTOMLESS_PIT;
