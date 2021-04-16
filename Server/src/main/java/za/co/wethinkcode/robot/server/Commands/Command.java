@@ -54,6 +54,8 @@ public abstract class Command {
         JSONArray args = (JSONArray) instruction.get("arguments");
 
         switch (command) {
+            case "state":
+                return new StateCommand();
             case "forward":
                 return new ForwardCommand(args.get(0).toString());
             case "back":
@@ -67,6 +69,8 @@ public abstract class Command {
                 }
             case "mine":
                 return new LayMineCommand();
+            case "repair":
+                return new RepairCommand();
             case "launch":
                 return new LaunchCommand(args);
             default:
@@ -116,6 +120,8 @@ public abstract class Command {
         Position newPosition = new Position(newX, newY);
 
         UpdateResponse response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots());
+        if (response == UpdateResponse.FAILED_HIT_MINE) world.maze.hitMine(oldPosition, newPosition, server);
+
         if (response != UpdateResponse.SUCCESS) return response;
 
         response = world.isInWorld(oldPosition, newPosition);

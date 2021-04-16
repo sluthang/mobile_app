@@ -18,7 +18,7 @@ public class Robot {
      * */
     public Robot(String name) {
         this.name = name;
-        this.status = "Ready";
+        this.status = "NORMAL";
         this.currentDirection = Direction.UP;
     }
 
@@ -131,5 +131,9 @@ public class Robot {
     public void setMaxes(int maxShields, int maxShots) {
         this.maxShields = maxShields;
         this.maxShots = maxShots;
+    }
+
+    public int getMaxShields() {
+        return this.maxShields;
     }
 }
