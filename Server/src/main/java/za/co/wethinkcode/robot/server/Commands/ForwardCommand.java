@@ -41,6 +41,7 @@ public class ForwardCommand extends Command {
 
         UpdateResponse response =  updatePosition(nrSteps, server, world);
 
+        //TODO set position to whatever it hits
         String message = "";
         if (response == UpdateResponse.SUCCESS){
             message = "Done";
