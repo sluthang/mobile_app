@@ -20,13 +20,10 @@ public class JsonHandler {
                 command = "turn";
                 break;
             case "mine":
-                newInstruction.put("arguments", Collections.emptyList());
-                command = "mine";
-                break;
             case "repair":
                 newInstruction.put("arguments", Collections.emptyList());
-                command = "repair";
                 break;
+            case "back" :
             case "forward" : {
                 if (instructions.length > 1) {
                     newInstruction.put("arguments", Arrays.asList(instructions[1]));
