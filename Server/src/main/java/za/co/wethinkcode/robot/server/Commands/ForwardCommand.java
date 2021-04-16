@@ -91,11 +91,13 @@ public class ForwardCommand extends Command {
                 newX = newX + nrSteps;
                 break;
         }
-        System.out.println("test1");
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
-
+        System.out.println("test1");
+        System.out.println(oldPosition.toString());
+        System.out.println(newPosition.toString());
         UpdateResponse response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots());
+        System.out.println("test2");
         if (response != UpdateResponse.SUCCESS) return response;
 
         response = world.isInWorld(oldPosition, newPosition);
