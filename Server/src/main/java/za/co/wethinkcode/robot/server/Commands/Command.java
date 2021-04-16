@@ -119,7 +119,8 @@ public abstract class Command {
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
 
-        UpdateResponse response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots());
+        UpdateResponse response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), server.robotName);
+        System.out.println(response);
         if (response == UpdateResponse.FAILED_HIT_MINE) world.maze.hitMine(oldPosition, newPosition, server);
 
         if (response != UpdateResponse.SUCCESS) return response;

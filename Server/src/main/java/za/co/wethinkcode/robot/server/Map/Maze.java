@@ -32,7 +32,7 @@ public interface Maze {
      * @param b second position
      * @return `true` if there is an obstacle is in the way
      */
-    UpdateResponse blocksPath(Position a, Position b, ConcurrentHashMap<String, Robot> robots);
+    UpdateResponse blocksPath(Position a, Position b, ConcurrentHashMap<String, Robot> robots, String robotName);
 
     boolean blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName);
 

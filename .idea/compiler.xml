@@ -12,7 +12,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
       <module name="0115-robot-world" target="11" />
-      <module name="Client" target="8" />
+      <module name="Client" target="1.8" />
       <module name="Server" target="1.8" />
     </bytecodeTargetLevel>
   </component>

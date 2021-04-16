@@ -61,16 +61,22 @@ public class BaseMaze implements Maze {
      * @param b : the new position;
      * @return: returns true if the path is blocked.
      * */
-    public UpdateResponse blocksPath(Position a, Position b, ConcurrentHashMap<String, Robot> robots) {
+    public UpdateResponse blocksPath(Position a, Position b, ConcurrentHashMap<String, Robot> robots, String robotName) {
+
         int incX = 1;
         int incY = 1;
         if (a.getX() > b.getX()) incX = -1;
         if (a.getY() > b.getY()) incY = -1;
-        if (a.getX() == b.getX()) incX = 0;
-        if (a.getY() == b.getY()) incY = 0;
-        //TODO work
-        for (int x = a.getX() + incX; x != b.getX(); x += incX) {
-            for (int y = a.getY() + incY; y != b.getY(); y += incY) {
+
+        System.out.println("[" + a.getX() + ", " + a.getY() + "]" + " - " + "[" + b.getX() + ", " + b.getY() + "]");
+        System.out.println(incX + " " + incY);
+
+        int x = a.getX();
+        do {
+            int y = a.getY();
+            do {
+                System.out.println("please go here");
+                System.out.println(x + ", " + y);
                 for (Obstacle pit : this.pitsList) {
                     if (pit.blocksPosition(new Position(x, y)))
                         return UpdateResponse.FAILED_BOTTOMLESS_PIT;
@@ -83,6 +89,7 @@ public class BaseMaze implements Maze {
                 }
 
                 for (Obstacle mine : this.minesList) {
+                    System.out.println(mine.getBottomLeftX() + ", " + mine.getBottomLeftY());
                     if (mine.blocksPosition(new Position(x, y))) {
                         return UpdateResponse.FAILED_HIT_MINE;
                     }
@@ -90,13 +97,21 @@ public class BaseMaze implements Maze {
 
                 Set<String> keys = robots.keySet();
                 for (String key : keys) {
-                    if (robots.get(key).blocksPosition(new Position(x, y))) {
+                    if (key.equals(robotName)) {
+                        continue;
+                    }
+                    if (robots.get(key).blocksPosition(new Position(x,y))) {
                         return UpdateResponse.FAILED_OBSTRUCTED;
                     }
                 }
+                if (y != b.getY()) {
+                    y += incY;
+                }
+            } while (y != b.getY());
+            if (x != b.getX()) {
+                x += incX;
             }
-        }
-
+        } while  (x != b.getX());
         return UpdateResponse.SUCCESS;
     }
 
