@@ -59,4 +59,9 @@ public class Position {
     public List<Integer> getAsList(){
         return Arrays.asList(this.x, this.y);
     }
+
+    @Override
+    public String toString() {
+        return this.x + "," + this.y;
+    }
 }
