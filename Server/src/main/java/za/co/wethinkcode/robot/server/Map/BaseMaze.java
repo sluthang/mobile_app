@@ -72,25 +72,25 @@ public class BaseMaze implements Maze {
         for (int x = a.getX() + incX; x != b.getX(); x += incX) {
             for (int y = a.getY() + incY; y != b.getY(); y += incY) {
                 for (Obstacle pit : this.pitsList) {
-                    if (pit.blocksPosition(new Position(b.getX(), b.getY())))
+                    if (pit.blocksPosition(new Position(x, y)))
                         return UpdateResponse.FAILED_BOTTOMLESS_PIT;
                 }
 
                 for (Obstacle obst : this.obstaclesList) {
-                    if (obst.blocksPosition(new Position(b.getX(), b.getY()))) {
+                    if (obst.blocksPosition(new Position(x, y))) {
                         return UpdateResponse.FAILED_OBSTRUCTED;
                     }
                 }
 
                 for (Obstacle mine : this.minesList) {
-                    if (mine.blocksPosition(new Position(b.getX(), b.getY()))) {
+                    if (mine.blocksPosition(new Position(x, y))) {
                         return UpdateResponse.FAILED_HIT_MINE;
                     }
                 }
 
                 Set<String> keys = robots.keySet();
                 for (String key : keys) {
-                    if (robots.get(key).blocksPosition(new Position(b.getX(), b.getY()))) {
+                    if (robots.get(key).blocksPosition(new Position(x, y))) {
                         return UpdateResponse.FAILED_OBSTRUCTED;
                     }
                 }
