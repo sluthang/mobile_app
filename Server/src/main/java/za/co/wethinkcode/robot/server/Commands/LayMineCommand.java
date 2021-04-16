@@ -9,6 +9,7 @@ import za.co.wethinkcode.robot.server.World;
 
 import java.io.IOException;
 
+@SuppressWarnings("unchecked")
 public class LayMineCommand extends Command{
 
 
@@ -16,7 +17,6 @@ public class LayMineCommand extends Command{
         super("mine");
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void execute(World world, Server server) {
         // Checks if the robot is allowed to lay mines.
@@ -28,7 +28,7 @@ public class LayMineCommand extends Command{
 
             server.robot.setStatus("SETMINE");
             try {
-                new Schedule(server, world, "mine", 10);
+                new Schedule(server, world, "mine", world.MINE_SET_TIME);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -38,10 +38,12 @@ public class LayMineCommand extends Command{
                 JSONObject data = new JSONObject();
                 data.put("message", "Mine");
                 server.response.addData(data);
+                server.response.add("result", "OK");
             } else {
                 JSONObject data = new JSONObject();
                 data.put("message", "Done");
                 server.response.addData(data);
+                server.response.add("result", "OK");
             }
         } else {
             throw new IllegalArgumentException("Unsupported command for class");

@@ -9,8 +9,8 @@ public class Robot {
     protected Position position;
     private String status;
     private int maxShields = 10;
-    public int shields = 10;
     private int maxShots = 10;
+    public int shields = 10;
     public int shots = 10;
 
     /**

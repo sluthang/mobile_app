@@ -16,5 +16,6 @@ public class StateCommand extends Command{
         JSONObject data = new JSONObject();
         data.put("message", "State");
         server.response.addData(data);
+        server.response.add("result", "OK");
     }
 }

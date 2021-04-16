@@ -18,12 +18,13 @@ public class RepairCommand extends Command{
     public void execute(World world, Server server) {
         try {
             server.robot.setStatus("REPAIR");
-            new Schedule(server, world, "repair", 10);
+            new Schedule(server, world, "repair", world.REPAIR_TIME);
         } catch (IOException e) {
             e.printStackTrace();
         }
         JSONObject data = new JSONObject();
         data.put("message", "Repair");
         server.response.addData(data);
+        server.response.add("result", "OK");
     }
 }
