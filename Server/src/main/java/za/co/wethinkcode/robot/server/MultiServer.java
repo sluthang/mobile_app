@@ -21,7 +21,6 @@ public class MultiServer {
         // Create our Thread for using the System.in of the server, this will run along side the server.
         Thread output = new Thread(new ServerManagement());
         output.start();
-
         while(output.isAlive()) {
             try {
                 // Create a new thread once a connection is made from a client. Client is added to Vector array.

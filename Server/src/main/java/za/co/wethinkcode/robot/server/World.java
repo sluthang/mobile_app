@@ -1,26 +1,30 @@
 package za.co.wethinkcode.robot.server;
 
-import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Commands.Command;
-import za.co.wethinkcode.robot.server.ConfigReader;
-import za.co.wethinkcode.robot.server.Map.*;
-import za.co.wethinkcode.robot.server.ResponseBuilder;
+import za.co.wethinkcode.robot.server.Map.BaseMaze;
+import za.co.wethinkcode.robot.server.Map.EmptyMaze;
+import za.co.wethinkcode.robot.server.Map.Maze;
+import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 
-import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class World{
-    public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
-    public final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
     protected static final Position CENTRE = new Position(0,0);
     protected ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
     // The map that the world will be using.
-    public BaseMaze maze = new EmptyMaze();
+    public Maze maze = new EmptyMaze();
+    public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
+    public final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
+    public final int MAX_SHOTS = MultiServer.config.getMaxShots();
+    public final int MAX_SHIELDS = MultiServer.config.getMaxShieldStrength();
+    public final int RELOAD_TIME = MultiServer.config.getReloadTime();
+    public final int REPAIR_TIME = MultiServer.config.getReloadTime();
+    public final int VISIBILITY = MultiServer.config.getVisibility();
+    public final int MINE_SET_TIME = MultiServer.config.getMineSetTime();
 
 
     /**

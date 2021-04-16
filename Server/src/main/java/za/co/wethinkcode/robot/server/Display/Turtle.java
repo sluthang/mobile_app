@@ -1,4 +1,5 @@
-package za.co.wethinkcode.robot.server.Display; /**AUTHOR: NICHOLAS SEWARD
+package za.co.wethinkcode.robot.server.Display;
+/**AUTHOR: NICHOLAS SEWARD
  * EMAIL: nicholas.seward@gmail.com
  * LICENSE: MIT (USE THIS HOWEVER YOU SEE FIT.)
  * DATE: 6/21/2012
@@ -164,12 +165,12 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         //window.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
         try{window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);}
         catch(Exception e){}
-        
+
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("File");
         menuBar.add(menu);
         JMenuItem menuItem1 = new JMenuItem("Save...");
-        
+
         menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(menuItem1);
@@ -388,7 +389,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         }
         else
         {
-           return null;
+            return null;
         }
     }
 
@@ -417,10 +418,10 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
     private static void drawTurtleIcon()
     {
         byte[] imageData= new byte[]{71,73,70,56,57,97,16,0,16,0,-95,2,0,0,-103,
-            0,0,-1,0,-1,-1,-1,-1,-1,-1,33,-7,4,1,10,0,2,0,44,0,0,0,0,16,0,16,0,
-            0,2,44,-108,-113,-87,-53,-19,-33,-128,4,104,74,35,67,-72,34,-21,11,
-            124,27,-90,-107,-109,72,117,-91,-71,110,103,-37,90,-31,-10,-55,-87,
-            122,-34,74,72,-15,17,-56,-127,8,33,5,0,59};
+                0,0,-1,0,-1,-1,-1,-1,-1,-1,33,-7,4,1,10,0,2,0,44,0,0,0,0,16,0,16,0,
+                0,2,44,-108,-113,-87,-53,-19,-33,-128,4,104,74,35,67,-72,34,-21,11,
+                124,27,-90,-107,-109,72,117,-91,-71,110,103,-37,90,-31,-10,-55,-87,
+                122,-34,74,72,-15,17,-56,-127,8,33,5,0,59};
         try
         {
             BufferedImage tmpicon = ImageIO.read(new ByteArrayInputStream(imageData));
@@ -611,16 +612,16 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         return t;
     }
 
-/*    .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)
- *  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/
- *    U U      U U      U U      U U      U U      U U      U U      U U
- *    .-./*)   .-./*)   .-./*)                     .-./*)   .-./*)   .-./*)
- *  _/___\/  _/___\/  _/___\/  STATE MANAGEMENT  _/___\/  _/___\/  _/___\/
- *    U U      U U      U U                        U U      U U      U U
- *    .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)
- *  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/
- *    U U      U U      U U      U U      U U      U U      U U      U U
- */
+    /*    .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)
+     *  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/
+     *    U U      U U      U U      U U      U U      U U      U U      U U
+     *    .-./*)   .-./*)   .-./*)                     .-./*)   .-./*)   .-./*)
+     *  _/___\/  _/___\/  _/___\/  STATE MANAGEMENT  _/___\/  _/___\/  _/___\/
+     *    U U      U U      U U                        U U      U U      U U
+     *    .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)
+     *  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/
+     *    U U      U U      U U      U U      U U      U U      U U      U U
+     */
 
     private long storeCurrentState()
     {
@@ -665,7 +666,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
             if (animate) time+=(long)(speed*1000000);
             state.set(0, time);
             turtleStates.put(time, state);
-            redoStates.clear(); 
+            redoStates.clear();
         }
         if(refreshMode==REFRESH_MODE_STATE_CHANGE) draw();
         if(refreshMode==REFRESH_MODE_ANIMATED)waitUntil(time);
@@ -885,7 +886,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
             catch(Exception e){return false;}
             x=(int)point.x;
             y=(int)point.y;
-            try 
+            try
             {
                 //System.out.println((new Color(image.getRGB(x, y),true)).getAlpha());
                 return (new Color(image.getRGB(x, y),true)).getAlpha()>50;
@@ -893,7 +894,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
             catch(Exception e){return false;}
         }
     }
-    
+
     /*    .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)
      *  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/
      *    U U      U U      U U      U U      U U      U U      U U      U U
@@ -960,7 +961,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
 
     /**
      * Turns the turtle left by the number of indicated degrees.
-     * 
+     *
      * @param angle angle in degrees
      * @return state change timestamp
      */
@@ -970,10 +971,10 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         long timeStamp=storeAnimatedState();
         return timeStamp;
     }
-    
+
     /**
      * Turns the turtle right by the number of indicated degrees.
-     * 
+     *
      * @param angle angle in degrees
      * @return state change timestamp
      */
@@ -1230,10 +1231,10 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         long timeStamp=storeCurrentState();
         return timeStamp;
     }
-    
+
     public long stab()
     {
-		Color c=Turtle.getColor("red");
+        Color c=Turtle.getColor("red");
         if(c!=null)this.penColor=c;
         this.isPenDown=true;
         long timeStamp=storeCurrentState();
@@ -1463,7 +1464,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         if(refreshMode!=REFRESH_MODE_ON_DEMAND)updateAll();
     }
 
-   /**
+    /**
      * Redo turtle state changes.
      *
      * @param steps the number of state changes to restore
@@ -1515,7 +1516,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         lastUpdate=0;
         if(refreshMode!=REFRESH_MODE_ON_DEMAND)updateAll();
     }
-    
+
     private void rollback()
     {
         int steps=0;
@@ -1549,7 +1550,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
             }
         }
     }
-    
+
     private void rollforward()
     {
         synchronized(turtleLock)
@@ -1638,7 +1639,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         String className="";
         try
         {
-         throw new Exception("Who called me?");
+            throw new Exception("Who called me?");
         }
         catch( Exception e )
         {
@@ -1697,7 +1698,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         String className="";
         try
         {
-         throw new Exception("Who called me?");
+            throw new Exception("Who called me?");
         }
         catch( Exception e )
         {
@@ -1827,15 +1828,15 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
             if(refreshMode!=REFRESH_MODE_ANIMATED)time=turtleStates.lastKey()+1;
             for (Map.Entry<Long, ArrayList> entry : turtleStates.headMap(time).entrySet())
             {
-                    ArrayList state=entry.getValue();
-                    if(!getStateIsPenDown(state))continue;
-                    Point2D.Double location =getStateLocation(state);
-                    if (location.x<minx) minx=location.x;
-                    if (location.x>maxx) maxx=location.x;
-                    if (location.y<miny) miny=location.y;
-                    if (location.y>maxy) maxy=location.y;
-                    shapeWidth=getStateShapeWidth(state);
-                    shapeHeight=getStateShapeHeight(state);
+                ArrayList state=entry.getValue();
+                if(!getStateIsPenDown(state))continue;
+                Point2D.Double location =getStateLocation(state);
+                if (location.x<minx) minx=location.x;
+                if (location.x>maxx) maxx=location.x;
+                if (location.y<miny) miny=location.y;
+                if (location.y>maxy) maxy=location.y;
+                shapeWidth=getStateShapeWidth(state);
+                shapeHeight=getStateShapeHeight(state);
             }
 
             if(turtleStates.lastKey()>time && getStateSpeed(turtleStates.lastEntry().getValue())>0)
@@ -1855,7 +1856,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
             zoom(minx-shapeMax/2, miny-shapeMax/2, maxx+shapeMax/2, maxy+shapeMax/2);
         }
     }
-    
+
     private static void updateAll()
     {
         lastUpdate=0;
@@ -1874,7 +1875,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
     {
         synchronized(turtleLock)
         {
-            
+
             long renderTime=System.nanoTime();
             if (turtleStates.isEmpty() || lastUpdate==0)
             {
@@ -1910,7 +1911,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
                 if(t._isStamp)t.drawStamp(1, offscreen);
                 t.drawDot(1, offscreen);
             }
-        
+
             midscreen.drawImage(offscreenImage,0,0, null);
             Turtle animatedTurtle=null;
             double percent=1;
@@ -1947,7 +1948,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
                     if(t.isVisible)t.drawStamp(1, midscreen);
                     //if(t==selectedTurtle)t.drawCrossHairs(1,midscreen);
                 }
-                
+
             }
             lastUpdate=renderTime;
             //zoomFit();
@@ -1955,8 +1956,8 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
             window.repaint();
             if(applet!=null)applet.repaint();
         }
-        
-        
+
+
     }
 
     private void drawLine(double percent,Graphics2D g)
@@ -2048,7 +2049,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         }
         g.setTransform(originalTransform);
     }
-    
+
     private void drawDot(double percent,Graphics2D g)
     {
         AffineTransform originalTransform=(AffineTransform)g.getTransform().clone();
@@ -2099,7 +2100,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
     {
         if(_location==null)return;
         double time=(System.nanoTime()/100000000)/10.0;
-        
+
         AffineTransform originalTransform=(AffineTransform)g.getTransform().clone();
         AffineTransform m = g.getTransform();
         double x1,x2,y1,y2,dir1,dir2;
@@ -2124,7 +2125,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         int f=10;
         m.scale(scale/f, scale/f);
         g.setTransform(m);
-        
+
         int period=50;
         int r=(int)(Math.sqrt(shapeWidth*shapeWidth+shapeHeight*shapeHeight)*f/2);
         g.setColor(new Color(255,255,255));
@@ -2175,9 +2176,9 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         newRaster = raster.createWritableChild(0, 0, width, height, 0, 0, new int[] {0, 1, 2});
         DirectColorModel cm = (DirectColorModel) onscreenImage.getColorModel();
         DirectColorModel newCM = new DirectColorModel(cm.getPixelSize(),
-                                                      cm.getRedMask(),
-                                                      cm.getGreenMask(),
-                                                      cm.getBlueMask());
+                cm.getRedMask(),
+                cm.getGreenMask(),
+                cm.getBlueMask());
         BufferedImage rgbBuffer = new BufferedImage(newCM, newRaster, false,  null);
         try
         {
@@ -2280,7 +2281,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         dragx=e.getX();
         dragy=e.getY();
         modifiers+=e.getModifiers();
-        synchronized (turtleLock) 
+        synchronized (turtleLock)
         {
             for(Turtle t:turtles)
             {
@@ -2335,7 +2336,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         modifiers=e.getModifiers();
         x=e.getX();
         y=e.getY();
-        
+
     }
 
     /**
@@ -2351,7 +2352,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
     public void keyPressed(KeyEvent e)
     {
         String keyText=KeyEvent.getKeyText(e.getKeyCode()).toLowerCase();
-        synchronized (keyLock) 
+        synchronized (keyLock)
         {
             keysDown.add(keyText);
             if (keyBindings.containsKey(keyText))
@@ -2415,7 +2416,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
                                 Method m = clsInstance.getClass().getMethod(methodName);
                                 m.invoke(clsInstance);
                             }
-                            catch(Exception e3) 
+                            catch(Exception e3)
                             {
                                 System.out.println("KeyBinding for "+keyText+" has failed.");
                                 e1.printStackTrace();
@@ -2501,7 +2502,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         return keysDown.contains(key);
     }
 
-     /**
+    /**
      * Get the mouse x coordinate using the screens coordinate system.
      *
      * @return x coordinate
@@ -2541,7 +2542,7 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
         return (turtle.modifiers&16)==16;
     }
 
-     /**
+    /**
      * Check to see if the second mouse button is down.
      *
      * @return true if button 2 is down
@@ -2590,38 +2591,38 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
     {
         return (canvasY-centerY)*scale+height/2.0;
     }
-    
-    
+
+
     private static void saveGCODE(String filename)
     {
-		PrintWriter out=new PrintWriter(System.out);
-		try
-		{
-			out=new PrintWriter(filename);
-		}
-		catch(Exception e)
-		{
-			
-		}
-		out.println("M104 S200");
-		out.println("M109 S200");
-		out.println("G21");
-		out.println("G90");
-		out.println("M82");
-		out.println("M106");
-		out.println("G28 X0 Y0");
-		out.println("G28 Z0");
-		out.println("G29");
-		out.println("G1 Z15.0 F9000");
-		out.println("G92 E0");
-		out.println("G1 F200 E5");
-		out.println("G92 E0");
-		out.println("G1 X50 Y50 F1800");
-		
-		double e=0;
-		synchronized(turtleLock)
+        PrintWriter out=new PrintWriter(System.out);
+        try
         {
-			int i=0;
+            out=new PrintWriter(filename);
+        }
+        catch(Exception e)
+        {
+
+        }
+        out.println("M104 S200");
+        out.println("M109 S200");
+        out.println("G21");
+        out.println("G90");
+        out.println("M82");
+        out.println("M106");
+        out.println("G28 X0 Y0");
+        out.println("G28 Z0");
+        out.println("G29");
+        out.println("G1 Z15.0 F9000");
+        out.println("G92 E0");
+        out.println("G1 F200 E5");
+        out.println("G92 E0");
+        out.println("G1 X50 Y50 F1800");
+
+        double e=0;
+        synchronized(turtleLock)
+        {
+            int i=0;
             for (Map.Entry<Long, ArrayList> entry : turtleStates.entrySet())
             {
                 retrieveState(entry.getKey());
@@ -2629,28 +2630,29 @@ public class Turtle implements Runnable, ActionListener, MouseListener, MouseMot
                 i++;
                 if(i==1)continue;
                 if(t.__location!=null && !t.__location.equals(t._location))
-				{
-					double x1=t._location.x,y1=t._location.y,x2=t.__location.x,y2=t.__location.y;
-					double d=Math.hypot(x1-x2,y1-y2);
-					e+=d*0.05;
-					//System.out.printf("%f %f %f %f",x1,y1,x2,y2);
-					if(t._isPenDown)
-					{
-						out.printf("G1 X%.4f Y%.4f E%.4f\n",screenX(x1)*1.0/width*100,screenY(y1)*1.0/height*100,e);
-					}
-					else
-					{
-						
-					}
-						
-				}
-			}
-			out.println("G1 Z15");
-			out.println("M104 S0");
-			out.println("M140 S0");
-			out.close();
-		}
+                {
+                    double x1=t._location.x,y1=t._location.y,x2=t.__location.x,y2=t.__location.y;
+                    double d=Math.hypot(x1-x2,y1-y2);
+                    e+=d*0.05;
+                    //System.out.printf("%f %f %f %f",x1,y1,x2,y2);
+                    if(t._isPenDown)
+                    {
+                        out.printf("G1 X%.4f Y%.4f E%.4f\n",screenX(x1)*1.0/width*100,screenY(y1)*1.0/height*100,e);
+                    }
+                    else
+                    {
 
-        
+                    }
+
+                }
+            }
+            out.println("G1 Z15");
+            out.println("M104 S0");
+            out.println("M140 S0");
+            out.close();
+        }
+
+
     }
 }
+

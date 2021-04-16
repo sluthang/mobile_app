@@ -2,6 +2,7 @@ package za.co.wethinkcode.robot.server;
 
 import org.json.simple.JSONObject;
 
+@SuppressWarnings("unchecked")
 public class ResponseBuilder {
     JSONObject response;
     public ResponseBuilder(){

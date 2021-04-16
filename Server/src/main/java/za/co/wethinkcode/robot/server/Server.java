@@ -8,6 +8,7 @@ import za.co.wethinkcode.robot.server.Robot.Robot;
 import java.io.*;
 import java.net.Socket;
 
+@SuppressWarnings("unchecked")
 public class Server implements Runnable {
 
     private boolean running;
@@ -39,7 +40,7 @@ public class Server implements Runnable {
             boolean shouldContinue = true;
 
             String messageFromClient;
-            while(running) {
+            while(robot == null) {
                 messageFromClient = in.readLine();
                 JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
                 System.out.println(messageFromClient);
@@ -50,6 +51,28 @@ public class Server implements Runnable {
 
                 Command command = Command.create(jsonMessage);
                 world.handleCommand(command, this);
+
+                this.response.add("state", this.robot.getState());
+                out.println(this.response.toString());
+            }
+
+            while(running) {
+                messageFromClient = in.readLine();
+                JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
+                System.out.println(messageFromClient);
+
+                this.robotName = (String)jsonMessage.get("robot");
+                this.robot = world.getRobot(this.robotName);
+                this.response = new ResponseBuilder();
+
+                if(robot.getStatus().equals("NORMAL")) {
+                    Command command = Command.create(jsonMessage);
+                    world.handleCommand(command, this);
+                } else {
+                    jsonMessage.put("command", "state");
+                    Command command = Command.create(jsonMessage);
+                    world.handleCommand(command, this);
+                }
 
                 this.response.add("state", this.robot.getState());
                 out.println(this.response.toString());

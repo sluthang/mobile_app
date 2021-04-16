@@ -1,8 +1,10 @@
 package za.co.wethinkcode.robot.client;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class JsonHandler {
 
@@ -16,6 +18,14 @@ public class JsonHandler {
             case "right":
                 newInstruction.put("arguments", Arrays.asList(command));
                 command = "turn";
+                break;
+            case "mine":
+                newInstruction.put("arguments", Collections.emptyList());
+                command = "mine";
+                break;
+            case "repair":
+                newInstruction.put("arguments", Collections.emptyList());
+                command = "repair";
                 break;
             case "forward" : {
                 if (instructions.length > 1) {
