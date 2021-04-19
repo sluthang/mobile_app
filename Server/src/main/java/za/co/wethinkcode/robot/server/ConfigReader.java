@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server;
 
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -15,17 +16,15 @@ public class ConfigReader {
         try {
             // Create new properties object to store config in.
             Properties prop = new Properties();
-            String propFileName = "config.properties";
+            //to load application's properties, we use this class
+            FileInputStream file;
 
-            // Create an input stream to grab the contents of the .properties file.
-            inputStream = ConfigReader.class.getClassLoader().getResourceAsStream(propFileName);
+            //the base folder is ./, the root of the main.properties file
+            String path = "./config.properties";
 
-            // Error check the file.
-            if (inputStream != null) {
-                prop.load(inputStream);
-            } else {
-                throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-            }
+            //load the file handle for main.properties
+            file = new FileInputStream(path);
+            prop.load(file);
 
 
             // get the property value and store them in fields of the class.
@@ -43,7 +42,7 @@ public class ConfigReader {
 
         } catch (Exception e) {
             System.out.println("Exception: " + e);
-        } finally {}
+        }
     }
 
     public int getMaxShots() {

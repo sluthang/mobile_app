@@ -52,7 +52,9 @@ public class ForwardCommand extends Command {
             server.robot.kill(world, server, "Fell");
         } else if (response == UpdateResponse.FAILED_HIT_MINE) {
             message = "Mine";
-            //TODO mine things
+            if (server.robot.isDead().equals("DEAD")) {
+                server.robot.kill(world, server, "Mine");
+            }
         } else if (response == UpdateResponse.FAILED_OUTSIDE_WORLD){
             message = "Obstructed";
         }
