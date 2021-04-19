@@ -19,7 +19,7 @@ public class MultiServer {
         System.out.println("Server running & waiting for client connections.");
 
         // Create our Thread for using the System.in of the server, this will run along side the server.
-        Thread output = new Thread(new ServerManagement());
+        Thread output = new Thread(new ServerManagement(world));
         output.start();
         world.showObstacles();
         while(output.isAlive()) {

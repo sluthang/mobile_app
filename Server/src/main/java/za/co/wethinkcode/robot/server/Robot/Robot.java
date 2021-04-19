@@ -18,6 +18,7 @@ public class Robot {
     private int maxShields;
     private int maxShots;
     public int shields;
+    public int jankVarOldShield;
     public int shots;
 
     /**
@@ -129,7 +130,7 @@ public class Robot {
         JSONObject state = new JSONObject();
         state.put("position", this.position.getAsList());
         state.put("direction", this.currentDirection.toString());
-        state.put("shields", this.shields);
+        state.put("shields", Math.max(this.shields, 0));
         state.put("shots", this.shots);
         state.put("status", isDead());
         return state;
@@ -143,8 +144,6 @@ public class Robot {
     }
 
     public void kill(World world, Server server, String message) {
-        MultiServer.clients.remove(MultiServer.clients.indexOf(server));
-
         this.shields = -1;
 
         ResponseBuilder response = new ResponseBuilder();

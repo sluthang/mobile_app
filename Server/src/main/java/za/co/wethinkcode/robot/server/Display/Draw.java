@@ -15,10 +15,11 @@ public class Draw {
         Turtle.setCanvasSize(400, 600);
         Turtle.zoomFit();
         this.display = new Turtle();
+        display.hide();
         display.fillColor(Color.BLACK);
         display.outlineWidth(2);
         display.width(2);
-        display.speed(10);
+        display.speed(0);
         display.shape("triangle");
         display.shapeSize(7, 7);
     }

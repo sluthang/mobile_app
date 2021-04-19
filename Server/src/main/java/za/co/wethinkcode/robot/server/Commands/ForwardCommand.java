@@ -50,7 +50,6 @@ public class ForwardCommand extends Command {
         } else if (response == UpdateResponse.FAILED_BOTTOMLESS_PIT) {
             message = "Fell";
             server.robot.kill(world, server, "Fell");
-            //TODO kill robot
         } else if (response == UpdateResponse.FAILED_HIT_MINE) {
             message = "Mine";
             //TODO mine things
