@@ -29,7 +29,6 @@ public class MultiServer {
 
                 Server r = new Server(socket, world);
                 Thread task = new Thread(r);
-                clients.add(r);
                 task.start();
             } catch(IOException ex) {
                 ex.printStackTrace();

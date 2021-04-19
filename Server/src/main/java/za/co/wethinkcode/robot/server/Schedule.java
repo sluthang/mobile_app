@@ -1,5 +1,6 @@
 package za.co.wethinkcode.robot.server;
 
+import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.Commands.ForwardCommand;
 import za.co.wethinkcode.robot.server.Robot.Position;
@@ -9,15 +10,18 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@SuppressWarnings("unchecked")
 public class Schedule {
+    private ResponseBuilder response;
     private final Timer timer;
     private final Robot robot;
     private final String todo;
     private final Server server;
     private final World world;
-    private int seconds;
+    private final int seconds;
 
     public Schedule(Server server, World world, String todo, int seconds) throws IOException {
+        this.response = new ResponseBuilder();
         this.todo = todo;
         this.timer = new Timer();
         this.robot = server.robot;
@@ -29,17 +33,23 @@ public class Schedule {
 
     public void startTask() throws IOException {
         timer.schedule(new Task(), seconds * 1000);
-        System.out.println("Starttask");
 
     }
 
-    public void changeRobotState(Robot target, String status) {
+    public void changeRobotState(String status) {
         robot.setStatus(status);
     }
 
     private void repairRobot(Robot target) {
         robot.shields = robot.getMaxShields();
-        changeRobotState(robot, "NORMAL");
+        changeRobotState("NORMAL");
+
+        JSONObject data = new JSONObject();
+        data.put("message", "Done");
+        response.addData(data);
+        response.add("result", "OK");
+        response.add("state", robot.getState());
+        server.out.println(response.toString());
     }
 
     private void layMine(Server server, World world) {
@@ -51,19 +61,40 @@ public class Schedule {
 
         world.getMaze().createMine(oldPos);
         server.robot.setStatus("NORMAL");
+
+        JSONObject data = new JSONObject();
+        data.put("message", "Done");
+        response.addData(data);
+        response.add("result", "OK");
+        response.add("state", robot.getState());
+        server.out.println(response.toString());
+    }
+
+    private void reload(Server server, World world) {
+        robot.shots = robot.getMaxShots();
+        changeRobotState("NORMAL");
+
+        JSONObject data = new JSONObject();
+        data.put("message", "Done");
+        response.addData(data);
+        response.add("result", "OK");
+        response.add("state", robot.getState());
+        server.out.println(response.toString());
     }
 
 
     class Task extends TimerTask {
         public void run() {
-            System.out.println("started run");
             switch (todo) {
                 case "mine":
                     layMine(server, world);
+                    break;
                 case "reload":
-                    changeRobotState(robot, "NORMAL");
+                    reload(server, world);
+                    break;
                 case "repair":
                     repairRobot(robot);
+                    break;
             }
             timer.cancel(); //Terminate the timer thread
         }

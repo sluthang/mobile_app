@@ -44,11 +44,11 @@ public class ServerManagement implements Runnable {
             if (inputString.get(0).equals("/message")) {
                 // /message <username> <message>, will fix later.
                 for (Server client : MultiServer.clients) {
-                    if (inputString.get(1).equals(client.clientName)) {
+                    if (inputString.get(1).equals(client.robotName)) {
                         client.out.println(ANSI_BLUE + inputString.get(2) + ANSI_RESET);
                         client.out.flush();
                         System.out.println("Message sent to: " + ANSI_GREEN +
-                                " "+ serverMessage + " " + client.clientName + ANSI_RESET);
+                                " "+ serverMessage + " " + client.robotName + ANSI_RESET);
                         break;
                     }
                 }
@@ -98,7 +98,7 @@ public class ServerManagement implements Runnable {
 
     private void purgeUser(String username) {
         for (Server client:MultiServer.clients) {
-            if (client.clientName.equalsIgnoreCase(username)) {
+            if (client.robotName.equalsIgnoreCase(username)) {
                 client.closeThread();
                 //noinspection RedundantCollectionOperation
                 MultiServer.clients.remove(MultiServer.clients.indexOf(client));
@@ -110,7 +110,7 @@ public class ServerManagement implements Runnable {
 
     private void showUsers() {
         for (Server client : MultiServer.clients) {
-            System.out.println(client.clientName + ": " + client);
+            System.out.println(client.robotName + ": " + client);
         }
     }
 

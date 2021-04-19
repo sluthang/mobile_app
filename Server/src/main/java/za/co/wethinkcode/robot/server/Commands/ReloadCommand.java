@@ -7,24 +7,22 @@ import za.co.wethinkcode.robot.server.World;
 
 import java.io.IOException;
 
+public class ReloadCommand extends Command{
 
-@SuppressWarnings("unchecked")
-public class RepairCommand extends Command{
-
-
-    public RepairCommand() {
-        super("repair");
+    public ReloadCommand() {
+        super("reload");
     }
 
+    @Override
     public void execute(World world, Server server) {
         try {
-            server.robot.setStatus("REPAIR");
-            new Schedule(server, world, "repair", world.REPAIR_TIME);
+            server.robot.setStatus("RELOAD");
+            new Schedule(server, world, "reload", world.REPAIR_TIME);
         } catch (IOException e) {
             e.printStackTrace();
         }
         JSONObject data = new JSONObject();
-        data.put("message", "Repair");
+        data.put("message", "Reload");
         server.response.addData(data);
         server.response.add("result", "OK");
     }

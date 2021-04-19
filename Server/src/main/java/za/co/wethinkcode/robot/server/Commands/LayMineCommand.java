@@ -22,6 +22,7 @@ public class LayMineCommand extends Command{
         // Checks if the robot is allowed to lay mines.
         if (canLay(server)) {
             // Create a forward command to move the robot 1 step ahead after laying mine.
+            //TODO While laying mines shields should be disabled.
             Command forward1 = new ForwardCommand("1");
             UpdateResponse response = forward1.updatePosition(1, server, world);
             forward1.updatePosition(-1, server, world);
@@ -38,13 +39,12 @@ public class LayMineCommand extends Command{
                 JSONObject data = new JSONObject();
                 data.put("message", "Mine");
                 server.response.addData(data);
-                server.response.add("result", "OK");
             } else {
                 JSONObject data = new JSONObject();
                 data.put("message", "Done");
                 server.response.addData(data);
-                server.response.add("result", "OK");
             }
+            server.response.add("result", "OK");
         } else {
             throw new IllegalArgumentException("Unsupported command for class");
         }

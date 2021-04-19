@@ -25,7 +25,7 @@ public class LaunchCommand extends Command{
         if (server.robot == null){
             server.robot = new Robot(server.robotName);
             world.addRobot(server.robot);
-            int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), MultiServer.config.getMaxShieldStrength());;
+            int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), MultiServer.config.getMaxShieldStrength());
             int maxShot = Integer.parseInt(args.get(2).toString());
             server.robot.setMaxes(maxShield, maxShot);
         } else {

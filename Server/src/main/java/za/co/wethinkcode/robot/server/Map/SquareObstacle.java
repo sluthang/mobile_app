@@ -44,7 +44,8 @@ public class SquareObstacle implements Obstacle {
      * @return: true if blocked (inside an obs.)
      * */
     public boolean blocksPosition(Position position) {
-        return (position.getX() >= bottomLeftX && position.getX() <= (bottomLeftX + 4)) && (position.getY() >= bottomLeftY && position.getY() <= (bottomLeftY + 4));
+        return (position.getX() >= bottomLeftX && position.getX() <= (bottomLeftX + 4)) &&
+                (position.getY() >= bottomLeftY && position.getY() <= (bottomLeftY + 4));
     }
 
     /**
