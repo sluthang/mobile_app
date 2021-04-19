@@ -102,16 +102,16 @@ public abstract class Command {
         int newY = currentPosition.getY();
 
         switch (currentDirection) {
-            case UP:
+            case NORTH:
                 newY = newY + nrSteps;
                 break;
-            case DOWN:
+            case SOUTH:
                 newY = newY - nrSteps;
                 break;
-            case LEFT:
+            case WEST:
                 newX = newX - nrSteps;
                 break;
-            case RIGHT:
+            case EAST:
                 newX = newX + nrSteps;
                 break;
         }

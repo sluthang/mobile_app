@@ -1,7 +1,6 @@
 package za.co.wethinkcode.robot.server.Robot;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.ResponseBuilder;
 
 public class Robot {
     protected final String name;
@@ -19,7 +18,7 @@ public class Robot {
     public Robot(String name) {
         this.name = name;
         this.status = "NORMAL";
-        this.currentDirection = Direction.UP;
+        this.currentDirection = Direction.NORTH;
     }
 
     /**
@@ -74,32 +73,32 @@ public class Robot {
     public void updateDirection(boolean turnRight) {
         if (turnRight) {
             switch (getCurrentDirection()){
-                case UP:
-                    this.currentDirection = Direction.RIGHT;
+                case NORTH:
+                    this.currentDirection = Direction.EAST;
                     break;
-                case RIGHT:
-                    this.currentDirection = Direction.DOWN;
+                case EAST:
+                    this.currentDirection = Direction.SOUTH;
                     break;
-                case DOWN:
-                    this.currentDirection = Direction.LEFT;
+                case SOUTH:
+                    this.currentDirection = Direction.WEST;
                     break;
-                case LEFT:
-                    this.currentDirection = Direction.UP;
+                case WEST:
+                    this.currentDirection = Direction.NORTH;
                     break;
             }
         } else {
             switch (getCurrentDirection()) {
-                case UP:
-                    this.currentDirection = Direction.LEFT;
+                case NORTH:
+                    this.currentDirection = Direction.WEST;
                     break;
-                case LEFT:
-                    this.currentDirection = Direction.DOWN;
+                case WEST:
+                    this.currentDirection = Direction.SOUTH;
                     break;
-                case DOWN:
-                    this.currentDirection = Direction.RIGHT;
+                case SOUTH:
+                    this.currentDirection = Direction.EAST;
                     break;
-                case RIGHT:
-                    this.currentDirection = Direction.UP;
+                case EAST:
+                    this.currentDirection = Direction.NORTH;
                     break;
             }
         }
