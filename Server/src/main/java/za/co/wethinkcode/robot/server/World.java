@@ -10,12 +10,14 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class World{
-    protected static final Position CENTRE = new Position(0,0);
+    //Hashmap of robots currently in play.
     protected ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
-    // The map that the world will be using.
-    public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
+    //Sets the maps Bottom-right and top-left positions set in the config file.
     public final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
+    public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
+    // The map that the world will be using.
     public Maze maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
+    //Values that were received from the config file.
     public final int MAX_SHOTS = MultiServer.config.getMaxShots();
     public final int MAX_SHIELDS = MultiServer.config.getMaxShieldStrength();
     public final int RELOAD_TIME = MultiServer.config.getReloadTime();
@@ -38,27 +40,55 @@ public class World{
         this.maze = maze;
     }
 
+    /**
+     * Return the list of SquareObstacles inside the map being used currently.
+     * @return Vector list of obstacle objects.
+     */
     public Vector<Obstacle> getObstacles() {
         return this.maze.getObstacles();
     }
 
+    /**
+     * Remove the robot at the given key.
+     * If a robot is dead or a client is disconnected this method will need to called to remove them from play.
+     * @param name of the robot to be removed
+     */
     public void removeRobot(String name) {
         this.robots.remove(name);
     }
 
+    /**
+     * Method will call the execute method on the given command.
+     * @param command to be executed.
+     * @param server that the command will issue data.
+     */
     public void handleCommand(Command command, Server server) {
         command.execute(this, server);
     }
 
-    // Builds a response for every  command input
+    /**
+     * Adds the newly created robot to the hashmap of robots on play.
+     * The Robot objects name will be used as the key.
+     * @param target to be added to list.
+     */
     public void addRobot(Robot target) {
         this.robots.put(target.getName(), target);
     }
 
+    /**
+     * Returns the robot from the hashmap with the given String as the key.
+     * @param name of robot
+     * @return Robot object.
+     */
     public Robot getRobot(String name){
         return this.robots.get(name);
     }
 
+    /**
+     * Returns the hashmap containing all the robots currently in play.
+     * Key: robot name, Value: Robot object
+     * @return hashmap of robots
+     */
     public ConcurrentHashMap<String, Robot> getRobots() {
         return robots;
     }

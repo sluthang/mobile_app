@@ -12,7 +12,7 @@ import java.util.TimerTask;
 
 @SuppressWarnings("unchecked")
 public class Schedule {
-    private ResponseBuilder response;
+    private final ResponseBuilder response;
     private final Timer timer;
     private final Robot robot;
     private final String todo;
@@ -31,16 +31,28 @@ public class Schedule {
         startTask();
     }
 
-    public void startTask() throws IOException {
-        timer.schedule(new Task(), seconds * 1000);
+    /**
+     * Starts the new task to be created.
+     */
+    public void startTask() {
+        timer.schedule(new Task(), seconds * 1000L);
 
     }
 
+    /**
+     * Changes the status of the robot while a task is being created or completed.
+     * @param status to change.
+     */
     public void changeRobotState(String status) {
         robot.setStatus(status);
     }
 
-    private void repairRobot(Robot target) {
+    /**
+     * Method will after a given seconds delay perform a task that repairs the robot.
+     * Robots shields will set to the maximum that were set at launch and state will be set to NORMAL.
+     *A JsonObject is constructed to let the user know that the task has completed and is sent to the user with new the new state.
+     */
+    private void repairRobot() {
         robot.shields = robot.getMaxShields();
         changeRobotState("NORMAL");
 
@@ -49,9 +61,16 @@ public class Schedule {
         response.addData(data);
         response.add("result", "OK");
         response.add("state", robot.getState());
-        server.out.println(response.toString());
+        server.out.println(response);
     }
 
+    /**
+     * Method will after a given seconds delay perform a task that repairs the robot.
+     * Robot will move forward by one place and place a mine on the old location that he was on.
+     * Status of robot is set to NORMAL and a JsonObject is built to send to the user with new state.
+     * @param server to perform task on.
+     * @param world to update mines list.
+     */
     private void layMine(Server server, World world) {
         try {
             Position oldPos = new Position(server.robot.getPosition().getX(),
@@ -70,13 +89,19 @@ public class Schedule {
             response.addData(data);
             response.add("result", "OK");
             response.add("state", robot.getState());
-            server.out.println(response.toString());
+            server.out.println(response);
         } catch (Exception e) {
             System.out.println("Robot died before completion");
         }
     }
 
-    private void reload(Server server, World world) {
+    /**
+     * Method will after a given seconds delay perform a task that reloads the robots ammo.
+     * Robots shots will set to the maximum that were set at launch and state will be set to NORMAL.
+     * A JsonObject is constructed to let the user know that the task has completed and is sent to the user with new the new state.
+     * @param server to issue commands to.
+     */
+    private void reload(Server server) {
         robot.shots = robot.getMaxShots();
         changeRobotState("NORMAL");
 
@@ -85,10 +110,12 @@ public class Schedule {
         response.addData(data);
         response.add("result", "OK");
         response.add("state", robot.getState());
-        server.out.println(response.toString());
+        server.out.println(response);
     }
 
-
+    /**
+     * Method will choose which task needs to be scheduled to run.
+     */
     class Task extends TimerTask {
         public void run() {
             switch (todo) {
@@ -96,10 +123,10 @@ public class Schedule {
                     layMine(server, world);
                     break;
                 case "reload":
-                    reload(server, world);
+                    reload(server);
                     break;
                 case "repair":
-                    repairRobot(robot);
+                    repairRobot();
                     break;
             }
             timer.cancel(); //Terminate the timer thread
