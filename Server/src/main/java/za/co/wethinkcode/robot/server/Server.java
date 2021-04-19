@@ -64,13 +64,14 @@ public class Server implements Runnable {
         printClientMessage(jsonMessage);
 
         this.robotName = (String)jsonMessage.get("robot");
-        this.robot = world.getRobot(this.robotName);
         this.response = new ResponseBuilder();
 
         Command command = Command.create(jsonMessage);
         world.handleCommand(command, this);
 
-        this.response.add("state", this.robot.getState());
+        if (robot != null) {
+            this.response.add("state", this.robot.getState());
+        }
         out.println(this.response.toString());
     }
 
@@ -89,9 +90,6 @@ public class Server implements Runnable {
             jsonMessage.put("command", "state");
             Command command = Command.create(jsonMessage);
             world.handleCommand(command, this);
-        }
-        if (robot.isDead().equals("DEAD")) {
-            robot.kill(world,this, "Dead");
         }
         this.response.add("state", this.robot.getState());
         out.println(this.response.toString());
@@ -122,8 +120,8 @@ public class Server implements Runnable {
     private void printClientMessage(JSONObject message) {
         System.out.println("\u001b[33;1m"+"Message from  : "+"\u001B[0m"+ this.robotName+"\n"+
                 "\n" +
-                "\u001B[32;1m"+"Robot name: "+"\u001B[0m"+ message.get("robot")+"\n"+
-                "\u001B[35;1m"+"Argument  : "+"\u001B[0m"+ message.get("arguments")+"\n"+
-                "\u001B[34;1m"+"Command   : "+"\u001B[0m"+ message.get("command")+"\n");
+                ServerManagement.ANSI_PURPLE + "\t\t\t\tName\t\t:\t" +ServerManagement.ANSI_CYAN + message.get("robot") + ServerManagement.ANSI_RESET +"\n"+
+                ServerManagement.ANSI_PURPLE + "\t\t\t\tArguments\t:\t" +ServerManagement.ANSI_CYAN + message.get("arguments") + ServerManagement.ANSI_RESET +"\n"+
+                ServerManagement.ANSI_PURPLE + "\t\t\t\tCommand\t:\t" +ServerManagement.ANSI_CYAN + message.get("command") + ServerManagement.ANSI_RESET +"\n");
     }
 }

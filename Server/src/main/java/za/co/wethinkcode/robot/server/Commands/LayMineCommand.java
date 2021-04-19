@@ -1,7 +1,6 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Schedule;
 import za.co.wethinkcode.robot.server.Server;
@@ -23,7 +22,7 @@ public class LayMineCommand extends Command{
         if (canLay(server)) {
             // Create a forward command to move the robot 1 step ahead after laying mine.
             server.robot.setStatus("SETMINE");
-            server.robot.jankVarOldShield = server.robot.shields;
+            server.robot.oldShield = server.robot.shields;
             server.robot.shields = 0;
             try {
                 new Schedule(server, world, "mine", world.MINE_SET_TIME);
@@ -47,12 +46,14 @@ public class LayMineCommand extends Command{
             }
             server.response.add("result", "OK");
         } else {
-            throw new IllegalArgumentException("Unsupported command for class");
+            JSONObject data = new JSONObject();
+            data.put("message", "No mines while using a gun.");
+            server.response.addData(data);
+            server.response.add("result", "ERROR");
         }
     }
 
     private boolean canLay(Server server) {
-//        return (server.robot.getShots() == 0);
-        return true;
+        return (server.robot.getMaxShots() == -1);
     }
 }

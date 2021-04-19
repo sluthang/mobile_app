@@ -116,10 +116,8 @@ public class BaseMaze implements Maze {
         while (i.hasNext()) {
             Obstacle mine = i.next();
             if (mine.blocksPosition(robotPosition)) {
-                server.robot.shields -= 3;
+                server.robot.takeDamage(3);
                 i.remove();
-                System.out.println("boom");
-                //TODO if shield is -1 send a dead state to user.
             }
         }
     }

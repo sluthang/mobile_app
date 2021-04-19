@@ -57,6 +57,9 @@ public class ForwardCommand extends Command {
         } else if (response == UpdateResponse.FAILED_HIT_MINE) {
             message = "Mine";
             world.maze.hitMine(server.robot.getPosition(), server);
+            if (server.robot.isDead().equals("DEAD")) {
+                server.robot.kill(world, server, "Mine");
+            }
         } else if (response == UpdateResponse.FAILED_OUTSIDE_WORLD){
             message = "Obstructed";
         }
