@@ -9,7 +9,7 @@ public class MultiServer {
     // Static field for the config files contents.
     public static ConfigReader config = new ConfigReader();
     // All client threads will be stored in the Vector array allowing us to use them individually.
-    static Vector<Server> clients = new Vector<>();
+    public static Vector<Server> clients = new Vector<>();
     // The loaded world with the map inserted, this will hold all the robots and data.
     public static World world = new World();
 
@@ -19,8 +19,9 @@ public class MultiServer {
         System.out.println("Server running & waiting for client connections.");
 
         // Create our Thread for using the System.in of the server, this will run along side the server.
-        Thread output = new Thread(new ServerManagement());
+        Thread output = new Thread(new ServerManagement(world));
         output.start();
+        world.showObstacles();
         while(output.isAlive()) {
             try {
                 // Create a new thread once a connection is made from a client. Client is added to Vector array.

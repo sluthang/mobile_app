@@ -18,13 +18,13 @@ public class RandomMaze extends BaseMaze {
      * Constructor for the random maze.
      * */
     public RandomMaze(Position TOP_LEFT, Position BOTTOM_RIGHT) {
-        generateList();
         this.upperX = BOTTOM_RIGHT.getX()-4;
         this.upperY = TOP_LEFT.getY()-4;
         this.lowerX = TOP_LEFT.getX();
         this.lowerY = BOTTOM_RIGHT.getY();
         this.maxX = BOTTOM_RIGHT.getX();
         this.maxY = TOP_LEFT.getY();
+        generateList();
     }
 
     /**
@@ -81,7 +81,7 @@ public class RandomMaze extends BaseMaze {
      * */
     public void generateList() {
         int counter = 0;
-        createMine(new Position(0,5));
+        createPit(new Position(0,3));
         while (counter != getNumberOfObs()) {
             int bottomLeftX = generateRandomNumber(upperX,lowerX,maxX);
             int bottomLeftY = generateRandomNumber(upperY,lowerY,maxY);

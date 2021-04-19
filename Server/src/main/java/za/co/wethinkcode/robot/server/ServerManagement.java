@@ -1,5 +1,6 @@
 package za.co.wethinkcode.robot.server;
 
+import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Display.Draw;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
@@ -13,17 +14,25 @@ public class ServerManagement implements Runnable {
     public static final String ANSI_GREEN = "\u001B[32;1m";
     public static final String ANSI_BLUE = "\u001B[34;1m";
     public static final String ANSI_PURPLE = "\u001B[35;1m";
+    public static final String ANSI_CYAN = "\u001B[36m";
     private final Draw display;
     private final Scanner sc;
+    private final World world;
     boolean running;
 
-    public ServerManagement() {
+    public ServerManagement(World world) {
         this.sc = new Scanner(System.in);
+        this.world = world;
         running = true;
         this.display = new Draw();
     }
 
     public void run() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("Server is running and live!\n" +
                 ANSI_PURPLE +
@@ -82,27 +91,31 @@ public class ServerManagement implements Runnable {
             client.closeThread();
         }
         this.running = false;
-        System.exit(0);
+        System.exit(69);
     }
 
     private void listRobots() {
         ConcurrentHashMap<String, Robot> robotDict = MultiServer.world.getRobots();
         Set<String> robots = robotDict.keySet();
 
-        for (String key:robots) {
-            Robot robot = robotDict.get(key);
-            System.out.println("Robot name: "+ANSI_PURPLE+robot.getName()+" position: ("+robot.getPosition().getX()+
-                    ","+robot.getPosition().getY()+") Direction: "+robot.getCurrentDirection()+ANSI_RESET);
+        for (String key : robots) {
+            Robot currentRobot = robotDict.get(key);
+            JSONObject robot = currentRobot.getState();
+
+            System.out.println(ANSI_GREEN + "\t\t\t\tName\t\t:\t" + ANSI_CYAN + currentRobot.getName() + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "\t\t\t\tPosition\t:\t" + ANSI_CYAN + robot.get("position") + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "\t\t\t\tDirection\t:\t" + ANSI_CYAN + robot.get("direction") + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "\t\t\t\tShield\t\t:\t" + ANSI_CYAN + robot.get("shields") + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "\t\t\t\tShots\t\t:\t" + ANSI_CYAN + robot.get("shots") + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "\t\t\t\tStatus\t\t:\t" + ANSI_CYAN + robot.get("status") + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "\t\t\t\t_____\t\t:\t" + ANSI_CYAN + "_____" + ANSI_RESET);
         }
     }
 
     private void purgeUser(String username) {
         for (Server client:MultiServer.clients) {
             if (client.robotName.equalsIgnoreCase(username)) {
-                client.closeThread();
-                //noinspection RedundantCollectionOperation
-                MultiServer.clients.remove(MultiServer.clients.indexOf(client));
-                MultiServer.world.removeRobot(username);
+                client.robot.kill(world, client, "Bonk");
                 break;
             }
         }
