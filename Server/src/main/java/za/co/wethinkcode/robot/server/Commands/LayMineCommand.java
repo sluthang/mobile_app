@@ -25,6 +25,7 @@ public class LayMineCommand extends Command{
             //TODO While laying mines shields should be disabled.
             Command forward1 = new ForwardCommand("1");
             UpdateResponse response = forward1.updatePosition(1, server, world);
+            //TODO must check before moving back
             forward1.updatePosition(-1, server, world);
 
             server.robot.setStatus("SETMINE");

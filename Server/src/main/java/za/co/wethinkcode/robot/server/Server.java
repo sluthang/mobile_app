@@ -87,13 +87,16 @@ public class Server implements Runnable {
             Command command = Command.create(jsonMessage);
             world.handleCommand(command, this);
         }
-        //TODO if the sheild is -1 return state of DEAD.
+        if (robot.isDead().equals("DEAD")) {
+            robot.kill(world,this, "Dead");
+        }
         this.response.add("state", this.robot.getState());
         out.println(this.response.toString());
     }
 
     public void closeThread() {
         this.running = false;
+        closeQuietly();
     }
 
     private void closeQuietly() {

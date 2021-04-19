@@ -1,10 +1,7 @@
 package za.co.wethinkcode.robot.server;
 
 import za.co.wethinkcode.robot.server.Commands.Command;
-import za.co.wethinkcode.robot.server.Map.BaseMaze;
-import za.co.wethinkcode.robot.server.Map.EmptyMaze;
-import za.co.wethinkcode.robot.server.Map.Maze;
-import za.co.wethinkcode.robot.server.Map.Obstacle;
+import za.co.wethinkcode.robot.server.Map.*;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
@@ -16,9 +13,9 @@ public class World{
     protected static final Position CENTRE = new Position(0,0);
     protected ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
     // The map that the world will be using.
-    public Maze maze = new EmptyMaze();
     public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
     public final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
+    public Maze maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
     public final int MAX_SHOTS = MultiServer.config.getMaxShots();
     public final int MAX_SHIELDS = MultiServer.config.getMaxShieldStrength();
     public final int RELOAD_TIME = MultiServer.config.getReloadTime();

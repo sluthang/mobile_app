@@ -1,6 +1,14 @@
 package za.co.wethinkcode.robot.server.Robot;
 
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.MultiServer;
+import za.co.wethinkcode.robot.server.ResponseBuilder;
+import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.World;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Robot {
     protected final String name;
@@ -123,8 +131,33 @@ public class Robot {
         state.put("direction", this.currentDirection.toString());
         state.put("shields", this.shields);
         state.put("shots", this.shots);
-        state.put("status", this.status);
+        state.put("status", isDead());
         return state;
+    }
+
+    public String isDead() {
+        if (this.shields < 0) {
+            this.status = "DEAD";
+        }
+        return this.status;
+    }
+
+    public void kill(World world, Server server, String message) {
+        MultiServer.clients.remove(MultiServer.clients.indexOf(server));
+
+        this.shields = -1;
+
+        ResponseBuilder response = new ResponseBuilder();
+        JSONObject data = new JSONObject();
+        data.put("Message", message);
+        response.addData(data);
+        response.add("result", "OK");
+        response.add("state", getState());
+
+        world.removeRobot(this.name);
+
+        server.out.println(response);
+        server.closeThread();
     }
 
     public void setMaxes(int maxShields, int maxShots) {
