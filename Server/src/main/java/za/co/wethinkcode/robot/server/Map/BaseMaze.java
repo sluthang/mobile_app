@@ -84,7 +84,6 @@ public class BaseMaze implements Maze {
                 }
 
                 for (Obstacle mine : this.minesList) {
-                    System.out.println(mine.getBottomLeftX() + ", " + mine.getBottomLeftY());
                     if (mine.blocksPosition(new Position(x, y))) {
                         return UpdateResponse.FAILED_HIT_MINE;
                     }
@@ -95,6 +94,7 @@ public class BaseMaze implements Maze {
                     if (key.equals(robotName)) {
                         continue;
                     }
+                    //TODO robots do not colide correctly and get stuck inside one another.
                     if (robots.get(key).blocksPosition(new Position(x,y))) {
                         return UpdateResponse.FAILED_OBSTRUCTED;
                     }

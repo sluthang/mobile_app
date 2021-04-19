@@ -38,13 +38,12 @@ public class LayMineCommand extends Command{
                 JSONObject data = new JSONObject();
                 data.put("message", "Mine");
                 server.response.addData(data);
-                server.response.add("result", "OK");
             } else {
                 JSONObject data = new JSONObject();
                 data.put("message", "Done");
                 server.response.addData(data);
-                server.response.add("result", "OK");
             }
+            server.response.add("result", "OK");
         } else {
             throw new IllegalArgumentException("Unsupported command for class");
         }

@@ -8,10 +8,10 @@ public class Robot {
     protected Direction currentDirection;
     protected Position position;
     private String status;
-    private int maxShields = 10;
-    private int maxShots = 10;
-    public int shields = 10;
-    public int shots = 10;
+    private int maxShields;
+    private int maxShots;
+    public int shields;
+    public int shots;
 
     /**
      * Constructor for Robot class
@@ -130,10 +130,14 @@ public class Robot {
 
     public void setMaxes(int maxShields, int maxShots) {
         this.maxShields = maxShields;
+        this.shields = maxShields;
         this.maxShots = maxShots;
+        this.shots = maxShots;
     }
 
     public int getMaxShields() {
         return this.maxShields;
     }
+
+    public int getMaxShots() { return this.maxShots; }
 }

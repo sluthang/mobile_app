@@ -8,14 +8,13 @@ import za.co.wethinkcode.robot.server.Robot.Robot;
 import java.io.*;
 import java.net.Socket;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "RedundantCollectionOperation"})
 public class Server implements Runnable {
 
     private boolean running;
     private final String clientMachine;
     public final BufferedReader in;
     public final PrintStream out;
-    public String clientName;
     public static World world;
     public Robot robot;
     public String robotName;
@@ -42,46 +41,55 @@ public class Server implements Runnable {
             String messageFromClient;
             while(robot == null) {
                 messageFromClient = in.readLine();
-                JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
-                System.out.println(messageFromClient);
-
-                this.robotName = (String)jsonMessage.get("robot");
-                this.robot = world.getRobot(this.robotName);
-                this.response = new ResponseBuilder();
-
-                Command command = Command.create(jsonMessage);
-                world.handleCommand(command, this);
-
-                this.response.add("state", this.robot.getState());
-                out.println(this.response.toString());
+                handleMessageBeforeLaunch(messageFromClient);
             }
 
+            MultiServer.clients.add(this);
             while(running) {
                 messageFromClient = in.readLine();
-                JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
-                System.out.println(messageFromClient);
-
-                this.robotName = (String)jsonMessage.get("robot");
-                this.robot = world.getRobot(this.robotName);
-                this.response = new ResponseBuilder();
-
-                if(robot.getStatus().equals("NORMAL")) {
-                    Command command = Command.create(jsonMessage);
-                    world.handleCommand(command, this);
-                } else {
-                    jsonMessage.put("command", "state");
-                    Command command = Command.create(jsonMessage);
-                    world.handleCommand(command, this);
-                }
-
-                this.response.add("state", this.robot.getState());
-                out.println(this.response.toString());
+                handleClientMessage(messageFromClient);
             }
-        } catch(IOException ex) {
+        } catch(IOException | NullPointerException ex) {
             System.out.println("Shutting down single client server");
         } finally {
             closeQuietly();
         }
+    }
+
+    private void handleMessageBeforeLaunch(String messageFromClient) {
+        JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
+        System.out.println(messageFromClient);
+
+        this.robotName = (String)jsonMessage.get("robot");
+        this.robot = world.getRobot(this.robotName);
+        this.response = new ResponseBuilder();
+
+        Command command = Command.create(jsonMessage);
+        world.handleCommand(command, this);
+
+        this.response.add("state", this.robot.getState());
+        out.println(this.response.toString());
+    }
+
+    private void handleClientMessage(String messageFromClient) {
+        JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
+        System.out.println(messageFromClient);
+
+        this.robotName = (String)jsonMessage.get("robot");
+        this.robot = world.getRobot(this.robotName);
+        this.response = new ResponseBuilder();
+
+        if(robot.getStatus().equals("NORMAL")) {
+            Command command = Command.create(jsonMessage);
+            world.handleCommand(command, this);
+        } else {
+            jsonMessage.put("command", "state");
+            Command command = Command.create(jsonMessage);
+            world.handleCommand(command, this);
+        }
+        //TODO if the sheild is -1 return state of DEAD.
+        this.response.add("state", this.robot.getState());
+        out.println(this.response.toString());
     }
 
     public void closeThread() {
@@ -89,7 +97,16 @@ public class Server implements Runnable {
     }
 
     private void closeQuietly() {
-        try { in.close(); out.close();
-        } catch(IOException ex) {}
+        try {
+            //TODO Before closing, send a dead state to the user, this should close the client.
+            in.close(); out.close();
+            System.out.println(Thread.currentThread().getName() + ": has left the server");
+            if (this.robot != null) {
+                world.removeRobot(this.robotName);
+                MultiServer.clients.remove(MultiServer.clients.indexOf(this));
+            }
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }
