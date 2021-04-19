@@ -63,7 +63,7 @@ public class Schedule {
             world.getMaze().createMine(oldPos);
             server.robot.setStatus("NORMAL");
 
-            server.robot.shields = server.robot.jankVarOldShield;
+            server.robot.shields = server.robot.oldShield;
 
             JSONObject data = new JSONObject();
             data.put("message", "Done");

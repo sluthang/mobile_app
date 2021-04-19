@@ -18,7 +18,7 @@ public class Robot {
     private int maxShields;
     private int maxShots;
     public int shields;
-    public int jankVarOldShield;
+    public int oldShield;
     public int shots;
 
     /**
@@ -131,7 +131,7 @@ public class Robot {
         state.put("position", this.position.getAsList());
         state.put("direction", this.currentDirection.toString());
         state.put("shields", Math.max(this.shields, 0));
-        state.put("shots", this.shots);
+        state.put("shots", Math.max(this.shots, 0));
         state.put("status", isDead());
         return state;
     }
@@ -168,6 +168,10 @@ public class Robot {
 
     public int getMaxShields() {
         return this.maxShields;
+    }
+
+    public void takeDamage(int damage) {
+        this.shields -= damage;
     }
 
     public int getMaxShots() { return this.maxShots; }

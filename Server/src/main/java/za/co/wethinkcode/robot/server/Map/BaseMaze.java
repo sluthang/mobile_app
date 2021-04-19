@@ -118,10 +118,8 @@ public class BaseMaze implements Maze {
             if (mine.blocksPath(a, b)) {
                 Position newPos = new Position(mine.getBottomLeftX(), mine.getBottomLeftY());
                 server.robot.setPosition(newPos);
-                server.robot.shields -= 3;
+                server.robot.takeDamage(3);
                 i.remove();
-                System.out.println("boom");
-                //TODO if shield is -1 send a dead state to user.
             }
         }
     }

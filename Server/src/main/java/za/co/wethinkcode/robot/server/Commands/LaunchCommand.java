@@ -8,10 +8,11 @@ import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Server;
 import za.co.wethinkcode.robot.server.World;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unchecked")
 public class LaunchCommand extends Command{
     JSONArray args;
     public LaunchCommand(JSONArray args) {
@@ -22,17 +23,18 @@ public class LaunchCommand extends Command{
     @Override
     public void execute(World world, Server server) {
         JSONObject data = new JSONObject();
-        if (server.robot == null){
+        if (!doesRobotExist(world, server)) {
+            server.robotName = null;
+            data.put("message", "Too many of you in this world");
+            server.response.addData(data);
+            server.response.add("result", "ERROR");
+            return;
+        } else if (server.robot == null){
             server.robot = new Robot(server.robotName);
             world.addRobot(server.robot);
             int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), MultiServer.config.getMaxShieldStrength());
             int maxShot = Integer.parseInt(args.get(2).toString());
             server.robot.setMaxes(maxShield, maxShot);
-        } else {
-            data.put("message", "Too many of you in this world");
-            server.response.addData(data);
-            server.response.add("result", "ERROR");
-            return;
         }
 
         Random random = new Random();
@@ -66,5 +68,22 @@ public class LaunchCommand extends Command{
 
         server.response.addData(data);
         server.response.add("result", "OK");
+    }
+
+    private boolean doesRobotExist(World world, Server server) {
+        try {
+            ConcurrentHashMap<String, Robot> robotDict = world.getRobots();
+            Set<String> robots = robotDict.keySet();
+
+            for (String key : robots) {
+                Robot currentRobot = robotDict.get(key);
+                if (currentRobot.getName().equals(server.robotName)) {
+                    return false;
+                }
+            }
+        } catch (NullPointerException e) {
+            return true;
+        }
+        return true;
     }
 }
