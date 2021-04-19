@@ -50,6 +50,7 @@ public class Server implements Runnable {
                 handleClientMessage(messageFromClient);
             }
         } catch(IOException | NullPointerException ex) {
+            ex.printStackTrace();
             System.out.println("Shutting down single client server");
         } finally {
             closeQuietly();

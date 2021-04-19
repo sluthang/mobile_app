@@ -39,7 +39,11 @@ public class ForwardCommand extends Command {
             return;
         }
 
-        UpdateResponse response =  updatePosition(nrSteps, server, world);
+        UpdateResponse response = UpdateResponse.SUCCESS;
+        while (nrSteps > 0 && response == UpdateResponse.SUCCESS) {
+            response =  updatePosition(1, server, world);
+            nrSteps -= 1;
+        }
 
         //TODO set position to whatever it hits
         String message = "";
@@ -52,7 +56,7 @@ public class ForwardCommand extends Command {
             //TODO kill robot
         } else if (response == UpdateResponse.FAILED_HIT_MINE) {
             message = "Mine";
-            //TODO mine things
+            world.maze.hitMine(server.robot.getPosition(), server);
         } else if (response == UpdateResponse.FAILED_OUTSIDE_WORLD){
             message = "Obstructed";
         }

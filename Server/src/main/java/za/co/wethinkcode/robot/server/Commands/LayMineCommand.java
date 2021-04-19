@@ -23,10 +23,6 @@ public class LayMineCommand extends Command{
         if (canLay(server)) {
             // Create a forward command to move the robot 1 step ahead after laying mine.
             //TODO While laying mines shields should be disabled.
-            Command forward1 = new ForwardCommand("1");
-            UpdateResponse response = forward1.updatePosition(1, server, world);
-            forward1.updatePosition(-1, server, world);
-
             server.robot.setStatus("SETMINE");
             try {
                 new Schedule(server, world, "mine", world.MINE_SET_TIME);
@@ -34,8 +30,12 @@ public class LayMineCommand extends Command{
                 e.printStackTrace();
             }
 
-            if (!response.equals(UpdateResponse.SUCCESS)) {
-                world.getMaze().hitMine(server.robot.getPosition(), server.robot.getPosition(), server);
+            Position currentPosition = server.robot.getPosition();
+            currentPosition = new Position(currentPosition.getX(), currentPosition.getY());
+            Command forward = new ForwardCommand("1");
+            forward.execute(world, server);
+            if (currentPosition.equals(server.robot.getPosition())) {
+                world.getMaze().hitMine(server.robot.getPosition(), server);
                 JSONObject data = new JSONObject();
                 data.put("message", "Mine");
                 server.response.addData(data);
