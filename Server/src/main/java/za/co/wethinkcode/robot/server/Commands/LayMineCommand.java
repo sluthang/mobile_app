@@ -22,8 +22,9 @@ public class LayMineCommand extends Command{
         // Checks if the robot is allowed to lay mines.
         if (canLay(server)) {
             // Create a forward command to move the robot 1 step ahead after laying mine.
-            //TODO While laying mines shields should be disabled.
             server.robot.setStatus("SETMINE");
+            server.robot.jankVarOldShield = server.robot.shields;
+            server.robot.shields = 0;
             try {
                 new Schedule(server, world, "mine", world.MINE_SET_TIME);
             } catch (IOException e) {
