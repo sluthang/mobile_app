@@ -73,6 +73,8 @@ public abstract class Command {
                 return new RepairCommand();
             case "launch":
                 return new LaunchCommand(args);
+            case "fire":
+                return new FireCommand();
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
