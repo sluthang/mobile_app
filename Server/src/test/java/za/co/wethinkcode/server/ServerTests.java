@@ -2,7 +2,7 @@ package za.co.wethinkcode.server;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import za.co.wethinkcode.robot.server.MultiServer;
+import za.co.wethinkcode.robot.server.Server.MultiServer;
 
 import java.io.IOException;
 

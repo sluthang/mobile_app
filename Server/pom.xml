@@ -27,7 +27,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>za.co.wethinkcode.robot.server.MultiServer</mainClass>
+                            <mainClass>za.co.wethinkcode.robot.server.Server.MultiServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

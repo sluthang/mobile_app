@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Robot.Direction;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 public abstract class Command {
@@ -46,9 +46,10 @@ public abstract class Command {
      * creates args, based on the arguments passed through.
      * checks if the args is just 1 (so like 'help' instead of 'forward 1'), and runs those commands.
      * else if does the commands and passes through their arguments.
-     * if the arugment is illegal or unsupported then it will throw back an exception
+     * if the argument is illegal or unsupported then it will throw back an exception
      *
-     * @param instruction*/
+     * @param instruction;
+     * */
     public static Command create(JSONObject instruction) {
         String command = instruction.get("command").toString();
         JSONArray args = (JSONArray) instruction.get("arguments");
@@ -73,6 +74,8 @@ public abstract class Command {
                 return new RepairCommand();
             case "launch":
                 return new LaunchCommand(args);
+            case "reload":
+                return new ReloadCommand();
             case "fire":
                 return new FireCommand();
             default:
