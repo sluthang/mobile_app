@@ -16,6 +16,14 @@ public class LayMineCommand extends Command{
         super("mine");
     }
 
+    /**
+     * Checks if the robot can move forward by 1 step, if the robot is obstructed
+     * then the mine placed will detonate on the robot that is laying it.
+     * Starts the task scheduler for laying the mine on the field.
+     * Build the JsonObject to send to the client stating that the task has started.
+     * @param world;
+     * @param server;
+     */
     @Override
     public void execute(World world, Server server) {
         // Checks if the robot is allowed to lay mines.

@@ -46,9 +46,10 @@ public abstract class Command {
      * creates args, based on the arguments passed through.
      * checks if the args is just 1 (so like 'help' instead of 'forward 1'), and runs those commands.
      * else if does the commands and passes through their arguments.
-     * if the arugment is illegal or unsupported then it will throw back an exception
+     * if the argument is illegal or unsupported then it will throw back an exception
      *
-     * @param instruction*/
+     * @param instruction;
+     * */
     public static Command create(JSONObject instruction) {
         String command = instruction.get("command").toString();
         JSONArray args = (JSONArray) instruction.get("arguments");
@@ -73,18 +74,13 @@ public abstract class Command {
                 return new RepairCommand();
             case "launch":
                 return new LaunchCommand(args);
+            case "reload":
+                return new ReloadCommand();
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
     }
 
-    /**
-     * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
-     * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),
-     * lastly it returns a failed out of bounds otherwise.
-     * @param nrSteps: the number of steps the robot will move;
-     * @return: an UpdateResponse of what the result of moving the robot is.
-     * */
     /**
      * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
      * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),

@@ -24,6 +24,11 @@ public class Draw {
         display.shapeSize(7, 7);
     }
 
+    /**
+     * Draws all the current obstacles on the field in the turtle draw interface.
+     * @param list to be drawn.
+     * @param color of the obstacles.
+     */
     public void drawObstacles(Vector<Obstacle> list, Color color) {
         display.penColor(color);
         for (Obstacle obs : list) {
@@ -39,6 +44,11 @@ public class Draw {
         display.forward(2);
     }
 
+    /**
+     * Draws the robots on the field in the turtle draw interface.
+     * @param robots list of robots to draw.
+     * @param color of the robots.
+     */
     public void drawRobots(ConcurrentHashMap<String, Robot> robots, Color color) {
         Set<String> keys = robots.keySet();
         for (String key : keys) {
@@ -51,6 +61,9 @@ public class Draw {
         display.setPosition(0,-20);
     }
 
+    /**
+     * Clears the display of all drawn objects.
+     */
     public void clear() {
         display.clear();
     }

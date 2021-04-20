@@ -13,6 +13,12 @@ public class ReloadCommand extends Command{
         super("reload");
     }
 
+    /**
+     * Starts the task scheduler for laying a mine on the field.
+     * Build the JsonObject to send to the client stating that the reloading has begun.
+     * @param world;
+     * @param server;
+     */
     @Override
     public void execute(World world, Server server) {
         try {
