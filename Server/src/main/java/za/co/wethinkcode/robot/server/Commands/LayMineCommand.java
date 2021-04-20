@@ -1,10 +1,8 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.Robot.Position;
-import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Schedule;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Utility.Schedule;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 import java.io.IOException;
@@ -17,6 +15,14 @@ public class LayMineCommand extends Command{
         super("mine");
     }
 
+    /**
+     * Checks if the robot can move forward by 1 step, if the robot is obstructed
+     * then the mine placed will detonate on the robot that is laying it.
+     * Starts the task scheduler for laying the mine on the field.
+     * Build the JsonObject to send to the client stating that the task has started.
+     * @param world;
+     * @param server;
+     */
     @Override
     public void execute(World world, Server server) {
         // Checks if the robot is allowed to lay mines.
