@@ -39,7 +39,13 @@ public class ForwardCommand extends Command {
             return;
         }
 
-        UpdateResponse response =  updatePosition(nrSteps, server, world);
+        UpdateResponse response = UpdateResponse.SUCCESS;
+        Integer step = 1;
+        if (nrSteps < 0) step = -1;
+        while (nrSteps != 0 && response == UpdateResponse.SUCCESS) {
+            response =  updatePosition(step, server, world);
+            nrSteps -= step;
+        }
 
         //TODO set position to whatever it hits
         String message = "";
@@ -52,6 +58,7 @@ public class ForwardCommand extends Command {
             server.robot.kill(world, server, "Fell");
         } else if (response == UpdateResponse.FAILED_HIT_MINE) {
             message = "Mine";
+            world.maze.hitMine(server.robot.getPosition(), server);
             if (server.robot.isDead().equals("DEAD")) {
                 server.robot.kill(world, server, "Mine");
             }

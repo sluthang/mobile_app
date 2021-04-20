@@ -76,6 +76,8 @@ public abstract class Command {
                 return new LaunchCommand(args);
             case "reload":
                 return new ReloadCommand();
+            case "fire":
+                return new FireCommand();
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
@@ -114,9 +116,19 @@ public abstract class Command {
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
 
-        UpdateResponse response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), server.robotName);
-        if (response == UpdateResponse.FAILED_HIT_MINE) world.maze.hitMine(oldPosition, newPosition, server);
+        UpdateResponse response;
+        if (Math.abs(nrSteps) == 1) {
+            response = world.maze.blocksPosition(world.getRobots(), newPosition, server.robotName);
+        }
+        else {
+            response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), server.robotName);
+            //this broke, don't touch
+        }
 
+        if (response == UpdateResponse.FAILED_HIT_MINE) {
+            server.robot.setPosition(newPosition);
+            return response;
+        }
         if (response != UpdateResponse.SUCCESS) return response;
 
         response = world.isInWorld(oldPosition, newPosition);
