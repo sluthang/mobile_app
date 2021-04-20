@@ -31,7 +31,7 @@ public class Schedule {
         startTask();
     }
 
-    public void startTask() throws IOException {
+    public void startTask() {
         timer.schedule(new Task(), seconds * 1000);
 
     }
@@ -40,7 +40,7 @@ public class Schedule {
         robot.setStatus(status);
     }
 
-    private void repairRobot(Robot target) {
+    private void repairRobot() {
         robot.shields = robot.getMaxShields();
         changeRobotState("NORMAL");
 
@@ -76,7 +76,7 @@ public class Schedule {
         }
     }
 
-    private void reload(Server server, World world) {
+    private void reload(Server server) {
         robot.shots = robot.getMaxShots();
         changeRobotState("NORMAL");
 
@@ -96,10 +96,10 @@ public class Schedule {
                     layMine(server, world);
                     break;
                 case "reload":
-                    reload(server, world);
+                    reload(server);
                     break;
                 case "repair":
-                    repairRobot(robot);
+                    repairRobot();
                     break;
             }
             timer.cancel(); //Terminate the timer thread

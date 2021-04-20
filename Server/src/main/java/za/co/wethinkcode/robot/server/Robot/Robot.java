@@ -1,14 +1,9 @@
 package za.co.wethinkcode.robot.server.Robot;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.MultiServer;
 import za.co.wethinkcode.robot.server.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Server;
 import za.co.wethinkcode.robot.server.World;
-
-import java.awt.*;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class Robot {
     protected final String name;
