@@ -73,18 +73,13 @@ public abstract class Command {
                 return new RepairCommand();
             case "launch":
                 return new LaunchCommand(args);
+            case "fire":
+                return new FireCommand();
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
     }
 
-    /**
-     * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
-     * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),
-     * lastly it returns a failed out of bounds otherwise.
-     * @param nrSteps: the number of steps the robot will move;
-     * @return: an UpdateResponse of what the result of moving the robot is.
-     * */
     /**
      * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
      * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),
@@ -118,9 +113,19 @@ public abstract class Command {
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
 
-        UpdateResponse response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), server.robotName);
-        if (response == UpdateResponse.FAILED_HIT_MINE) world.maze.hitMine(oldPosition, newPosition, server);
+        UpdateResponse response;
+        if (Math.abs(nrSteps) == 1) {
+            response = world.maze.blocksPosition(world.getRobots(), newPosition, server.robotName);
+        }
+        else {
+            response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), server.robotName);
+            //this broke, don't touch
+        }
 
+        if (response == UpdateResponse.FAILED_HIT_MINE) {
+            server.robot.setPosition(newPosition);
+            return response;
+        }
         if (response != UpdateResponse.SUCCESS) return response;
 
         response = world.isInWorld(oldPosition, newPosition);
