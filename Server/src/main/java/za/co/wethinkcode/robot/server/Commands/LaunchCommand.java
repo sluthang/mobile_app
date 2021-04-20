@@ -32,8 +32,8 @@ public class LaunchCommand extends Command{
         } else if (server.robot == null){
             server.robot = new Robot(server.robotName);
             world.addRobot(server.robot);
-            int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), MultiServer.config.getMaxShieldStrength());
-            int maxShot = Integer.parseInt(args.get(2).toString());
+            int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), world.MAX_SHIELDS);
+            int maxShot = Math.min(Integer.parseInt(args.get(2).toString()), world.MAX_SHOTS);
             server.robot.setMaxes(maxShield, maxShot);
         }
 
@@ -82,6 +82,7 @@ public class LaunchCommand extends Command{
                 }
             }
         } catch (NullPointerException e) {
+            e.printStackTrace();
             return true;
         }
         return true;

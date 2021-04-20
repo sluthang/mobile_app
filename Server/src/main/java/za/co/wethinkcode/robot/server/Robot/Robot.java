@@ -34,8 +34,7 @@ public class Robot {
 
     /**
      * Getter to fetch current direction
-     *
-     * @return
+     * @return currentDirection.
      * */
     public Direction getCurrentDirection() {
         return this.currentDirection;
@@ -61,7 +60,9 @@ public class Robot {
     /**
      * Setter to set the current direction
      * */
-    public void setCurrentDirection(Direction direction) {this.currentDirection = direction;}
+    public void setCurrentDirection(Direction direction) {
+        this.currentDirection = direction;
+    }
 
     /**
      * Setter to set the current status
@@ -116,10 +117,20 @@ public class Robot {
         this.position = position;
     }
 
+    /**
+     * Checks if the position given matches the current position of the robot.
+     * @param position to be compared.
+     * @return true if blocked.
+     */
     public boolean blocksPosition(Position position) {
         return this.position.equals(position);
     }
 
+    /**
+     * Creates a JsonObject that is filled with the robots current state.
+     * The fields that are included are position, direction, shields, shots and status.
+     * @return JsonObject with state.
+     */
     @SuppressWarnings("unchecked")
     public JSONObject getState(){
         JSONObject state = new JSONObject();
@@ -131,6 +142,11 @@ public class Robot {
         return state;
     }
 
+    /**
+     * Method will check if the robot is dead.
+     * If the robots shield is below 0 then the robot is considered dead.
+     * @return true/false.
+     */
     public String isDead() {
         if (this.shields < 0) {
             this.status = "DEAD";
@@ -138,9 +154,17 @@ public class Robot {
         return this.status;
     }
 
+    /**
+     * Method will kill the robot and and purge user that is associated with that robot.
+     * @param world;
+     * @param server;
+     * @param message;
+     */
     public void kill(World world, Server server, String message) {
+        //Sets the robots shields to below 0.
         this.shields = -1;
 
+        //Builds a Json response to send to client.
         ResponseBuilder response = new ResponseBuilder();
         JSONObject data = new JSONObject();
         data.put("Message", message);
@@ -148,12 +172,19 @@ public class Robot {
         response.add("result", "OK");
         response.add("state", getState());
 
+        //Removes the current robot from the HashMap list.
         world.removeRobot(this.name);
 
+        //Sends response to client and closes their thread.
         server.out.println(response);
         server.closeThread();
     }
 
+    /**
+     * Sets the max for shields and shots.
+     * @param maxShields;
+     * @param maxShots;
+     */
     public void setMaxes(int maxShields, int maxShots) {
         this.maxShields = maxShields;
         this.shields = maxShields;
@@ -165,6 +196,10 @@ public class Robot {
         return this.maxShields;
     }
 
+    /**
+     * Reduces the shield of the robot by the given int value.
+     * @param damage;
+     */
     public void takeDamage(int damage) {
         this.shields -= damage;
     }

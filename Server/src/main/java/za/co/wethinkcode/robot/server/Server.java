@@ -37,9 +37,6 @@ public class Server implements Runnable {
 
     public void run() {
         try {
-            // Default "Play" of the current client.
-            boolean shouldContinue = true;
-
             String messageFromClient;
             while(robot == null) {
                 messageFromClient = in.readLine();
@@ -58,6 +55,11 @@ public class Server implements Runnable {
         }
     }
 
+    /**
+     * Method will handle the input from the connected client before any robot has been launched.
+     * No fields will be set or allow any commands to be issued until launch is used.
+     * @param messageFromClient JsonString from client.
+     */
     private void handleMessageBeforeLaunch(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
         printClientMessage(jsonMessage);
@@ -74,6 +76,11 @@ public class Server implements Runnable {
         out.println(this.response.toString());
     }
 
+    /**
+     * Method will handle the input from the clients once a robot is instantiated.
+     * This will handle calling all the commands the client sends through as well as error handling.
+     * @param messageFromClient JsonString from client.
+     */
     private void handleClientMessage(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
         printClientMessage(jsonMessage);
@@ -94,11 +101,19 @@ public class Server implements Runnable {
         out.println(this.response.toString());
     }
 
+    /**
+     * Sets running to false to end the Run method.
+     * Calls the close Quietly command to end the threads process.
+     */
     public void closeThread() {
         this.running = false;
         closeQuietly();
     }
 
+    /**
+     * Closes all the streams for the current thread.
+     *
+     */
     @SuppressWarnings("CatchMayIgnoreException")
     private void closeQuietly() {
         try {

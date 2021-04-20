@@ -17,7 +17,7 @@ public class ReloadCommand extends Command{
     public void execute(World world, Server server) {
         try {
             server.robot.setStatus("RELOAD");
-            new Schedule(server, world, "reload", world.REPAIR_TIME);
+            new Schedule(server, world, "reload", world.RELOAD_TIME);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerManagement implements Runnable {
+    //Ansi escape codes to be used for pretty printing.
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32;1m";
     public static final String ANSI_BLUE = "\u001B[34;1m";
     public static final String ANSI_PURPLE = "\u001B[35;1m";
     public static final String ANSI_CYAN = "\u001B[36m";
+    //Display to be drawn on for the dump command.
     private final Draw display;
     private final Scanner sc;
     private final World world;
@@ -28,12 +30,13 @@ public class ServerManagement implements Runnable {
     }
 
     public void run() {
+        //Sleep for 3 seconds due to threads printing at the same time when run on fast CPU's.
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        //Pretty print the instructions for using the server to the server admin.
         System.out.println("Server is running and live!\n" +
                 ANSI_PURPLE +
                 "Server can message clients individually by using the /message tag.\n" +
@@ -47,46 +50,36 @@ public class ServerManagement implements Runnable {
 
         while (running) {
             String serverMessage = sc.nextLine();
-            List<String> inputString = Arrays.asList(serverMessage.split(" ", 3));
+            //Split the console input into a string.
+            List<String> inputString = Arrays.asList(serverMessage.split(" ", 2));
 
-            // if /message is used a direct message is sent to a user. the username must be included.
-            if (inputString.get(0).equals("/message")) {
-                // /message <username> <message>, will fix later.
-                for (Server client : MultiServer.clients) {
-                    if (inputString.get(1).equals(client.robotName)) {
-                        client.out.println(ANSI_BLUE + inputString.get(2) + ANSI_RESET);
-                        client.out.flush();
-                        System.out.println("Message sent to: " + ANSI_GREEN +
-                                " "+ serverMessage + " " + client.robotName + ANSI_RESET);
-                        break;
-                    }
-                }
-
-                // If /command is used it will issue server side methods.
-            } else if (inputString.get(0).equals("/command")) {
-                //execute server commands that will alter the world.
-                switch (inputString.get(1)) {
-                    case "quit":
-                        quitServer();
-                        break;
-                    case "robots":
-                        listRobots();
-                        break;
-                    case "purge":
-                        purgeUser(inputString.get(2));
-                        break;
-                    case "clients":
-                        showUsers();
-                        break;
-                    case "dump":
-                        dump();
-                        break;
-                }
+            //execute server commands that will alter the world.
+            switch (inputString.get(0)) {
+                case "quit":
+                    quitServer();
+                    break;
+                case "robots":
+                    listRobots();
+                    break;
+                case "purge":
+                    purgeUser(inputString.get(1));
+                    break;
+                case "clients":
+                    showUsers();
+                    break;
+                case "dump":
+                    dump();
+                    break;
             }
         }
     }
 
+    /**
+     * Method will close all the threads currently running on the server,
+     * then it will close the server completely.
+     */
     private void quitServer() {
+        //Loops through the client list and closes the.
         for (Server client : MultiServer.clients) {
             client.closeThread();
         }
@@ -94,14 +87,21 @@ public class ServerManagement implements Runnable {
         System.exit(69);
     }
 
+    /**
+     * Method will display all the robots currently in play on the field,
+     * as well as their current states.
+     */
     private void listRobots() {
-        ConcurrentHashMap<String, Robot> robotDict = MultiServer.world.getRobots();
+        //Creates a copy of the robots HashMap
+        ConcurrentHashMap<String, Robot> robotDict = world.getRobots();
+        //Create a set with the keys from the HashMap
         Set<String> robots = robotDict.keySet();
 
+        //Loops through the list of robots and grabs the values.
         for (String key : robots) {
             Robot currentRobot = robotDict.get(key);
             JSONObject robot = currentRobot.getState();
-
+            //Pretty prints the state of the current robot in the loop.
             System.out.println(ANSI_GREEN + "\t\t\t\tName\t\t:\t" + ANSI_CYAN + currentRobot.getName() + ANSI_RESET);
             System.out.println(ANSI_GREEN + "\t\t\t\tPosition\t:\t" + ANSI_CYAN + robot.get("position") + ANSI_RESET);
             System.out.println(ANSI_GREEN + "\t\t\t\tDirection\t:\t" + ANSI_CYAN + robot.get("direction") + ANSI_RESET);
@@ -112,6 +112,10 @@ public class ServerManagement implements Runnable {
         }
     }
 
+    /**
+     * Removes the user with the given name from the robots list as well as client list.
+     * @param username that will be purged.
+     */
     private void purgeUser(String username) {
         for (Server client:MultiServer.clients) {
             if (client.robotName.equalsIgnoreCase(username)) {
@@ -121,15 +125,27 @@ public class ServerManagement implements Runnable {
         }
     }
 
+    /**
+     * Prints the currently connected clients to the console.
+     */
     private void showUsers() {
         for (Server client : MultiServer.clients) {
             System.out.println(client.robotName + ": " + client);
         }
     }
 
+    /**
+     * Creates a turtle field that will be used to display the objects on the field.
+     * Objects shown will as follows.
+     * Mines in Red.
+     * Robots in Green.
+     * Obstacles in Purple.
+     * Bottomless pits in Black.
+     */
     private void dump() {
+        //Clears the display before printing out.
         display.clear();
-
+        // Calls the methods to display the separate objects on the field.
         display.drawObstacles(MultiServer.world.getObstacles(), Color.MAGENTA);
         display.drawObstacles(MultiServer.world.getMaze().getPits(), Color.BLACK);
         display.drawObstacles(MultiServer.world.getMaze().getMines(), Color.RED);
