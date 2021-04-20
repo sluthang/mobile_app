@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Display;
 
 import za.co.wethinkcode.robot.server.Map.Obstacle;
+import za.co.wethinkcode.robot.server.MultiServer;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
 import java.awt.*;
@@ -10,10 +11,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Draw {
     private final Turtle display;
+    private final int height;
+    private final int width;
 
-    public Draw() {
-        Turtle.setCanvasSize(400, 600);
-        Turtle.zoomFit();
+    public Draw(int height, int width) {
+        this.width = width;
+        this.height = height;
+        Turtle.setCanvasSize(600, 600);
         this.display = new Turtle();
         display.hide();
         display.fillColor(Color.BLACK);
@@ -22,6 +26,27 @@ public class Draw {
         display.speed(0);
         display.shape("triangle");
         display.shapeSize(7, 7);
+
+    }
+
+    public void zoom() {
+        Turtle.zoomFit();
+    }
+
+    private void drawBorder() {
+        display.penColor(Color.BLACK);
+        display.up();
+        display.setPosition(-(width/2), (height/2));
+        display.setDirection(0);
+        display.down();
+        display.forward(width);
+        display.right(90);
+        display.forward(height);
+        display.right(90);
+        display.forward(width);
+        display.right(90);
+        display.forward(height);
+        display.up();
     }
 
     /**
@@ -30,6 +55,7 @@ public class Draw {
      * @param color of the obstacles.
      */
     public void drawObstacles(Vector<Obstacle> list, Color color) {
+        drawBorder();
         display.penColor(color);
         for (Obstacle obs : list) {
             display.up();

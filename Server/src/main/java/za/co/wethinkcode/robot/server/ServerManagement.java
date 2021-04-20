@@ -26,7 +26,7 @@ public class ServerManagement implements Runnable {
         this.sc = new Scanner(System.in);
         this.world = world;
         running = true;
-        this.display = new Draw();
+        this.display = new Draw(MultiServer.config.getHeight(), MultiServer.config.getWidth());
     }
 
     public void run() {
@@ -123,6 +123,9 @@ public class ServerManagement implements Runnable {
                 break;
             }
         }
+        try {
+            world.robots.remove(username);
+        } catch (NullPointerException ignored) {}
     }
 
     /**
@@ -150,5 +153,6 @@ public class ServerManagement implements Runnable {
         display.drawObstacles(MultiServer.world.getMaze().getPits(), Color.BLACK);
         display.drawObstacles(MultiServer.world.getMaze().getMines(), Color.RED);
         display.drawRobots(MultiServer.world.getRobots(), Color.GREEN);
+        display.zoom();
     }
 }

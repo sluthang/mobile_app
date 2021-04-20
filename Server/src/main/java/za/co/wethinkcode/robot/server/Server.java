@@ -25,7 +25,7 @@ public class Server implements Runnable {
         // Constructor for the class will create the in and out streams.
         this.socket = socket;
         clientMachine = socket.getInetAddress().getHostName();
-        System.out.println("Connection from " + clientMachine);
+        System.out.println(ServerManagement.ANSI_GREEN+"Connection from " + ServerManagement.ANSI_RESET + clientMachine);
 
         out = new PrintStream(socket.getOutputStream());
         in = new BufferedReader(new InputStreamReader(

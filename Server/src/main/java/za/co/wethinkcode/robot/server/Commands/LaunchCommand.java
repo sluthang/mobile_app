@@ -23,13 +23,13 @@ public class LaunchCommand extends Command{
     @Override
     public void execute(World world, Server server) {
         JSONObject data = new JSONObject();
-        if (!doesRobotExist(world, server)) {
+        if (!doesRobotExist(world, server) || server.robot != null) {
             server.robotName = null;
             data.put("message", "Too many of you in this world");
             server.response.addData(data);
             server.response.add("result", "ERROR");
             return;
-        } else if (server.robot == null){
+        } else {
             server.robot = new Robot(server.robotName);
             world.addRobot(server.robot);
             int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), world.MAX_SHIELDS);
