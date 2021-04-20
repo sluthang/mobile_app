@@ -1,9 +1,11 @@
-package za.co.wethinkcode.robot.server;
+package za.co.wethinkcode.robot.server.Server;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import za.co.wethinkcode.robot.server.Commands.Command;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Robot.Robot;
+import za.co.wethinkcode.robot.server.World;
 
 import java.io.*;
 import java.net.Socket;
@@ -25,7 +27,7 @@ public class Server implements Runnable {
         // Constructor for the class will create the in and out streams.
         this.socket = socket;
         clientMachine = socket.getInetAddress().getHostName();
-        System.out.println("Connection from " + clientMachine);
+        System.out.println(ServerManagement.ANSI_GREEN+"Connection from " + ServerManagement.ANSI_RESET + clientMachine);
 
         out = new PrintStream(socket.getOutputStream());
         in = new BufferedReader(new InputStreamReader(
@@ -37,9 +39,6 @@ public class Server implements Runnable {
 
     public void run() {
         try {
-            // Default "Play" of the current client.
-            boolean shouldContinue = true;
-
             String messageFromClient;
             while(robot == null) {
                 messageFromClient = in.readLine();
@@ -52,12 +51,18 @@ public class Server implements Runnable {
                 handleClientMessage(messageFromClient);
             }
         } catch(IOException | NullPointerException ex) {
+            ex.printStackTrace();
             System.out.println("Shutting down single client server");
         } finally {
             closeQuietly();
         }
     }
 
+    /**
+     * Method will handle the input from the connected client before any robot has been launched.
+     * No fields will be set or allow any commands to be issued until launch is used.
+     * @param messageFromClient JsonString from client.
+     */
     private void handleMessageBeforeLaunch(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
         printClientMessage(jsonMessage);
@@ -68,12 +73,17 @@ public class Server implements Runnable {
         Command command = Command.create(jsonMessage);
         world.handleCommand(command, this);
 
-        if (robot != null) {
+        if (this.robot != null) {
             this.response.add("state", this.robot.getState());
         }
         out.println(this.response.toString());
     }
 
+    /**
+     * Method will handle the input from the clients once a robot is instantiated.
+     * This will handle calling all the commands the client sends through as well as error handling.
+     * @param messageFromClient JsonString from client.
+     */
     private void handleClientMessage(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
         printClientMessage(jsonMessage);
@@ -94,11 +104,19 @@ public class Server implements Runnable {
         out.println(this.response.toString());
     }
 
+    /**
+     * Sets running to false to end the Run method.
+     * Calls the close Quietly command to end the threads process.
+     */
     public void closeThread() {
         this.running = false;
         closeQuietly();
     }
 
+    /**
+     * Closes all the streams for the current thread.
+     *
+     */
     @SuppressWarnings("CatchMayIgnoreException")
     private void closeQuietly() {
         try {

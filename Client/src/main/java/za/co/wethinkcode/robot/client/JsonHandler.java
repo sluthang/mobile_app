@@ -19,6 +19,7 @@ public class JsonHandler {
                 newInstruction.put("arguments", Arrays.asList(command));
                 command = "turn";
                 break;
+            case "fire":
             case "mine":
             case "repair":
                 newInstruction.put("arguments", Collections.emptyList());

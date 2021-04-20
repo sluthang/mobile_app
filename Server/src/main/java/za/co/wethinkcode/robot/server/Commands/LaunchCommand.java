@@ -2,10 +2,11 @@ package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.MultiServer;
+import za.co.wethinkcode.robot.server.Server.MultiServer;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 import java.util.Random;
@@ -23,17 +24,17 @@ public class LaunchCommand extends Command{
     @Override
     public void execute(World world, Server server) {
         JSONObject data = new JSONObject();
-        if (!doesRobotExist(world, server)) {
+        if (!doesRobotExist(world, server) || server.robot != null) {
             server.robotName = null;
             data.put("message", "Too many of you in this world");
             server.response.addData(data);
             server.response.add("result", "ERROR");
             return;
-        } else if (server.robot == null){
+        } else {
             server.robot = new Robot(server.robotName);
             world.addRobot(server.robot);
-            int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), MultiServer.config.getMaxShieldStrength());
-            int maxShot = Integer.parseInt(args.get(2).toString());
+            int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), world.MAX_SHIELDS);
+            int maxShot = Math.min(Integer.parseInt(args.get(2).toString()), world.MAX_SHOTS);
             server.robot.setMaxes(maxShield, maxShot);
         }
 
@@ -46,7 +47,7 @@ public class LaunchCommand extends Command{
             int x = 0;
             int y = 0;
 
-            if (!world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName)){
+            if (world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName) == UpdateResponse.SUCCESS){
                 server.robot.setPosition(new Position(x, y));
                 positionSet = true;
                 break;
@@ -82,6 +83,7 @@ public class LaunchCommand extends Command{
                 }
             }
         } catch (NullPointerException e) {
+            e.printStackTrace();
             return true;
         }
         return true;

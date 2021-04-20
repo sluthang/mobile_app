@@ -1,9 +1,8 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Schedule;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Utility.Schedule;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 import java.io.IOException;
@@ -16,16 +15,19 @@ public class LayMineCommand extends Command{
         super("mine");
     }
 
+    /**
+     * Checks if the robot can move forward by 1 step, if the robot is obstructed
+     * then the mine placed will detonate on the robot that is laying it.
+     * Starts the task scheduler for laying the mine on the field.
+     * Build the JsonObject to send to the client stating that the task has started.
+     * @param world;
+     * @param server;
+     */
     @Override
     public void execute(World world, Server server) {
         // Checks if the robot is allowed to lay mines.
         if (canLay(server)) {
             // Create a forward command to move the robot 1 step ahead after laying mine.
-            Command forward1 = new ForwardCommand("1");
-            UpdateResponse response = forward1.updatePosition(1, server, world);
-            //TODO must check before moving back
-            forward1.updatePosition(-1, server, world);
-
             server.robot.setStatus("SETMINE");
             server.robot.oldShield = server.robot.shields;
             server.robot.shields = 0;
@@ -35,16 +37,9 @@ public class LayMineCommand extends Command{
                 e.printStackTrace();
             }
 
-            if (!response.equals(UpdateResponse.SUCCESS)) {
-                world.getMaze().hitMine(server.robot.getPosition(), server.robot.getPosition(), server);
-                JSONObject data = new JSONObject();
-                data.put("message", "Mine");
-                server.response.addData(data);
-            } else {
-                JSONObject data = new JSONObject();
-                data.put("message", "Done");
-                server.response.addData(data);
-            }
+            JSONObject data = new JSONObject();
+            data.put("message", "Done");
+            server.response.addData(data);
             server.response.add("result", "OK");
         } else {
             JSONObject data = new JSONObject();

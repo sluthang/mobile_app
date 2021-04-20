@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Robot.Direction;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 public abstract class Command {
@@ -46,9 +46,10 @@ public abstract class Command {
      * creates args, based on the arguments passed through.
      * checks if the args is just 1 (so like 'help' instead of 'forward 1'), and runs those commands.
      * else if does the commands and passes through their arguments.
-     * if the arugment is illegal or unsupported then it will throw back an exception
+     * if the argument is illegal or unsupported then it will throw back an exception
      *
-     * @param instruction*/
+     * @param instruction;
+     * */
     public static Command create(JSONObject instruction) {
         String command = instruction.get("command").toString();
         JSONArray args = (JSONArray) instruction.get("arguments");
@@ -73,18 +74,15 @@ public abstract class Command {
                 return new RepairCommand();
             case "launch":
                 return new LaunchCommand(args);
+            case "reload":
+                return new ReloadCommand();
+            case "fire":
+                return new FireCommand();
             default:
                 throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
     }
 
-    /**
-     * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
-     * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),
-     * lastly it returns a failed out of bounds otherwise.
-     * @param nrSteps: the number of steps the robot will move;
-     * @return: an UpdateResponse of what the result of moving the robot is.
-     * */
     /**
      * Checks the old position of the robot against the new positions of the robot. In 3 ways, first it checks if their is
      * a obstacle in the way, secondly it checks if the new position is actually allowed (if yes it moves),
@@ -118,9 +116,19 @@ public abstract class Command {
         Position oldPosition = new Position(oldX, oldY);
         Position newPosition = new Position(newX, newY);
 
-        UpdateResponse response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), server.robotName);
-        if (response == UpdateResponse.FAILED_HIT_MINE) world.maze.hitMine(oldPosition, newPosition, server);
+        UpdateResponse response;
+        if (Math.abs(nrSteps) == 1) {
+            response = world.maze.blocksPosition(world.getRobots(), newPosition, server.robotName);
+        }
+        else {
+            response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), server.robotName);
+            //this broke, don't touch
+        }
 
+        if (response == UpdateResponse.FAILED_HIT_MINE) {
+            server.robot.setPosition(newPosition);
+            return response;
+        }
         if (response != UpdateResponse.SUCCESS) return response;
 
         response = world.isInWorld(oldPosition, newPosition);

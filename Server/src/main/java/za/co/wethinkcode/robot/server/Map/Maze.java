@@ -3,7 +3,7 @@ package za.co.wethinkcode.robot.server.Map;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Server.Server;
 
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +21,7 @@ public interface Maze {
 
     Vector<Obstacle> getMines();
 
-    void hitMine(Position a, Position b, Server server);
+    void hitMine(Position minePosition, Server server);
 
     void createMine(Position position);
 
@@ -34,6 +34,6 @@ public interface Maze {
      */
     UpdateResponse blocksPath(Position a, Position b, ConcurrentHashMap<String, Robot> robots, String robotName);
 
-    boolean blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName);
+    UpdateResponse blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName);
 
 }

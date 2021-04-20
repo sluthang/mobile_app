@@ -1,10 +1,8 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.Robot.Direction;
-import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 public class ForwardCommand extends Command {
@@ -39,7 +37,13 @@ public class ForwardCommand extends Command {
             return;
         }
 
-        UpdateResponse response =  updatePosition(nrSteps, server, world);
+        UpdateResponse response = UpdateResponse.SUCCESS;
+        Integer step = 1;
+        if (nrSteps < 0) step = -1;
+        while (nrSteps != 0 && response == UpdateResponse.SUCCESS) {
+            response =  updatePosition(step, server, world);
+            nrSteps -= step;
+        }
 
         //TODO set position to whatever it hits
         String message = "";
@@ -52,6 +56,7 @@ public class ForwardCommand extends Command {
             server.robot.kill(world, server, "Fell");
         } else if (response == UpdateResponse.FAILED_HIT_MINE) {
             message = "Mine";
+            world.maze.hitMine(server.robot.getPosition(), server);
             if (server.robot.isDead().equals("DEAD")) {
                 server.robot.kill(world, server, "Mine");
             }

@@ -1,8 +1,8 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.Schedule;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Utility.Schedule;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 import java.io.IOException;
@@ -13,11 +13,17 @@ public class ReloadCommand extends Command{
         super("reload");
     }
 
+    /**
+     * Starts the task scheduler for laying a mine on the field.
+     * Build the JsonObject to send to the client stating that the reloading has begun.
+     * @param world;
+     * @param server;
+     */
     @Override
     public void execute(World world, Server server) {
         try {
             server.robot.setStatus("RELOAD");
-            new Schedule(server, world, "reload", world.REPAIR_TIME);
+            new Schedule(server, world, "reload", world.RELOAD_TIME);
         } catch (IOException e) {
             e.printStackTrace();
         }

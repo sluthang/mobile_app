@@ -3,7 +3,7 @@ package za.co.wethinkcode.robot.server.Map;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Server.Server;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -110,35 +110,33 @@ public class BaseMaze implements Maze {
         return UpdateResponse.SUCCESS;
     }
 
-    public void hitMine(Position a, Position b, Server server) {
+    public void hitMine(Position robotPosition, Server server) {
         Iterator<Obstacle> i = this.minesList.iterator();
 
         while (i.hasNext()) {
             Obstacle mine = i.next();
-            if (mine.blocksPath(a, b)) {
-                Position newPos = new Position(mine.getBottomLeftX(), mine.getBottomLeftY());
-                server.robot.setPosition(newPos);
+            if (mine.blocksPosition(robotPosition)) {
                 server.robot.takeDamage(3);
                 i.remove();
             }
         }
     }
 
-    public boolean blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName) {
+    public UpdateResponse blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName) {
         for (Obstacle pit : this.pitsList) {
             if (pit.blocksPosition(position))
-                return true;
+                return UpdateResponse.FAILED_BOTTOMLESS_PIT;
         }
 
         for (Obstacle obst : this.obstaclesList) {
             if (obst.blocksPosition(position)) {
-                return true;
+                return UpdateResponse.FAILED_OBSTRUCTED;
             }
         }
 
         for (Obstacle mine : this.minesList) {
             if (mine.blocksPosition(position)) {
-                return true;
+                return UpdateResponse.FAILED_HIT_MINE;
             }
         }
 
@@ -148,9 +146,9 @@ public class BaseMaze implements Maze {
                 continue;
             }
             if (robots.get(key).blocksPosition(position)) {
-                return true;
+                return UpdateResponse.FAILED_OBSTRUCTED;
             }
         }
-        return false;
+        return UpdateResponse.SUCCESS;
     }
 }
