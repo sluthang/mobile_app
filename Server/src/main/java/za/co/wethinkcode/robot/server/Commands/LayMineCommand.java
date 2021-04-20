@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Schedule;
 import za.co.wethinkcode.robot.server.Server;
@@ -30,20 +31,9 @@ public class LayMineCommand extends Command{
                 e.printStackTrace();
             }
 
-            Position currentPosition = server.robot.getPosition();
-            currentPosition = new Position(currentPosition.getX(), currentPosition.getY());
-            Command forward = new ForwardCommand("1");
-            forward.execute(world, server);
-            if (currentPosition.equals(server.robot.getPosition())) {
-                world.getMaze().hitMine(server.robot.getPosition(), server);
-                JSONObject data = new JSONObject();
-                data.put("message", "Mine");
-                server.response.addData(data);
-            } else {
-                JSONObject data = new JSONObject();
-                data.put("message", "Done");
-                server.response.addData(data);
-            }
+            JSONObject data = new JSONObject();
+            data.put("message", "Done");
+            server.response.addData(data);
             server.response.add("result", "OK");
         } else {
             JSONObject data = new JSONObject();

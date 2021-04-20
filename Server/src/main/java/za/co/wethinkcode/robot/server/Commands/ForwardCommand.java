@@ -40,9 +40,11 @@ public class ForwardCommand extends Command {
         }
 
         UpdateResponse response = UpdateResponse.SUCCESS;
-        while (nrSteps > 0 && response == UpdateResponse.SUCCESS) {
-            response =  updatePosition(1, server, world);
-            nrSteps -= 1;
+        Integer step = 1;
+        if (nrSteps < 0) step = -1;
+        while (nrSteps != 0 && response == UpdateResponse.SUCCESS) {
+            response =  updatePosition(step, server, world);
+            nrSteps -= step;
         }
 
         //TODO set position to whatever it hits

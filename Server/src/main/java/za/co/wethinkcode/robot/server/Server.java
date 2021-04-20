@@ -69,7 +69,7 @@ public class Server implements Runnable {
         Command command = Command.create(jsonMessage);
         world.handleCommand(command, this);
 
-        if (robot != null) {
+        if (this.robot != null) {
             this.response.add("state", this.robot.getState());
         }
         out.println(this.response.toString());

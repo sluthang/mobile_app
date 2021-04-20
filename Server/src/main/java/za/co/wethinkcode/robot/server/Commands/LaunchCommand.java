@@ -47,7 +47,7 @@ public class LaunchCommand extends Command{
             int x = 0;
             int y = 0;
 
-            if (world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName) != UpdateResponse.SUCCESS){
+            if (world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName) == UpdateResponse.SUCCESS){
                 server.robot.setPosition(new Position(x, y));
                 positionSet = true;
                 break;

@@ -53,21 +53,31 @@ public class Schedule {
     }
 
     private void layMine(Server server, World world) {
-        try {
-            Position oldPos = new Position(server.robot.getPosition().getX(),
-                    server.robot.getPosition().getY());
+        try {Position oldPos = new Position(server.robot.getPosition().getX(),
+                server.robot.getPosition().getY());
+
+            if (server.robot.shields == 0){
+                world.getMaze().createMine(oldPos);
+            }
+            server.robot.shields = server.robot.oldShield - server.robot.shields;
 
             Command forward1 = new ForwardCommand("1");
             forward1.execute(world, server);
+            JSONObject data = new JSONObject();
+            if (oldPos.equals(server.robot.getPosition())) {
+                world.getMaze().hitMine(server.robot.getPosition(), server);
+                data.put("message", "Mine");
+                if (server.robot.isDead().equals("DEAD")) {
+                    server.robot.kill(world, server, "Mine");
+                }
+            }
+            else {
+                data.put("message", "Done");
+            }
+            response.addData(data);
 
-            world.getMaze().createMine(oldPos);
             server.robot.setStatus("NORMAL");
 
-            server.robot.shields = server.robot.oldShield;
-
-            JSONObject data = new JSONObject();
-            data.put("message", "Done");
-            response.addData(data);
             response.add("result", "OK");
             response.add("state", robot.getState());
             server.out.println(response.toString());

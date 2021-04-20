@@ -114,11 +114,12 @@ public abstract class Command {
         Position newPosition = new Position(newX, newY);
 
         UpdateResponse response;
-        if (nrSteps == 1) {
+        if (Math.abs(nrSteps) == 1) {
             response = world.maze.blocksPosition(world.getRobots(), newPosition, server.robotName);
         }
         else {
             response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), server.robotName);
+            //this broke, don't touch
         }
 
         if (response == UpdateResponse.FAILED_HIT_MINE) {
