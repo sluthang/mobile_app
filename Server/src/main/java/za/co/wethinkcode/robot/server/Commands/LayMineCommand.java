@@ -29,8 +29,8 @@ public class LayMineCommand extends Command{
         if (canLay(server)) {
             // Create a forward command to move the robot 1 step ahead after laying mine.
             server.robot.setStatus("SETMINE");
-            server.robot.oldShield = server.robot.shields;
-            server.robot.shields = 0;
+            server.robot.setOldShield(server.robot.getShields());
+            server.robot.setShields(0);
             try {
                 new Schedule(server, world, "mine", world.MINE_SET_TIME);
             } catch (IOException e) {
@@ -50,6 +50,6 @@ public class LayMineCommand extends Command{
     }
 
     private boolean canLay(Server server) {
-        return (server.robot.getMaxShots() == -1);
+        return (server.robot.getMaxShots() == 0);
     }
 }

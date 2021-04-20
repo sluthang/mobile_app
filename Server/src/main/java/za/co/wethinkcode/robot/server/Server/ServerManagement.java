@@ -14,7 +14,6 @@ public class ServerManagement implements Runnable {
     //Ansi escape codes to be used for pretty printing.
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32;1m";
-    public static final String ANSI_BLUE = "\u001B[34;1m";
     public static final String ANSI_PURPLE = "\u001B[35;1m";
     public static final String ANSI_CYAN = "\u001B[36m";
     //Display to be drawn on for the dump command.
@@ -33,7 +32,7 @@ public class ServerManagement implements Runnable {
     public void run() {
         //Sleep for 3 seconds due to threads printing at the same time when run on fast CPU's.
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,18 +57,23 @@ public class ServerManagement implements Runnable {
             switch (inputString.get(0)) {
                 case "quit":
                     quitServer();
+                    System.out.println("Quiting the server!");
                     break;
                 case "robots":
                     listRobots();
+                    System.out.println("Listed robots!");
                     break;
                 case "purge":
                     purgeUser(inputString.get(1));
+                    System.out.println("Purged user!");
                     break;
                 case "clients":
                     showUsers();
+                    System.out.println("Showed users!");
                     break;
                 case "dump":
                     dump();
+                    System.out.println("Displayed to Turtle!");
                     break;
             }
         }
@@ -125,7 +129,7 @@ public class ServerManagement implements Runnable {
             }
         }
         try {
-            world.robots.remove(username);
+            world.removeRobot(username);
         } catch (NullPointerException ignored) {}
     }
 
@@ -150,10 +154,10 @@ public class ServerManagement implements Runnable {
         //Clears the display before printing out.
         display.clear();
         // Calls the methods to display the separate objects on the field.
-        display.drawObstacles(MultiServer.world.getObstacles(), Color.MAGENTA);
-        display.drawObstacles(MultiServer.world.getMaze().getPits(), Color.BLACK);
-        display.drawObstacles(MultiServer.world.getMaze().getMines(), Color.RED);
-        display.drawRobots(MultiServer.world.getRobots(), Color.GREEN);
+        display.drawObstacles(world.getObstacles(), Color.MAGENTA);
+        display.drawObstacles(world.getMaze().getPits(), Color.BLACK);
+        display.drawObstacles(world.getMaze().getMines(), Color.RED);
+        display.drawRobots(world.getRobots(), Color.GREEN);
         display.zoom();
     }
 }

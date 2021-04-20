@@ -2,15 +2,11 @@ package za.co.wethinkcode.robot.server.Utility;
 
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigReader {
-    InputStream inputStream;
     private int width,height,visibility, maxShieldStrength, shieldRechargeTime
             ,mineSetTime, reloadTime, port, maxShots;
-    private String mapName;
 
     public ConfigReader() {
         try {
@@ -37,8 +33,6 @@ public class ConfigReader {
             this.reloadTime = Integer.parseInt(prop.getProperty("reload_time"));
             this.port = Integer.parseInt(prop.getProperty("port"));
             this.maxShots = Integer.parseInt(prop.getProperty("max_shots"));
-
-            this.mapName = prop.getProperty("map");
 
         } catch (Exception e) {
             System.out.println("Exception: " + e);
@@ -75,10 +69,6 @@ public class ConfigReader {
 
     public int getMineSetTime() {
         return mineSetTime;
-    }
-
-    public String getMapName() {
-        return mapName;
     }
 
     public int getPort() {

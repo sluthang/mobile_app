@@ -5,16 +5,17 @@ import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
+@SuppressWarnings({"unused", "unchecked"})
 public class Robot {
-    protected final String name;
-    protected Direction currentDirection;
-    protected Position position;
+    private final String name;
+    private Direction currentDirection;
+    private Position position;
     private String status;
     private int maxShields;
     private int maxShots;
-    public int shields;
-    public int oldShield;
-    public int shots;
+    private int shields;
+    private int oldShield;
+    private int shots;
 
     /**
      * Constructor for Robot class
@@ -23,6 +24,38 @@ public class Robot {
         this.name = name;
         this.status = "NORMAL";
         this.currentDirection = Direction.NORTH;
+    }
+
+    public void setShots(int shots) {
+        this.shots = shots;
+    }
+
+    public void setOldShield(int oldShield) {
+        this.oldShield = oldShield;
+    }
+
+    public void setMaxShots(int maxShots) {
+        this.maxShots = maxShots;
+    }
+
+    public void setMaxShields(int maxShield) {
+        this.maxShields = maxShield;
+    }
+
+    public void setShields(int shield) {
+        this.shields = shield;
+    }
+
+    public int getShots() {
+        return this.shots;
+    }
+
+    public int getOldShield() {
+        return this.oldShield;
+    }
+
+    public int getShields() {
+        return this.shields;
     }
 
     /**

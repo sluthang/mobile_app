@@ -2,7 +2,7 @@ package za.co.wethinkcode.robot.server.Utility;
 
 import org.json.simple.JSONObject;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "unused"})
 public class ResponseBuilder {
     JSONObject response;
     public ResponseBuilder(){
