@@ -11,6 +11,15 @@ public class FireCommand extends Command{
 
     @Override
     public void execute(World world, Server server) {
+        int xStep = 0;
+        int yStep = 0;
+        switch (server.robot.getCurrentDirection()) {
+            case NORTH: yStep = 1;
+            case EAST: xStep = 1;
+            case SOUTH: yStep = -1;
+            case WEST: xStep = -1;
+        }
 
+        
     }
 }
