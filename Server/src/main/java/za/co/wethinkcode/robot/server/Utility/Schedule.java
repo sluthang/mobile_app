@@ -1,10 +1,12 @@
-package za.co.wethinkcode.robot.server;
+package za.co.wethinkcode.robot.server.Utility;
 
 import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.Commands.ForwardCommand;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
+import za.co.wethinkcode.robot.server.Server.Server;
+import za.co.wethinkcode.robot.server.World;
 
 import java.io.IOException;
 import java.util.Timer;

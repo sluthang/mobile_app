@@ -1,8 +1,9 @@
-package za.co.wethinkcode.robot.server;
+package za.co.wethinkcode.robot.server.Server;
 
 import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Display.Draw;
 import za.co.wethinkcode.robot.server.Robot.Robot;
+import za.co.wethinkcode.robot.server.World;
 
 import java.awt.*;
 import java.util.*;

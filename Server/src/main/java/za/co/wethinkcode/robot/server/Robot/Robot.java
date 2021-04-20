@@ -1,8 +1,8 @@
 package za.co.wethinkcode.robot.server.Robot;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.ResponseBuilder;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 public class Robot {

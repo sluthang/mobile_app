@@ -2,11 +2,11 @@ package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.MultiServer;
+import za.co.wethinkcode.robot.server.Server.MultiServer;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 import java.util.Random;

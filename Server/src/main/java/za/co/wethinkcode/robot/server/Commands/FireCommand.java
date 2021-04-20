@@ -1,6 +1,6 @@
 package za.co.wethinkcode.robot.server.Commands;
 
-import za.co.wethinkcode.robot.server.Server;
+import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 public class FireCommand extends Command{

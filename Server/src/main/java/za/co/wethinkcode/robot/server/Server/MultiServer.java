@@ -1,4 +1,7 @@
-package za.co.wethinkcode.robot.server;
+package za.co.wethinkcode.robot.server.Server;
+
+import za.co.wethinkcode.robot.server.Utility.ConfigReader;
+import za.co.wethinkcode.robot.server.World;
 
 import java.io.IOException;
 import java.net.DatagramSocket;

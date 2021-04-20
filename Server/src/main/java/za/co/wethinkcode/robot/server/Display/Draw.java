@@ -1,7 +1,6 @@
 package za.co.wethinkcode.robot.server.Display;
 
 import za.co.wethinkcode.robot.server.Map.Obstacle;
-import za.co.wethinkcode.robot.server.MultiServer;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 
 import java.awt.*;

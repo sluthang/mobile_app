@@ -5,13 +5,15 @@ import za.co.wethinkcode.robot.server.Map.*;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
+import za.co.wethinkcode.robot.server.Server.MultiServer;
+import za.co.wethinkcode.robot.server.Server.Server;
 
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class World{
     //Hashmap of robots currently in play.
-    protected ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
+    public ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
     //Sets the maps Bottom-right and top-left positions set in the config file.
     public final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
     public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
