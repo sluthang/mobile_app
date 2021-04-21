@@ -10,7 +10,7 @@ public class KindCreator {
         switch (kind.toLowerCase()) {
             case "sniper": shots = "1"; break;
             case "trooper": shots = "5"; break;
-            case "miner": shots = "-1"; break;
+            case "miner": shots = "0"; break;
             default: shots = "3";
         }
         return Arrays.asList(kind, shields, shots);

@@ -14,7 +14,6 @@ public class ServerManagement implements Runnable {
     //Ansi escape codes to be used for pretty printing.
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32;1m";
-    public static final String ANSI_BLUE = "\u001B[34;1m";
     public static final String ANSI_PURPLE = "\u001B[35;1m";
     public static final String ANSI_CYAN = "\u001B[36m";
     //Display to be drawn on for the dump command.
@@ -33,7 +32,7 @@ public class ServerManagement implements Runnable {
     public void run() {
         //Sleep for 3 seconds due to threads printing at the same time when run on fast CPU's.
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -50,28 +49,37 @@ public class ServerManagement implements Runnable {
                 ANSI_GREEN+"       <quit> <>            "+ANSI_RESET+" - Closes all currently connected clients and threads. Quits program.");
 
         while (running) {
-            String serverMessage = sc.nextLine();
-            //Split the console input into a string.
-            List<String> inputString = Arrays.asList(serverMessage.split(" ", 2));
+            try {
+                String serverMessage = sc.nextLine();
+                //Split the console input into a string.
+                List<String> inputString = Arrays.asList(serverMessage.split(" ", 2));
 
-            //execute server commands that will alter the world.
-            switch (inputString.get(0)) {
-                case "quit":
-                    quitServer();
-                    break;
-                case "robots":
-                    listRobots();
-                    break;
-                case "purge":
-                    purgeUser(inputString.get(1));
-                    break;
-                case "clients":
-                    showUsers();
-                    break;
-                case "dump":
-                    dump();
-                    break;
-            }
+                //execute server commands that will alter the world.
+                switch (inputString.get(0)) {
+                    case "quit":
+                        quitServer();
+                        System.out.println("Quiting the server!");
+                        break;
+                    case "robots":
+                        listRobots();
+                        System.out.println("Listed robots!");
+                        break;
+                    case "purge":
+                        if (inputString.size() > 1) {
+                            purgeUser(inputString.get(1));
+                            System.out.println("Purged user!");
+                        }
+                        break;
+                    case "clients":
+                        showUsers();
+                        System.out.println("Showed users!");
+                        break;
+                    case "dump":
+                        dump();
+                        System.out.println("Displayed to Turtle!");
+                        break;
+                }
+            } catch (Exception ignored) {}
         }
     }
 
@@ -81,9 +89,11 @@ public class ServerManagement implements Runnable {
      */
     private void quitServer() {
         //Loops through the client list and closes the.
-        for (Server client : MultiServer.clients) {
-            client.closeThread();
-        }
+        try {
+            for (Server client : MultiServer.clients) {
+                client.closeThread();
+            }
+        } catch (Exception ignored) {}
         this.running = false;
         System.exit(69);
     }
@@ -125,7 +135,7 @@ public class ServerManagement implements Runnable {
             }
         }
         try {
-            world.robots.remove(username);
+            world.removeRobot(username);
         } catch (NullPointerException ignored) {}
     }
 
@@ -150,10 +160,10 @@ public class ServerManagement implements Runnable {
         //Clears the display before printing out.
         display.clear();
         // Calls the methods to display the separate objects on the field.
-        display.drawObstacles(MultiServer.world.getObstacles(), Color.MAGENTA);
-        display.drawObstacles(MultiServer.world.getMaze().getPits(), Color.BLACK);
-        display.drawObstacles(MultiServer.world.getMaze().getMines(), Color.RED);
-        display.drawRobots(MultiServer.world.getRobots(), Color.GREEN);
+        display.drawObstacles(world.getObstacles(), Color.MAGENTA);
+        display.drawObstacles(world.getMaze().getPits(), Color.BLACK);
+        display.drawObstacles(world.getMaze().getMines(), Color.RED);
+        display.drawRobots(world.getRobots(), Color.GREEN);
         display.zoom();
     }
 }

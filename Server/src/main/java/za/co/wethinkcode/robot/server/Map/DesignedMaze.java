@@ -2,6 +2,7 @@ package za.co.wethinkcode.robot.server.Map;
 
 import za.co.wethinkcode.robot.server.Robot.Position;
 
+@SuppressWarnings("unused")
 public class DesignedMaze extends BaseMaze {
 
     /**
@@ -43,7 +44,7 @@ public class DesignedMaze extends BaseMaze {
     }
 
     /**
-     * drawLines checks which lines are the same, then incremints on 5,
+     * drawLines checks which lines are the same, then increments on 5,
      * to draw them.
      * @param newX: new X co-ord;
      * @param newY: new Y co-ord;

@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
+@SuppressWarnings("unchecked")
 public class LeftCommand extends Command {
     /**
      * Constructor for left command

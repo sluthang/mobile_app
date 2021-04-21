@@ -5,6 +5,7 @@ import za.co.wethinkcode.robot.server.Robot.Position;
 /**
  * Defines an interface for obstacles you want to place in your world.
  */
+@SuppressWarnings("unused")
 public interface Obstacle {
 
     /**
