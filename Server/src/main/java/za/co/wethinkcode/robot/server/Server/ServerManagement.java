@@ -49,33 +49,37 @@ public class ServerManagement implements Runnable {
                 ANSI_GREEN+"       <quit> <>            "+ANSI_RESET+" - Closes all currently connected clients and threads. Quits program.");
 
         while (running) {
-            String serverMessage = sc.nextLine();
-            //Split the console input into a string.
-            List<String> inputString = Arrays.asList(serverMessage.split(" ", 2));
+            try {
+                String serverMessage = sc.nextLine();
+                //Split the console input into a string.
+                List<String> inputString = Arrays.asList(serverMessage.split(" ", 2));
 
-            //execute server commands that will alter the world.
-            switch (inputString.get(0)) {
-                case "quit":
-                    quitServer();
-                    System.out.println("Quiting the server!");
-                    break;
-                case "robots":
-                    listRobots();
-                    System.out.println("Listed robots!");
-                    break;
-                case "purge":
-                    purgeUser(inputString.get(1));
-                    System.out.println("Purged user!");
-                    break;
-                case "clients":
-                    showUsers();
-                    System.out.println("Showed users!");
-                    break;
-                case "dump":
-                    dump();
-                    System.out.println("Displayed to Turtle!");
-                    break;
-            }
+                //execute server commands that will alter the world.
+                switch (inputString.get(0)) {
+                    case "quit":
+                        quitServer();
+                        System.out.println("Quiting the server!");
+                        break;
+                    case "robots":
+                        listRobots();
+                        System.out.println("Listed robots!");
+                        break;
+                    case "purge":
+                        if (inputString.size() > 1) {
+                            purgeUser(inputString.get(1));
+                            System.out.println("Purged user!");
+                        }
+                        break;
+                    case "clients":
+                        showUsers();
+                        System.out.println("Showed users!");
+                        break;
+                    case "dump":
+                        dump();
+                        System.out.println("Displayed to Turtle!");
+                        break;
+                }
+            } catch (Exception ignored) {}
         }
     }
 
@@ -85,9 +89,11 @@ public class ServerManagement implements Runnable {
      */
     private void quitServer() {
         //Loops through the client list and closes the.
-        for (Server client : MultiServer.clients) {
-            client.closeThread();
-        }
+        try {
+            for (Server client : MultiServer.clients) {
+                client.closeThread();
+            }
+        } catch (Exception ignored) {}
         this.running = false;
         System.exit(69);
     }

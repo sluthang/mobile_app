@@ -205,9 +205,6 @@ public class Robot {
         response.add("result", "OK");
         response.add("state", getState());
 
-        //Removes the current robot from the HashMap list.
-        world.removeRobot(this.name);
-
         //Sends response to client and closes their thread.
         server.out.println(response);
         server.closeThread();
