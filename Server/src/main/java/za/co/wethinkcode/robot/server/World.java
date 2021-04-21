@@ -11,12 +11,13 @@ import za.co.wethinkcode.robot.server.Server.Server;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unused")
 public class World{
     //Hashmap of robots currently in play.
-    public ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
     //Sets the maps Bottom-right and top-left positions set in the config file.
-    public final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
-    public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
+    private final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
+    private final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
     // The map that the world will be using.
     public Maze maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
     //Values that were received from the config file.
@@ -33,13 +34,6 @@ public class World{
      * */
     public Maze getMaze() {
         return maze;
-    }
-
-    /**
-     * setter to set the maze.
-     * */
-    public void setMaze(BaseMaze maze) {
-        this.maze = maze;
     }
 
     /**

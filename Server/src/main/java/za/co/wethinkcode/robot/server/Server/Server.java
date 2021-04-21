@@ -9,16 +9,16 @@ import za.co.wethinkcode.robot.server.World;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 @SuppressWarnings({"unchecked", "RedundantCollectionOperation"})
 public class Server implements Runnable {
 
     private boolean running;
-    private final String clientMachine;
     public final Socket socket;
     public final BufferedReader in;
     public final PrintStream out;
-    public static World world;
+    public World world;
     public Robot robot;
     public String robotName;
     public ResponseBuilder response;
@@ -26,7 +26,7 @@ public class Server implements Runnable {
     public Server(Socket socket, World world) throws IOException {
         // Constructor for the class will create the in and out streams.
         this.socket = socket;
-        clientMachine = socket.getInetAddress().getHostName();
+        String clientMachine = socket.getInetAddress().getHostName();
         System.out.println(ServerManagement.ANSI_GREEN+"Connection from " + ServerManagement.ANSI_RESET + clientMachine);
 
         out = new PrintStream(socket.getOutputStream());
@@ -50,8 +50,7 @@ public class Server implements Runnable {
                 messageFromClient = in.readLine();
                 handleClientMessage(messageFromClient);
             }
-        } catch(IOException | NullPointerException ex) {
-            ex.printStackTrace();
+        } catch(IOException | NullPointerException  ex) {
             System.out.println("Shutting down single client server");
         } finally {
             closeQuietly();
@@ -135,8 +134,7 @@ public class Server implements Runnable {
     }
 
     private void printClientMessage(JSONObject message) {
-        System.out.println("\u001b[33;1m"+"Message from  : "+"\u001B[0m"+ this.robotName+"\n"+
-                "\n" +
+        System.out.println("\u001b[33;1m"+"Message from  : "+"\u001B[0m"+ this.robotName+"\n\n"+
                 ServerManagement.ANSI_PURPLE + "\t\t\t\tName\t\t:\t" +ServerManagement.ANSI_CYAN + message.get("robot") + ServerManagement.ANSI_RESET +"\n"+
                 ServerManagement.ANSI_PURPLE + "\t\t\t\tArguments\t:\t" +ServerManagement.ANSI_CYAN + message.get("arguments") + ServerManagement.ANSI_RESET +"\n"+
                 ServerManagement.ANSI_PURPLE + "\t\t\t\tCommand\t:\t" +ServerManagement.ANSI_CYAN + message.get("command") + ServerManagement.ANSI_RESET +"\n");

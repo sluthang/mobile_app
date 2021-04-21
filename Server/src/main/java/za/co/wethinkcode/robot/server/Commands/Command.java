@@ -8,6 +8,7 @@ import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
+@SuppressWarnings("unused")
 public abstract class Command {
     private final String name;
     private String argument;

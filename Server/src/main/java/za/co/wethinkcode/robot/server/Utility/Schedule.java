@@ -54,7 +54,7 @@ public class Schedule {
      *A JsonObject is constructed to let the user know that the task has completed and is sent to the user with new the new state.
      */
     private void repairRobot() {
-        robot.shields = robot.getMaxShields();
+        robot.setShields(robot.getMaxShields());
         changeRobotState("NORMAL");
 
         JSONObject data = new JSONObject();
@@ -76,10 +76,10 @@ public class Schedule {
         try {Position oldPos = new Position(server.robot.getPosition().getX(),
                 server.robot.getPosition().getY());
 
-            if (server.robot.shields == 0){
+            if (server.robot.getShields() == 0){
                 world.getMaze().createMine(oldPos);
             }
-            server.robot.shields = server.robot.oldShield - server.robot.shields;
+            server.robot.setShields(server.robot.getOldShield() - server.robot.getShields());
 
             Command forward1 = new ForwardCommand("1");
             forward1.execute(world, server);
@@ -113,7 +113,7 @@ public class Schedule {
      * @param server to issue commands to.
      */
     private void reload(Server server) {
-        robot.shots = robot.getMaxShots();
+        robot.setShots(robot.getMaxShots());
         changeRobotState("NORMAL");
 
         JSONObject data = new JSONObject();
