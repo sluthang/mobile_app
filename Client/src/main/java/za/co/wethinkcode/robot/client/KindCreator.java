@@ -6,7 +6,7 @@ import java.util.List;
 public class KindCreator {
     public static List<String> getKind(String kind){
         String shields = "999";
-        String shots = "0";
+        String shots;
         switch (kind.toLowerCase()) {
             case "sniper": shots = "1"; break;
             case "trooper": shots = "5"; break;
