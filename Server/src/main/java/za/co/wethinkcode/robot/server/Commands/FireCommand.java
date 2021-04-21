@@ -19,7 +19,7 @@ public class FireCommand extends Command{
 
     @Override
     public void execute(World world, Server server) {
-        if (server.robot.shots == 0) {
+        if (server.robot.getShields() == 0) {
             server.response.add("response", "Error");
             JSONObject data = new JSONObject();
             data.put("message", "Please reload.");
@@ -66,7 +66,7 @@ public class FireCommand extends Command{
 
         server.response.add("result", "OK");
         JSONObject data = new JSONObject();
-        server.robot.shots -= 1;
+        server.robot.setShots(server.robot.getShots() - 1);
         if (hit) {
             data.put("message", "Hit");
             data.put("distance", initialDistance - distance + 1);
@@ -92,7 +92,7 @@ public class FireCommand extends Command{
             if (client.robot.getName().equals(robotName)) {
                 out = client;
                 client.robot.takeDamage(1);
-                if (client.robot.shields == -1) return client;
+                if (client.robot.getShields() == -1) return client;
                 client.response = new ResponseBuilder();
                 client.response.add("result", "OK");
                 JSONObject data = new JSONObject();
