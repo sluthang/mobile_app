@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Map;
 
 
+@SuppressWarnings("unused")
 public class EmptyMaze extends BaseMaze {
 
     /**

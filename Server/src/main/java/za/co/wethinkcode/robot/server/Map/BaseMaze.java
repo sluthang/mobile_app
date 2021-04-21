@@ -8,6 +8,7 @@ import za.co.wethinkcode.robot.server.Server.Server;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unused")
 public class BaseMaze implements Maze {
 
     Vector<Obstacle> obstaclesList = new Vector<>();
@@ -94,7 +95,7 @@ public class BaseMaze implements Maze {
                     if (key.equals(robotName)) {
                         continue;
                     }
-                    //TODO robots do not colide correctly and get stuck inside one another.
+                    //TODO robots do not collide correctly and get stuck inside one another.
                     if (robots.get(key).blocksPosition(new Position(x,y))) {
                         return UpdateResponse.FAILED_OBSTRUCTED;
                     }

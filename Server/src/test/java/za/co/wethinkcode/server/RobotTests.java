@@ -28,7 +28,7 @@ public class RobotTests {
     @Test
     public void testIsDead() {
         Robot robot = new Robot("hal");
-        robot.shields = -1;
+        robot.setShields(-1);
         assertEquals(robot.isDead(), "DEAD");
     }
 

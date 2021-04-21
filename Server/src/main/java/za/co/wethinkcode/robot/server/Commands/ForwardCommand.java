@@ -5,6 +5,7 @@ import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
+@SuppressWarnings({"unchecked", "unused"})
 public class ForwardCommand extends Command {
     private World currentWorld;
 
@@ -23,7 +24,7 @@ public class ForwardCommand extends Command {
     @Override
     public void execute(World world, Server server) {
         JSONObject data = new JSONObject();
-        int nrSteps = 0;
+        int nrSteps;
         try {
             String argument = getArgument();
             if (argument.contains("--")){
@@ -38,7 +39,7 @@ public class ForwardCommand extends Command {
         }
 
         UpdateResponse response = UpdateResponse.SUCCESS;
-        Integer step = 1;
+        int step = 1;
         if (nrSteps < 0) step = -1;
         while (nrSteps != 0 && response == UpdateResponse.SUCCESS) {
             response =  updatePosition(step, server, world);

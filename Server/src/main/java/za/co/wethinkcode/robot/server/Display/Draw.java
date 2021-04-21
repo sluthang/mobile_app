@@ -35,7 +35,7 @@ public class Draw {
     private void drawBorder() {
         display.penColor(Color.BLACK);
         display.up();
-        display.setPosition(-(width/2), (height/2));
+        display.setPosition((long)-(width/2), (long)(height/2));
         display.setDirection(0);
         display.down();
         display.forward(width);
@@ -58,8 +58,8 @@ public class Draw {
         display.penColor(color);
         for (Obstacle obs : list) {
             display.up();
-            display.setPosition(obs.getBottomLeftX()+(obs.getSize()/2),
-                    obs.getBottomLeftY()+(obs.getSize()/2));
+            display.setPosition(obs.getBottomLeftX()+(long)(obs.getSize()/2),
+                    obs.getBottomLeftY()+(long)(obs.getSize()/2));
             display.dot(color, obs.getSize()+3);
 
         }

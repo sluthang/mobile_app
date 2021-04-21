@@ -65,7 +65,7 @@ public class LaunchCommand extends Command{
         data.put("reload", MultiServer.config.getReloadTime());
         data.put("repair", MultiServer.config.getShieldRechargeTime());
         data.put("mine", MultiServer.config.getMineSetTime());
-        data.put("shields", server.robot.shields);
+        data.put("shields", server.robot.getShields());
 
         server.response.addData(data);
         server.response.add("result", "OK");
