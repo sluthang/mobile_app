@@ -22,7 +22,7 @@ public class FireCommand extends Command{
         if (server.robot.shots == 0) {
             server.response.add("response", "Error");
             JSONObject data = new JSONObject();
-            data.put("message", "You got shot");
+            data.put("message", "Please reload.");
             server.response.addData(data);
             return;
         }
@@ -43,6 +43,7 @@ public class FireCommand extends Command{
         int initialDistance = distance;
         Set<String> keys = world.getRobots().keySet();
         Boolean hit = false;
+        Server targetServer = null;
         do {
             walker = new Position(walker.getX() + xStep, walker.getY() + yStep);
             for (String key : keys) {
@@ -52,7 +53,7 @@ public class FireCommand extends Command{
             }
 
             if (target != null) {
-                getHit(target.getName());
+                targetServer = getHit(target.getName());
                 hit = true;
                 break;
             }
@@ -76,25 +77,32 @@ public class FireCommand extends Command{
             data.put("message", "Miss");
         }
 
-        if (target.isDead().equals("DEAD")) {
-            target.kill(world, server, "Mine");
+        if (target != null) {
+            if (target.isDead().equals("DEAD")) {
+                target.kill(world, targetServer, "Shot");
+            }
         }
 
         server.response.addData(data);
     }
 
-    public void getHit(String robotName) {
+    public Server getHit(String robotName) {
+        Server out = null;
         for (Server client: MultiServer.clients) {
             if (client.robot.getName().equals(robotName)) {
+                out = client;
                 client.robot.takeDamage(1);
+                if (client.robot.shields == -1) return client;
                 client.response = new ResponseBuilder();
                 client.response.add("result", "OK");
                 JSONObject data = new JSONObject();
-                data.put("message", "You got shot");
+                data.put("message", "Shot");
                 client.response.addData(data);
                 client.response.add("state", client.robot.getState());
                 client.out.println(client.response.toString());
+                break;
             }
         }
+        return out;
     }
 }
