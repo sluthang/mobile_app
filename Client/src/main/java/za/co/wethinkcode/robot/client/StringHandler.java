@@ -304,9 +304,3 @@ public class StringHandler {
         }
     }
 }
-//    public static void main(String[] args) {
-//        checkPosition("{\"result\":\"OK\",\"data\":{\"message\":\"Done\"},\"st" +
-//                "ate\":{\"shields\":5,\"position\":[0,1],\"shots\":1,\"directio" +
-//                "n\":\"NORTH\",\"status\":\"NORMAL\"}}");
-//    }
-
