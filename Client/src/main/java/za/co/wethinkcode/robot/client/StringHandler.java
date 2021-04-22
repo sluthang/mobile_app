@@ -2,6 +2,7 @@ package za.co.wethinkcode.robot.client;
 
 public class StringHandler {
     String previousResponse;
+    String firstResponse;
 
     public boolean launchedMiner (String in){
         String launchedMine = "{\"result\":\"OK\",\"data\":{\"mine\":10,\"repa" +
@@ -173,17 +174,37 @@ public class StringHandler {
         }
     }
 
+    public boolean missedShot(String in){
+        String[] shot1 = previousResponse.split("shots");
+        int shotValue1 = Integer.parseInt(String.valueOf(shot1[1].charAt(2)));
+        String[] shot2 = in.split("shots");
+        int shotValue2 = Integer.parseInt(String.valueOf(shot2[1].charAt(2)));
+        return (in.contains("Miss") && shotValue2 < shotValue1);
+    }
+
+    public boolean noShots(String in){
+        String[] shot1 = previousResponse.split("shots");
+        int shotValue1 = Integer.parseInt(String.valueOf(shot1[1].charAt(2)));
+        String[] shot2 = in.split("shots");
+        int shotValue2 = Integer.parseInt(String.valueOf(shot2[1].charAt(2)));
+        return (in.contains("Miss") && shotValue2 == shotValue1 &&
+                shotValue2 == 0);
+    }
+
     public String convertJSON(String in){
         if (launchedMiner(in)){
             previousResponse = in;
+            firstResponse = in;
             return "Launched Robot Miner (Sets mines, can't shoot)";
 
         } if (launchedSniper(in)){
             previousResponse = in;
+            firstResponse = in;
             return "Launched Robot Sniper (has 1 bullet, 5 step range)";
 
         } if (launchedTrooper(in)){
             previousResponse = in;
+            firstResponse = in;
             return "Launched Robot Trooper (has 5 bullets, 1 step range)";
 
         } if (settingMine(in)){
@@ -297,6 +318,21 @@ public class StringHandler {
             int steps = currentX - previousX;
             previousResponse = in;
             return "You moved backward by "+(-steps)+" steps.";
+
+        } if (missedShot(in)){
+            previousResponse = in;
+            return "You fired a shot... and missed.";
+
+        }if (noShots(in)){
+            previousResponse = in;
+            if (firstResponse.equals("{\"result\":\"OK\",\"data\":{\"mine\":10,\"repa" +
+                    "ir\":10,\"shields\":5,\"reload\":10,\"visibility\":10,\"positi" +
+                    "on\":[0,0]},\"state\":{\"shields\":5,\"position\":[0,0],\"shot" +
+                    "s\":0,\"direction\":\"NORTH\",\"status\":\"NORMAL\"}}")){
+                return "You are a miner, you can only set mines, not shoot.";
+            }else{
+                return "You tried to shoot with no bullets.";
+            }
 
         }else{
             previousResponse = in;
