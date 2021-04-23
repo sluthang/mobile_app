@@ -41,7 +41,8 @@ public class StringHandler {
     }
 
     public boolean mineActivate (String in){
-        return (in.contains("Mine"));
+        return (in.contains("Mine") &&
+                in.contains("NORMAL"));
     }
 
     public boolean mineDeath (String in){
@@ -97,9 +98,9 @@ public class StringHandler {
     }
 
     public String checkPosition(String in){
-        String[] whatever = in.split("]");
-        String[] why = whatever[0].split(":");
-        return why[why.length-1]+"]";
+        String[] cuttingLastHalf = in.split("]");
+        String[] cuttingFirstHalf = cuttingLastHalf[0].split(":");
+        return cuttingFirstHalf[cuttingFirstHalf.length-1]+"]";
     }
 
     public int xPosition(String position){
@@ -182,6 +183,14 @@ public class StringHandler {
         return (in.contains("Miss") && shotValue2 < shotValue1);
     }
 
+    public boolean accurateShot(String in){
+        String[] shot1 = previousResponse.split("shots");
+        int shotValue1 = Integer.parseInt(String.valueOf(shot1[1].charAt(2)));
+        String[] shot2 = in.split("shots");
+        int shotValue2 = Integer.parseInt(String.valueOf(shot2[1].charAt(2)));
+        return (in.contains("Hit") && shotValue2 < shotValue1);
+    }
+
     public boolean noShots(String in){
         String[] shot1 = previousResponse.split("shots");
         int shotValue1 = Integer.parseInt(String.valueOf(shot1[1].charAt(2)));
@@ -189,6 +198,40 @@ public class StringHandler {
         int shotValue2 = Integer.parseInt(String.valueOf(shot2[1].charAt(2)));
         return (in.contains("Miss") && shotValue2 == shotValue1 &&
                 shotValue2 == 0);
+    }
+
+    public boolean Reloading(String in){
+        return (in.contains("Reload"));
+    }
+
+    public boolean doneReloading(String in){
+        String[] shot1 = previousResponse.split("shots");
+        int shotValue1 = Integer.parseInt(String.valueOf(shot1[1].charAt(2)));
+        String[] shot2 = in.split("shots");
+        int shotValue2 = Integer.parseInt(String.valueOf(shot2[1].charAt(2)));
+        return (in.contains("Done") && shotValue2 > shotValue1);
+    }
+
+    public boolean stateMessage(String in){
+        return (in.contains("State"));
+    }
+
+    public boolean shotAt(String in){
+        String[] shield1 = previousResponse.split("shields");
+        int shieldValue1 = Integer.parseInt(String.valueOf(shield1[1].charAt(2)));
+        String[] shield2 = in.split("shields");
+        int shieldValue2 = Integer.parseInt(String.valueOf(shield2[1].charAt(2)));
+        return (in.contains("Shot") && shieldValue1 > shieldValue2 &&
+                in.contains("NORMAL"));
+    }
+
+    public boolean shotDeath(String in){
+        String[] shield1 = previousResponse.split("shields");
+        int shieldValue1 = Integer.parseInt(String.valueOf(shield1[1].charAt(2)));
+        String[] shield2 = in.split("shields");
+        int shieldValue2 = Integer.parseInt(String.valueOf(shield2[1].charAt(2)));
+        return (in.contains("Shot") && shieldValue1 > shieldValue2 &&
+                in.contains("DEAD"));
     }
 
     public String convertJSON(String in){
@@ -254,7 +297,11 @@ public class StringHandler {
             int currentY = yPosition(currentPosition);
             int steps = currentY - previousY;
             previousResponse = in;
-            return "You moved forward by "+steps+" steps.";
+            if (steps == 1){
+                return "You moved forward by "+steps+" step.";
+            }else{
+                return "You moved forward by "+steps+" steps.";
+            }
 
         } if (movedForward(in) && in.contains("EAST")){
             String previousPosition = checkPosition(previousResponse);
@@ -263,7 +310,11 @@ public class StringHandler {
             int currentX = xPosition(currentPosition);
             int steps = currentX - previousX;
             previousResponse = in;
-            return "You moved forward by "+steps+" steps.";
+            if (steps == 1){
+                return "You moved forward by "+steps+" step.";
+            }else{
+                return "You moved forward by "+steps+" steps.";
+            }
 
         } if (movedForward(in) && in.contains("WEST")){
             String previousPosition = checkPosition(previousResponse);
@@ -272,7 +323,11 @@ public class StringHandler {
             int currentX = xPosition(currentPosition);
             int steps = previousX - currentX;
             previousResponse = in;
-            return "You moved forward by "+steps+" steps.";
+            if (steps == 1){
+                return "You moved forward by "+steps+" step.";
+            }else{
+                return "You moved forward by "+steps+" steps.";
+            }
 
         } if (movedForward(in) && in.contains("SOUTH")){
             String previousPosition = checkPosition(previousResponse);
@@ -281,7 +336,11 @@ public class StringHandler {
             int currentY = yPosition(currentPosition);
             int steps = previousY - currentY;
             previousResponse = in;
-            return "You moved forward by "+steps+" steps.";
+            if (steps == 1){
+                return "You moved forward by "+steps+" step.";
+            }else{
+                return "You moved forward by "+steps+" steps.";
+            }
 
         } if (movedBackward(in) && in.contains("NORTH")){
             String previousPosition = checkPosition(previousResponse);
@@ -290,7 +349,11 @@ public class StringHandler {
             int currentY = yPosition(currentPosition);
             int steps = previousY - currentY;
             previousResponse = in;
-            return "You moved backward by "+steps+" steps.";
+            if (steps == 1){
+                return "You moved backward by "+steps+" step.";
+            }else{
+                return "You moved backward by "+steps+" steps.";
+            }
 
         }if (movedBackward(in) && in.contains("WEST")){
             String previousPosition = checkPosition(previousResponse);
@@ -299,7 +362,11 @@ public class StringHandler {
             int currentX = xPosition(currentPosition);
             int steps = previousX - currentX;
             previousResponse = in;
-            return "You moved backward by "+(-steps)+" steps.";
+            if (-steps == 1){
+                return "You moved backward by "+(-steps)+" step.";
+            }else{
+                return "You moved backward by "+(-steps)+" steps.";
+            }
 
         }if (movedBackward(in) && in.contains("SOUTH")){
             String previousPosition = checkPosition(previousResponse);
@@ -308,7 +375,11 @@ public class StringHandler {
             int currentY = yPosition(currentPosition);
             int steps = currentY - previousY;
             previousResponse = in;
-            return "You moved backward by "+steps+" steps.";
+            if (steps == 1){
+                return "You moved backward by "+steps+" step.";
+            }else{
+                return "You moved backward by "+steps+" steps.";
+            }
 
         }if (movedBackward(in) && in.contains("EAST")){
             String previousPosition = checkPosition(previousResponse);
@@ -317,11 +388,27 @@ public class StringHandler {
             int currentX = xPosition(currentPosition);
             int steps = currentX - previousX;
             previousResponse = in;
-            return "You moved backward by "+(-steps)+" steps.";
+            if (-steps == 1){
+                return "You moved backward by "+(-steps)+" step.";
+            }else{
+                return "You moved backward by "+(-steps)+" steps.";
+            }
 
         } if (missedShot(in)){
             previousResponse = in;
             return "You fired a shot... and missed.";
+
+        } if (accurateShot(in)){
+            previousResponse = in;
+            return "You fired a shot... it hit!";
+
+        } if (shotAt(in)){
+            previousResponse = in;
+            return "You have been shot at!";
+
+        } if (shotDeath(in)){
+            previousResponse = in;
+            return "You are dead (Cause of death: shot at)";
 
         }if (noShots(in)){
             previousResponse = in;
@@ -332,6 +419,91 @@ public class StringHandler {
                 return "You are a miner, you can only set mines, not shoot.";
             }else{
                 return "You tried to shoot with no bullets.";
+            }
+
+        } if (Reloading(in)){
+            previousResponse = in;
+            String[] shot = firstResponse.split("shots");
+            int bullets = Integer.parseInt(String.valueOf(shot[1].charAt(2)));
+            if (bullets == 0){
+                return "You are a miner, you have no bullets to reload.";
+            }else{
+                return "You are reloading...";
+            }
+
+        } if (doneReloading(in)){
+            previousResponse = in;
+            String[] shot = firstResponse.split("shots");
+            int bullets = Integer.parseInt(String.valueOf(shot[1].charAt(2)));
+            if (bullets == 0){
+                return "As a miner, you reloaded no bullets, wasting your time.";
+            }else{
+                return "You have finished reloading.";
+            }
+
+        } if (stateMessage(in)){
+            previousResponse = in;
+            String position = checkPosition(in);
+
+            String[] shield = in.split("shields");
+            int shieldValue = Integer.parseInt(String.valueOf(shield[1].charAt(2)));
+
+            String[] shot = in.split("shots");
+            int shotValue = Integer.parseInt(String.valueOf(shot[1].charAt(2)));
+
+            String[] initialShot = firstResponse.split("shots");
+            int bullets = Integer.parseInt(String.valueOf(initialShot[1].charAt(2)));
+
+            if (in.contains("NORTH") && bullets == 1){
+                return "You are a sniper robot (bullets = 1, range = 5 steps) " +
+                        "at position "+position+" with " +shotValue+" shots and " +
+                        shieldValue+" points in your shield, facing NORTH.";
+            }if (in.contains("SOUTH") && bullets == 1){
+                return "You are a sniper robot (bullets = 1, range = 5 steps) " +
+                        "at position "+position+" with " +shotValue+" shots and " +
+                        shieldValue+" points in your shield, facing SOUTH.";
+            }if (in.contains("WEST") && bullets == 1){
+                return "You are a sniper robot (bullets = 1, range = 5 steps) " +
+                        "at position "+position+" with " +shotValue+" shots and " +
+                        shieldValue+" points in your shield, facing WEST.";
+            }if (in.contains("EAST") && bullets == 1){
+                return "You are a sniper robot (bullets = 1, range = 5 steps) " +
+                        "at position "+position+" with " +shotValue+" shots and " +
+                        shieldValue+" points in your shield, facing EAST.";
+            }if (in.contains("NORTH") && bullets == 5){
+                return "You are a trooper robot (bullets = 5, range = 1 step) " +
+                        "at position "+position+" with "+shotValue+" shots and "+
+                        shieldValue+" points in your shield, facing NORTH.";
+            }if (in.contains("SOUTH") && bullets == 5){
+                return "You are a trooper robot (bullets = 5, range = 1 step) " +
+                        "at position "+position+" with "+shotValue+" shots and "+
+                        shieldValue+" points in your shield, facing NORTH.";
+            }if (in.contains("WEST") && bullets == 5){
+                return "You are a trooper robot (bullets = 5, range = 1 step) " +
+                        "at position "+position+" with "+shotValue+" shots and "+
+                        shieldValue+" points in your shield, facing NORTH.";
+            }if (in.contains("EAST") && bullets == 5){
+                return "You are a trooper robot (bullets = 5, range = 1 step) " +
+                        "at position "+position+" with "+shotValue+" shots and "+
+                        shieldValue+" points in your shield, facing NORTH.";
+            }if (in.contains("NORTH") && bullets == 0){
+                return "You are a miner robot at position "+position+" with " +
+                        "only mines (no shots) and "+shieldValue+" points " +
+                        "in your shield, facing NORTH.";
+            }if (in.contains("SOUTH") && bullets == 0){
+                return "You are a miner robot at position "+position+" with " +
+                        "only mines (no shots) and "+shieldValue+" points " +
+                        "in your shield, facing SOUTH.";
+            }if (in.contains("WEST") && bullets == 0){
+                return "You are a miner robot at position "+position+" with " +
+                        "only mines (no shots) and "+shieldValue+" points " +
+                        "in your shield, facing WEST.";
+            }if (in.contains("EAST") && bullets == 0){
+                return "You are a miner robot at position "+position+" with " +
+                        "only mines (no shots) and "+shieldValue+" points " +
+                        "in your shield, facing EAST.";
+            }else{
+                return "This line of code can't be reached.";
             }
 
         }else{

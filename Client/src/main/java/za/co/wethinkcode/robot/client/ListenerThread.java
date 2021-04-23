@@ -20,20 +20,7 @@ public class ListenerThread implements Runnable {
                 messageFromServer = input.readLine();
                 if (messageFromServer != null){
                     String response = handler.convertJSON(messageFromServer);
-
-                    String[] cutLastBit = messageFromServer.split("]");
-                    String[] cutFirstBit = cutLastBit[0].split(":");
-                    String position = cutFirstBit[cutFirstBit.length-1]+"]";
-
-                    String[] shield = messageFromServer.split("shields");
-                    int shieldValue = Integer.parseInt(String.valueOf(shield[1].charAt(2)));
-
-                    String[] shot = messageFromServer.split("shots");
-                    int shotValue = Integer.parseInt(String.valueOf(shot[1].charAt(2)));
-
-                    System.out.println("Response: "+response+" "+
-                        position+" shield: "+shieldValue+" shots: "+
-                        shotValue);
+                    System.out.println("Response: "+response);
 //                    System.out.println("Response: "+messageFromServer);
                 }
             } catch (IOException e) {
