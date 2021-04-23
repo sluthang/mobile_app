@@ -11,6 +11,7 @@ import za.co.wethinkcode.robot.server.World;
 
 import java.util.Set;
 
+@SuppressWarnings("unchecked")
 public class FireCommand extends Command{
 
     public FireCommand() {

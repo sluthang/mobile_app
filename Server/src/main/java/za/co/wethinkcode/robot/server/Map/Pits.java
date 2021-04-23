@@ -35,7 +35,7 @@ public class Pits implements Obstacle {
      * Getter for the size of the obstacle (square 5x5 on curriculum page).
      * */
     public int getSize() {
-        return 4;
+        return 2;
     }
 
     /**

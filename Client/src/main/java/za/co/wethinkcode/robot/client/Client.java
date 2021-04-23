@@ -12,6 +12,7 @@ public class Client {
     private static String port;
 
     public static void main(String[] args) {
+        // Client will ask the user for the IP address and port of the server, then set these values.
         setIpAndPort();
         try (
                 // Client will attempt to establish a connection to the server.

@@ -21,9 +21,19 @@ public class LaunchCommand extends Command{
         this.args = args;
     }
 
+    /**
+     * Method will create a new robot in the world with the given data.
+     * The method will first check if the robot does not already exist within the world and if so the method returns
+     * an error to the client.
+     * If the arguments are valid the method will proceed to find a random open spot in the world and create the new
+     * robot at that location in the world and store it in the clients connected thread.
+     * @param world of the server.
+     * @param server associated with the client.
+     */
     @Override
     public void execute(World world, Server server) {
         JSONObject data = new JSONObject();
+        // Checks if the Robot exists already, then returns error if it is.
         if (!doesRobotExist(world, server) || server.robot != null) {
             server.robotName = null;
             data.put("message", "Too many of you in this world");
@@ -31,6 +41,7 @@ public class LaunchCommand extends Command{
             server.response.add("result", "ERROR");
             return;
         } else {
+            // Create
             server.robot = new Robot(server.robotName);
             world.addRobot(server.robot);
             int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), world.MAX_SHIELDS);
@@ -42,10 +53,9 @@ public class LaunchCommand extends Command{
 
         boolean positionSet = false;
         for (int i = 0; i < 1000; i++) {
-//            int x = random.nextInt(world.BOTTOM_RIGHT.getX() - world.TOP_LEFT.getX()) - world.BOTTOM_RIGHT.getX();
-//            int y = random.nextInt(world.TOP_LEFT.getY() - world.BOTTOM_RIGHT.getY()) - world.TOP_LEFT.getY();
-            int x = 0;
-            int y = 0;
+            int x = random.nextInt(world.BOTTOM_RIGHT.getX() - world.TOP_LEFT.getX()) - world.BOTTOM_RIGHT.getX();
+            int y = random.nextInt(world.TOP_LEFT.getY() - world.BOTTOM_RIGHT.getY()) - world.TOP_LEFT.getY();
+
 
             if (world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName) == UpdateResponse.SUCCESS){
                 server.robot.setPosition(new Position(x, y));
