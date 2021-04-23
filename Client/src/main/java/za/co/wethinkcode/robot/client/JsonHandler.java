@@ -21,6 +21,8 @@ public class JsonHandler {
             case "fire":
             case "mine":
             case "repair":
+            case "reload":
+            case "state":
                 newInstruction.put("arguments", Collections.emptyList());
                 break;
             case "back" :
