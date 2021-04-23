@@ -21,7 +21,7 @@ public class Draw {
         display.hide();
         display.fillColor(Color.BLACK);
         display.outlineWidth(2);
-        display.width(2);
+        display.width(1);
         display.speed(0);
         display.shape("triangle");
         display.shapeSize(7, 7);
@@ -57,10 +57,23 @@ public class Draw {
         drawBorder();
         display.penColor(color);
         for (Obstacle obs : list) {
+            int steps = obs.getSize();
+            if (obs.getClass().getSimpleName().equals("Mines")) {
+                steps += 1;
+            }
             display.up();
-            display.setPosition(obs.getBottomLeftX()+(long)(obs.getSize()/2),
-                    obs.getBottomLeftY()+(long)(obs.getSize()/2));
-            display.dot(color, obs.getSize()+3);
+            display.setPosition(obs.getBottomLeftX(), obs.getBottomLeftY());
+            display.down();
+//            display.dot(color, 3);
+            display.setDirection(0);
+            display.forward(steps);
+            display.left(90);
+            display.forward(steps);
+            display.left(90);
+            display.forward(steps);
+            display.left(90);
+            display.forward(steps);
+            display.left(90);
 
         }
         display.up();

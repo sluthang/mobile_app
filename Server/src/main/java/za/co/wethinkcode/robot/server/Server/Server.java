@@ -3,13 +3,15 @@ package za.co.wethinkcode.robot.server.Server;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import za.co.wethinkcode.robot.server.Commands.Command;
-import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Robot.Robot;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.World;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.Socket;
-import java.net.SocketException;
 
 @SuppressWarnings({"unchecked", "RedundantCollectionOperation"})
 public class Server implements Runnable {
@@ -133,10 +135,14 @@ public class Server implements Runnable {
         } catch (IndexOutOfBoundsException ex) {}
     }
 
+    /**
+     * Prints the currently received request from the client.
+     * @param message from client on specific socket.
+     */
     private void printClientMessage(JSONObject message) {
-        System.out.println("\u001b[33;1m"+"Message from  : "+"\u001B[0m"+ this.robotName+"\n\n"+
-                ServerManagement.ANSI_PURPLE + "\t\t\t\tName\t\t:\t" +ServerManagement.ANSI_CYAN + message.get("robot") + ServerManagement.ANSI_RESET +"\n"+
-                ServerManagement.ANSI_PURPLE + "\t\t\t\tArguments\t:\t" +ServerManagement.ANSI_CYAN + message.get("arguments") + ServerManagement.ANSI_RESET +"\n"+
-                ServerManagement.ANSI_PURPLE + "\t\t\t\tCommand\t:\t" +ServerManagement.ANSI_CYAN + message.get("command") + ServerManagement.ANSI_RESET +"\n");
+        System.out.println("\u001b[33;1m"+"Message from  : "+"\u001B[0m"+ this.robotName+"\n"+
+                ServerManagement.ANSI_PURPLE + "\t\t\tName\t\t:\t" +ServerManagement.ANSI_CYAN + message.get("robot") + ServerManagement.ANSI_RESET +"\n"+
+                ServerManagement.ANSI_PURPLE + "\t\t\tArguments\t:\t" +ServerManagement.ANSI_CYAN + message.get("arguments") + ServerManagement.ANSI_RESET +"\n"+
+                ServerManagement.ANSI_PURPLE + "\t\t\tCommand\t:\t" +ServerManagement.ANSI_CYAN + message.get("command") + ServerManagement.ANSI_RESET);
     }
 }

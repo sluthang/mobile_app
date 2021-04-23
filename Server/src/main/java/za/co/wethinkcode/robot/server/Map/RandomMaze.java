@@ -6,7 +6,8 @@ import java.util.Random;
 
 public class RandomMaze extends BaseMaze {
     private final Random rand = new Random();
-    private final int numberOfObs = rand.nextInt(25);
+    private final int numberOfObs;
+    private final int numberOfPits;
     private final int upperX;
     private final int upperY;
     private final int lowerX;
@@ -18,6 +19,8 @@ public class RandomMaze extends BaseMaze {
      * Constructor for the random maze.
      * */
     public RandomMaze(Position TOP_LEFT, Position BOTTOM_RIGHT) {
+        numberOfObs = ((TOP_LEFT.getY()*2)+(BOTTOM_RIGHT.getX()*2))/20;
+        numberOfPits = ((TOP_LEFT.getY()*2)+(BOTTOM_RIGHT.getX()*2))/20;
         this.upperX = BOTTOM_RIGHT.getX()-4;
         this.upperY = TOP_LEFT.getY()-4;
         this.lowerX = TOP_LEFT.getX();
@@ -81,7 +84,6 @@ public class RandomMaze extends BaseMaze {
      * */
     public void generateList() {
         int counter = 0;
-        createPit(new Position(0,3));
         while (counter != getNumberOfObs()) {
             int bottomLeftX = generateRandomNumber(upperX,lowerX,maxX);
             int bottomLeftY = generateRandomNumber(upperY,lowerY,maxY);
@@ -90,7 +92,7 @@ public class RandomMaze extends BaseMaze {
                 counter++;
             }
         }
-        while (pitsList.size() != 10) {
+        while (pitsList.size() != numberOfPits) {
             int bottomLeftX = generateRandomNumber(upperX,lowerX,maxX);
             int bottomLeftY = generateRandomNumber(upperY,lowerY,maxY);
             if (overLappingStart(bottomLeftX, bottomLeftY) && overLappingObs(bottomLeftX, bottomLeftY)) {
