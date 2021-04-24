@@ -5,29 +5,15 @@ public class StringHandler {
     String firstResponse;
 
     public boolean launchedMiner (String in){
-        String launchedMine = "{\"result\":\"OK\",\"data\":{\"mine\":10,\"repa" +
-                "ir\":10,\"shields\":5,\"reload\":10,\"visibility\":10,\"positi" +
-                "on\":[0,0]},\"state\":{\"shields\":5,\"position\":[0,0],\"shot" +
-                "s\":0,\"direction\":\"NORTH\",\"status\":\"NORMAL\"}}";
-
-        return (in.equals(launchedMine));
+                return ListenerThread.type.equals("miner");
     }
 
     public boolean launchedSniper (String in){
-        String launchedSnipe = "{\"result\":\"OK\",\"data\":{\"mine\":10,\"rep" +
-                "air\":10,\"shields\":5,\"reload\":10,\"visibility\":10,\"posit" +
-                "ion\":[0,0]},\"state\":{\"shields\":5,\"position\":[0,0],\"sho" +
-                "ts\":1,\"direction\":\"NORTH\",\"status\":\"NORMAL\"}}";
-
-        return(in.equals(launchedSnipe));
+        return ListenerThread.type.equals("sniper");
     }
 
     public boolean launchedTrooper (String in){
-        String launchedTroop = "{\"result\":\"OK\",\"data\":{\"mine\":10,\"repa" +
-                "ir\":10,\"shields\":5,\"reload\":10,\"visibility\":10,\"positi" +
-                "on\":[0,0]},\"state\":{\"shields\":5,\"position\":[0,0],\"shot" +
-                "s\":5,\"direction\":\"NORTH\",\"status\":\"NORMAL\"}}";
-        return (in.equals(launchedTroop));
+        return ListenerThread.type.equals("trooper");
     }
 
     public boolean settingMine (String in){
@@ -236,16 +222,19 @@ public class StringHandler {
 
     public String convertJSON(String in){
         if (launchedMiner(in)){
+            ListenerThread.type = "default";
             previousResponse = in;
             firstResponse = in;
             return "Launched Robot Miner (Sets mines, can't shoot)";
 
         } if (launchedSniper(in)){
+            ListenerThread.type = "default";
             previousResponse = in;
             firstResponse = in;
             return "Launched Robot Sniper (has 1 bullet, 5 step range)";
 
         } if (launchedTrooper(in)){
+            ListenerThread.type = "default";
             previousResponse = in;
             firstResponse = in;
             return "Launched Robot Trooper (has 5 bullets, 1 step range)";

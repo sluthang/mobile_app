@@ -41,6 +41,9 @@ public class Client {
         }
     }
 
+    /**
+     * Method will prompt the user for the IP and PORT of the server user is attempting to connect to.
+     */
     public static void setIpAndPort() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Ip address please: ");

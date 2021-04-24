@@ -19,7 +19,6 @@ public class JsonHandler {
                 newInstruction.put("arguments", Arrays.asList(command));
                 command = "turn";
                 break;
-            case "reload":
             case "fire":
             case "mine":
             case "look":

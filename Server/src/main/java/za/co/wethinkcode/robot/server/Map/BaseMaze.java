@@ -40,27 +40,35 @@ public class BaseMaze implements Maze {
     }
 
     /**
-     * Create the obstacles list, by adding in a new obstacles at the position.
-     * @param position: takes in the position, and pass it into the new square position.
+     * Create the obstacle and then add the new obstacle to the list of obstacles.
+     * @param position: of the obstacle to be created
      * */
     public void createObstacles(Position position) {
         this.obstaclesList.add(new SquareObstacle(position.getX(), position.getY()));
     }
 
+    /**
+     * Creates a new bottomless pit on the map and adds this to the list of current pits.
+     * @param position: of the pit to be created
+     */
     public void createPit(Position position) {
         this.pitsList.add(new Pits(position.getX(), position.getY()));
     }
 
+    /**
+     * Creates a new mine with the position given and adds it to the list of current mines.
+     * @param position: of the mine to be created
+     */
     public void createMine(Position position) {
         this.minesList.add(new Mines(position.getX(), position.getY()));
     }
 
     /**
-     * Takes in 2 parameters, old and new position and checks if the path is blocked per each obstacle in the
-     * obstacle list.
+     * Takes in 3 parameters, old and new position and checks if the path is blocked per each obstacle in the
+     * obstacle lists as well as the list of robots currently in play.
      * @param a : the old position;
      * @param b : the new position;
-     * @return: returns true if the path is blocked.
+     * @return: returns UpdateResponse of the obstacle hit.
      * */
     public UpdateResponse blocksPath(Position a, Position b, ConcurrentHashMap<String, Robot> robots, String robotName) {
 
@@ -95,7 +103,6 @@ public class BaseMaze implements Maze {
                     if (key.equals(robotName)) {
                         continue;
                     }
-                    //TODO robots do not collide correctly and get stuck inside one another.
                     if (robots.get(key).blocksPosition(new Position(x,y))) {
                         return UpdateResponse.FAILED_OBSTRUCTED;
                     }
@@ -111,6 +118,13 @@ public class BaseMaze implements Maze {
         return UpdateResponse.SUCCESS;
     }
 
+    /**
+     * Method will loop through the list of mines and check the position of the robot.
+     * If the mine is found that the robot has triggered their health will be reduced and the mine will be removed
+     * from the list of currently active mines on the field.
+     * @param robotPosition position of robot on mine.
+     * @param server of the robot that will be hit by the mine.
+     */
     public void hitMine(Position robotPosition, Server server) {
         Iterator<Obstacle> i = this.minesList.iterator();
 
@@ -123,6 +137,15 @@ public class BaseMaze implements Maze {
         }
     }
 
+    /**
+     * Method will look through all possible lists of Mines,Pits,Robots and obstacles.
+     * If any of these obstacles are within this position given the method will return a relevant update response
+     * for that obstacle, for example if a mine is at position given FAILED_HIT_MINE is returned.
+     * @param robots map of all robots in play.
+     * @param position to be checked.
+     * @param robotName of robot currently checking for movement.
+     * @return UpdateResponse.
+     */
     public UpdateResponse blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName) {
         for (Obstacle pit : this.pitsList) {
             if (pit.blocksPosition(position))

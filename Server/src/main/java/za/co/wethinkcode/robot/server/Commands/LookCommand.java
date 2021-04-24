@@ -47,9 +47,9 @@ public class LookCommand extends Command{
             } if (obstacle.blocksPath(robot.getPosition(), new Position(robot.getPosition().getX() + visionRange, robot.getPosition().getY()))) {
                 this.array.add(makeJsonObject(obstacle, (obstacle.getBottomLeftX() - robot.getPosition().getX()), "EAST"));
             } if (obstacle.blocksPath(robot.getPosition(), new Position(robot.getPosition().getX(), robot.getPosition().getY() - visionRange))) {
-                this.array.add(makeJsonObject(obstacle, (robot.getPosition().getY() - obstacle.getBottomLeftY())-obstacle.getSize(), "SOUTH"));
+                this.array.add(makeJsonObject(obstacle, (robot.getPosition().getY() - obstacle.getBottomLeftY())-(obstacle.getSize()-1), "SOUTH"));
             } if (obstacle.blocksPath(robot.getPosition(), new Position(robot.getPosition().getX() - visionRange, robot.getPosition().getY()))) {
-                this.array.add(makeJsonObject(obstacle, (robot.getPosition().getY() - obstacle.getBottomLeftY())-obstacle.getSize(), "WEST"));
+                this.array.add(makeJsonObject(obstacle, (robot.getPosition().getX() - obstacle.getBottomLeftX())-(obstacle.getSize()-1), "WEST"));
             }
         }
     }
@@ -112,9 +112,12 @@ public class LookCommand extends Command{
 
     private JSONObject makeJsonObject(Object obstacle, int distance, String direction) {
         JSONObject json = new JSONObject();
+        String obstacleType = obstacle.getClass().getSimpleName();
+
+        if (obstacleType.equals("SquareObstacle")) obstacleType = "OBSTACLE";
 
         json.put("direction", direction);
-        json.put("type", obstacle.getClass().getSimpleName());
+        json.put("type", obstacleType.toUpperCase());
         json.put("distance", String.valueOf(distance));
 
         return json;

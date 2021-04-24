@@ -26,38 +26,6 @@ public class Robot {
         this.currentDirection = Direction.NORTH;
     }
 
-    public void setShots(int shots) {
-        this.shots = shots;
-    }
-
-    public void setOldShield(int oldShield) {
-        this.oldShield = oldShield;
-    }
-
-    public void setMaxShots(int maxShots) {
-        this.maxShots = maxShots;
-    }
-
-    public void setMaxShields(int maxShield) {
-        this.maxShields = maxShield;
-    }
-
-    public void setShields(int shield) {
-        this.shields = shield;
-    }
-
-    public int getShots() {
-        return this.shots;
-    }
-
-    public int getOldShield() {
-        return this.oldShield;
-    }
-
-    public int getShields() {
-        return this.shields;
-    }
-
     /**
      * Getter to fetch status
      * */
@@ -142,14 +110,6 @@ public class Robot {
         }
     }
 
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
     /**
      * Checks if the position given matches the current position of the robot.
      * @param position to be compared.
@@ -200,10 +160,13 @@ public class Robot {
         //Builds a Json response to send to client.
         ResponseBuilder response = new ResponseBuilder();
         JSONObject data = new JSONObject();
-        data.put("Message", message);
+        data.put("message", message);
         response.addData(data);
         response.add("result", "OK");
         response.add("state", getState());
+
+        System.out.println("\033[31;1m"+"User: "+this.name+" has been killed!\n"+
+                "Reason for death: "+"\033[0m"+message);
 
         //Sends response to client and closes their thread.
         server.out.println(response);
@@ -222,10 +185,6 @@ public class Robot {
         this.shots = maxShots;
     }
 
-    public int getMaxShields() {
-        return this.maxShields;
-    }
-
     /**
      * Reduces the shield of the robot by the given int value.
      * @param damage;
@@ -234,5 +193,49 @@ public class Robot {
         this.shields -= damage;
     }
 
+    public int getMaxShields() {
+        return this.maxShields;
+    }
+
     public int getMaxShots() { return this.maxShots; }
+
+    public void setShots(int shots) {
+        this.shots = shots;
+    }
+
+    public void setOldShield(int oldShield) {
+        this.oldShield = oldShield;
+    }
+
+    public void setMaxShots(int maxShots) {
+        this.maxShots = maxShots;
+    }
+
+    public void setMaxShields(int maxShield) {
+        this.maxShields = maxShield;
+    }
+
+    public void setShields(int shield) {
+        this.shields = shield;
+    }
+
+    public int getShots() {
+        return this.shots;
+    }
+
+    public int getOldShield() {
+        return this.oldShield;
+    }
+
+    public int getShields() {
+        return this.shields;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
 }

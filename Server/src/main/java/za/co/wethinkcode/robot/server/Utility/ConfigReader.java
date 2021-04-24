@@ -2,6 +2,7 @@ package za.co.wethinkcode.robot.server.Utility;
 
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Properties;
 
 public class ConfigReader {
@@ -12,14 +13,20 @@ public class ConfigReader {
         try {
             // Create new properties object to store config in.
             Properties prop = new Properties();
-            //to load application's properties, we use this class
+            //use this to load the properties file
             FileInputStream file;
 
-            //the base folder is ./, the root of the main.properties file
+            //the base folder is ./, the root of the config.properties file
             String path = "./config.properties";
 
-            //load the file handle for main.properties
-            file = new FileInputStream(path);
+            //load the file handle for config.properties
+            try {
+                file = new FileInputStream(path);
+            } catch (FileNotFoundException e) {
+                CreateConfig newFile = new CreateConfig();
+                newFile.createConfigFile();
+                file = new FileInputStream(path);
+            }
             prop.load(file);
 
 

@@ -46,7 +46,6 @@ public class ForwardCommand extends Command {
             nrSteps -= step;
         }
 
-        //TODO set position to whatever it hits
         String message = "";
         if (response == UpdateResponse.SUCCESS){
             message = "Done";

@@ -1,11 +1,16 @@
 package za.co.wethinkcode.robot.client;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
 // Thread will listen for input from the server constantly.
 public class ListenerThread implements Runnable {
     private final BufferedReader input;
+    public static String type;
 
     public ListenerThread(BufferedReader in) {
         input = in;
@@ -19,11 +24,10 @@ public class ListenerThread implements Runnable {
             try {
                 messageFromServer = input.readLine();
                 if (messageFromServer != null){
-                    String response = handler.convertJSON(messageFromServer);
-                    System.out.println("Response: "+response);
-//                    System.out.println("Response: "+messageFromServer);
+                    PrettyPrint print = new PrettyPrint(messageFromServer);
+                    print.printMessage();
                 }
-            } catch (IOException e) {
+            } catch (IOException | ParseException e) {
                 e.printStackTrace();
             }
         }

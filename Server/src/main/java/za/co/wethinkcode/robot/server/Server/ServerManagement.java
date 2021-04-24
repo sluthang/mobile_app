@@ -38,11 +38,8 @@ public class ServerManagement implements Runnable {
         }
         //Pretty print the instructions for using the server to the server admin.
         System.out.println("Server is running and live!\n" +
-                ANSI_PURPLE +
-                "Server can message clients individually by using the /message tag.\n" +
-                ANSI_GREEN + "       eg. /message <clientName> <message>\n" +
-                ANSI_PURPLE + "Server can issue commands using the /command tag.\n" +
-                ANSI_GREEN +"       eg. /command <command> <tag>\n" + ANSI_RESET +
+                ANSI_PURPLE + "Server can issue commands using the command name.\n" +
+                ANSI_GREEN +"       eg. <command> <tag>\n" + ANSI_RESET +
                 ANSI_GREEN+"       <purge> <client-name>"+ANSI_RESET+" - Purges the selected user from the server.\n" +
                 ANSI_GREEN+"       <clients> <>         "+ANSI_RESET+" - Lists all the currently connected users and their username.\n" +
                 ANSI_GREEN+"       <robots> <>          "+ANSI_RESET+" - Lists the robots currently on the map and their states.\n" +
