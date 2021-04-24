@@ -13,8 +13,7 @@ public class CreateConfig {
                 System.out.println("config file created: " + newFile.getName());
                 try {
                     FileWriter writer = new FileWriter("config.properties");
-                    writer.write("ip=192.168.0.1\n" +
-                            "port=6969\n" +
+                    writer.write("port=6969\n" +
                             "width=70\n" +
                             "height=40\n" +
                             "visibility=10\n" +

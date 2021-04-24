@@ -11,9 +11,9 @@ import java.io.IOException;
 public class PrettyPrint {
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\033[1;91m";
-    private static final String ANSI_GREEN = "\033[33;1m";
-    private static final String ANSI_CYAN = "\033[35;1m";
-    private static final String CYAN_UNDERLINED = "\033[4;33m";
+    private static final String ANSI_CYAN = "\033[33;1m";
+    private static final String ANSI_PURPLE = "\033[35;1m";
+    private static final String PURPLE_UNDERLINED = "\033[4;33m";
     private final String messageFromServer;
 
     public PrettyPrint(String message) {
@@ -28,7 +28,6 @@ public class PrettyPrint {
         if (messageFromClient.get("result") != null) {
             switch (messageFromClient.get("result").toString()) {
                 case "OK":
-
                     JSONObject data = (JSONObject) messageFromClient.get("data");
                     if (data.get("message") == null) {
                         if (data.get("mine") == null) {
@@ -58,20 +57,20 @@ public class PrettyPrint {
      */
     private static void statePrint(JSONObject state, String robot) {
         if (robot.equalsIgnoreCase("enemy")) {
-            System.out.println(CYAN_UNDERLINED + ANSI_CYAN + "Enemy State" + ANSI_RESET + "\n"
-                    + ANSI_CYAN + "\t\tShields Left\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("shields") + "\n"
-                    + ANSI_CYAN + "\t\tPosition\t\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("position") + "\n"
-                    + ANSI_CYAN + "\t\tDirection\t\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("direction") + "\n"
-                    + ANSI_CYAN + "\t\tShots\t\t\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("shots") + "\n"
-                    + ANSI_CYAN + "\t\tStatus\t\t\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("status") + "\n"
+            System.out.println(PURPLE_UNDERLINED + ANSI_PURPLE + "Enemy State" + ANSI_RESET + "\n"
+                    + ANSI_PURPLE + "\t\tShields Left\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shields") + "\n"
+                    + ANSI_PURPLE + "\t\tPosition\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("position") + "\n"
+                    + ANSI_PURPLE + "\t\tDirection\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("direction") + "\n"
+                    + ANSI_PURPLE + "\t\tShots\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shots") + "\n"
+                    + ANSI_PURPLE + "\t\tStatus\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("status") + "\n"
                     + ANSI_RESET);
         } else {
-            System.out.println(CYAN_UNDERLINED + ANSI_CYAN + "Robot State" + ANSI_RESET + "\n"
-                    + ANSI_CYAN + "\t\tShields Left\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("shields") + "\n"
-                    + ANSI_CYAN + "\t\tPosition\t\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("position") + "\n"
-                    + ANSI_CYAN + "\t\tDirection\t\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("direction") + "\n"
-                    + ANSI_CYAN + "\t\tShots\t\t\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("shots") + "\n"
-                    + ANSI_CYAN + "\t\tStatus\t\t\t:\t" + ANSI_RESET + ANSI_GREEN + state.get("status") + "\n"
+            System.out.println(PURPLE_UNDERLINED + ANSI_PURPLE + "Robot State" + ANSI_RESET + "\n"
+                    + ANSI_PURPLE + "\t\tShields Left\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shields") + "\n"
+                    + ANSI_PURPLE + "\t\tPosition\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("position") + "\n"
+                    + ANSI_PURPLE + "\t\tDirection\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("direction") + "\n"
+                    + ANSI_PURPLE + "\t\tShots\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shots") + "\n"
+                    + ANSI_PURPLE + "\t\tStatus\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("status") + "\n"
                     + ANSI_RESET);
         }
     }
@@ -81,7 +80,7 @@ public class PrettyPrint {
      */
     private static void errorPrint(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
-        System.out.println(ANSI_CYAN + "Result\t\t\t\t\t\t:\t" + ANSI_RESET + ANSI_RED + message.get("result") + ", " + data.get("message") + ANSI_RESET + "\n");
+        System.out.println(ANSI_PURPLE + "Result\t\t\t\t\t\t:\t" + ANSI_RESET + ANSI_RED + message.get("result") + ", " + data.get("message") + ANSI_RESET + "\n");
     }
 
     /**
@@ -89,12 +88,12 @@ public class PrettyPrint {
      */
     private static void launchPrint(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
-        System.out.println(CYAN_UNDERLINED + ANSI_CYAN + "System Data" + ANSI_RESET + "\n"
-                + ANSI_CYAN + "\t\tMine Duration\t:\t" + ANSI_RESET + ANSI_GREEN + data.get("mine") + "\n"
-                + ANSI_CYAN + "\t\tRepair Duration\t:\t" + ANSI_RESET + ANSI_GREEN + data.get("repair") + "\n"
-                + ANSI_CYAN + "\t\tShields Number\t:\t" + ANSI_RESET + ANSI_GREEN + data.get("shields") + "\n"
-                + ANSI_CYAN + "\t\tReload Duration\t:\t" + ANSI_RESET + ANSI_GREEN + data.get("reload") + "\n"
-                + ANSI_CYAN + "\t\tVisible Area\t:\t" + ANSI_RESET + ANSI_GREEN + data.get("visibility") + "\n"
+        System.out.println(PURPLE_UNDERLINED + ANSI_PURPLE + "System Data" + ANSI_RESET + "\n"
+                + ANSI_PURPLE + "\t\tMine Duration\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("mine") + "\n"
+                + ANSI_PURPLE + "\t\tRepair Duration\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("repair") + "\n"
+                + ANSI_PURPLE + "\t\tShields Number\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("shields") + "\n"
+                + ANSI_PURPLE + "\t\tReload Duration\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("reload") + "\n"
+                + ANSI_PURPLE + "\t\tVisible Area\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("visibility") + "\n"
                 + ANSI_RESET);
         statePrint((JSONObject) message.get("state"), "");
     }
@@ -105,12 +104,12 @@ public class PrettyPrint {
     private static void lookPrint(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
         JSONArray objects = (JSONArray) data.get("objects");
-        System.out.println(CYAN_UNDERLINED + ANSI_CYAN + "Obstacles" + ANSI_RESET);
+        System.out.println(PURPLE_UNDERLINED + ANSI_PURPLE + "Obstacles" + ANSI_RESET);
         for (Object object : objects) {
             JSONObject obs = (JSONObject) object;
-            System.out.println(ANSI_CYAN + "\t\tType\t\t\t:\t" + ANSI_GREEN + obs.get("type") + ANSI_RESET);
-            System.out.println(ANSI_CYAN + "\t\tDirection\t\t:\t" + ANSI_GREEN + obs.get("direction") + ANSI_RESET);
-            System.out.println(ANSI_CYAN + "\t\tDistance\t\t:\t" + ANSI_GREEN + obs.get("distance") + ANSI_RESET);
+            System.out.println(ANSI_PURPLE + "\t\tType\t\t\t:\t" + ANSI_CYAN + obs.get("type") + ANSI_RESET);
+            System.out.println(ANSI_PURPLE + "\t\tDirection\t\t:\t" + ANSI_CYAN + obs.get("direction") + ANSI_RESET);
+            System.out.println(ANSI_PURPLE + "\t\tDistance\t\t:\t" + ANSI_CYAN + obs.get("distance") + ANSI_RESET);
             System.out.println();
         }
         statePrint((JSONObject) message.get("state"), "");
@@ -123,10 +122,10 @@ public class PrettyPrint {
      */
     private static void hitPrint(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
-        System.out.println(ANSI_CYAN + "\t\tResult\t\t:\t" + ANSI_RESET + ANSI_GREEN + message.get("result") + ANSI_RESET);
-        System.out.println(ANSI_CYAN + "\t\tMessage\t\t\t:\t" + ANSI_RESET + ANSI_GREEN + data.get("message"));
-        System.out.println(ANSI_CYAN + "\t\tEnemy\t\t\t:\t" + ANSI_RESET + ANSI_GREEN + data.get("robot"));
-        System.out.println(ANSI_CYAN + "\t\tDistance\t\t:\t" + ANSI_RESET + ANSI_GREEN + data.get("distance") + "\n");
+        System.out.println(ANSI_PURPLE + "\t\tResult\t\t:\t" + ANSI_RESET + ANSI_CYAN + message.get("result") + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "\t\tMessage\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("message"));
+        System.out.println(ANSI_PURPLE + "\t\tEnemy\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("robot"));
+        System.out.println(ANSI_PURPLE + "\t\tDistance\t\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("distance") + "\n");
         statePrint((JSONObject) data.get("state"), "enemy");
         statePrint((JSONObject) message.get("state"), "");
     }
@@ -136,8 +135,8 @@ public class PrettyPrint {
      */
     private static void simplePrint(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
-        System.out.println(ANSI_CYAN + "\t\tResult\t\t\t:\t" + ANSI_RESET + ANSI_GREEN + message.get("result") + ANSI_RESET);
-        System.out.println(ANSI_CYAN + "\t\tMessage\t\t\t:\t" + ANSI_RESET + ANSI_GREEN + data.get("message") + "\n");
+        System.out.println(ANSI_PURPLE + "\t\tResult\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + message.get("result") + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "\t\tMessage\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("message") + "\n");
         statePrint((JSONObject) message.get("state"), "");
     }
 }
