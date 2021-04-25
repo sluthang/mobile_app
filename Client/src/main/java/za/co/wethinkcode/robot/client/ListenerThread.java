@@ -1,7 +1,5 @@
 package za.co.wethinkcode.robot.client;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
@@ -18,7 +16,6 @@ public class ListenerThread implements Runnable {
 
     public void run() {
         String messageFromServer = "";
-        StringHandler handler = new StringHandler();
 
         while (messageFromServer != null) {
             try {

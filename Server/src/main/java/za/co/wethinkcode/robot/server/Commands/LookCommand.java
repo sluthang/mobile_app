@@ -47,9 +47,9 @@ public class LookCommand extends Command{
             } if (obstacle.blocksPath(robot.getPosition(), new Position(robot.getPosition().getX() + visionRange, robot.getPosition().getY()))) {
                 this.array.add(makeJsonObject(obstacle, (obstacle.getBottomLeftX() - robot.getPosition().getX()), "EAST"));
             } if (obstacle.blocksPath(robot.getPosition(), new Position(robot.getPosition().getX(), robot.getPosition().getY() - visionRange))) {
-                this.array.add(makeJsonObject(obstacle, (robot.getPosition().getY() - obstacle.getBottomLeftY())-(obstacle.getSize()-1), "SOUTH"));
+                this.array.add(makeJsonObject(obstacle, (robot.getPosition().getY() - obstacle.getBottomLeftY())-(obstacle.getSize()), "SOUTH"));
             } if (obstacle.blocksPath(robot.getPosition(), new Position(robot.getPosition().getX() - visionRange, robot.getPosition().getY()))) {
-                this.array.add(makeJsonObject(obstacle, (robot.getPosition().getX() - obstacle.getBottomLeftX())-(obstacle.getSize()-1), "WEST"));
+                this.array.add(makeJsonObject(obstacle, (robot.getPosition().getX() - obstacle.getBottomLeftX())-(obstacle.getSize()), "WEST"));
             }
         }
     }

@@ -31,9 +31,9 @@ public class PrettyPrint {
                     JSONObject data = (JSONObject) messageFromClient.get("data");
                     if (data.get("message") == null) {
                         if (data.get("mine") == null) {
-                            lookPrint(messageFromClient);
+                            printLook(messageFromClient);
                         } else {
-                            launchPrint(messageFromClient);
+                            printLaunch(messageFromClient);
                         }
                     } else if (data.get("message").equals("Hit")) {
                         hitPrint(messageFromClient);
@@ -52,13 +52,13 @@ public class PrettyPrint {
     }
 
     /**
-     * @param state is robot state. Checks for bullets left, shield left and location.
-     * @param robot name chosen by the user.
+     * @param state the current robots state object, which will be used to print elements.
+     * @param robot name of the robot.
      */
     private static void statePrint(JSONObject state, String robot) {
         if (robot.equalsIgnoreCase("enemy")) {
             System.out.println(PURPLE_UNDERLINED + ANSI_PURPLE + "Enemy State" + ANSI_RESET + "\n"
-                    + ANSI_PURPLE + "\t\tShields Left\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shields") + "\n"
+                    + ANSI_PURPLE + "\t\tShields Left\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shields") + "\n"
                     + ANSI_PURPLE + "\t\tPosition\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("position") + "\n"
                     + ANSI_PURPLE + "\t\tDirection\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("direction") + "\n"
                     + ANSI_PURPLE + "\t\tShots\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shots") + "\n"
@@ -66,7 +66,7 @@ public class PrettyPrint {
                     + ANSI_RESET);
         } else {
             System.out.println(PURPLE_UNDERLINED + ANSI_PURPLE + "Robot State" + ANSI_RESET + "\n"
-                    + ANSI_PURPLE + "\t\tShields Left\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shields") + "\n"
+                    + ANSI_PURPLE + "\t\tShields Left\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shields") + "\n"
                     + ANSI_PURPLE + "\t\tPosition\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("position") + "\n"
                     + ANSI_PURPLE + "\t\tDirection\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("direction") + "\n"
                     + ANSI_PURPLE + "\t\tShots\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + state.get("shots") + "\n"
@@ -76,7 +76,7 @@ public class PrettyPrint {
     }
 
     /**
-     * @param message is the response message when an invalid request was made.
+     * @param message the object returned when an invalid request is made.
      */
     private static void errorPrint(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
@@ -84,9 +84,9 @@ public class PrettyPrint {
     }
 
     /**
-     * @param message initial message response sent after a robot launch was successful.
+     * @param message the message received after a robot is successfully launched.
      */
-    private static void launchPrint(JSONObject message) {
+    private static void printLaunch(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
         System.out.println(PURPLE_UNDERLINED + ANSI_PURPLE + "System Data" + ANSI_RESET + "\n"
                 + ANSI_PURPLE + "\t\tMine Duration\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("mine") + "\n"
@@ -99,9 +99,10 @@ public class PrettyPrint {
     }
 
     /**
-     * @param message display of robot state and all possible obstacles five blocks from all directions
+     * @param message message received with an array of obstacles in all direction. This will be broken down and
+     *                displayed to the user individually.
      */
-    private static void lookPrint(JSONObject message) {
+    private static void printLook(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
         JSONArray objects = (JSONArray) data.get("objects");
         System.out.println(PURPLE_UNDERLINED + ANSI_PURPLE + "Obstacles" + ANSI_RESET);
@@ -116,9 +117,9 @@ public class PrettyPrint {
     }
 
     /**
-     * The display message after a robot gets shot by another robot.
+     * THe Object received when a robot is hit when firing.
      *
-     * @param message is the response from the server after every action.
+     * @param message the message received from the server
      */
     private static void hitPrint(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
@@ -131,12 +132,13 @@ public class PrettyPrint {
     }
 
     /**
-     * @param message is the command validation response for all request made by the robot.
+     * @param message Validation of the command sent through to the server.
      */
     private static void simplePrint(JSONObject message) {
         JSONObject data = (JSONObject) message.get("data");
         System.out.println(ANSI_PURPLE + "\t\tResult\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + message.get("result") + ANSI_RESET);
-        System.out.println(ANSI_PURPLE + "\t\tMessage\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("message") + "\n");
+        System.out.println(ANSI_PURPLE + "\t\tMessage\t\t\t:\t" + ANSI_RESET + ANSI_CYAN + data.get("message"));
+        System.out.println(ANSI_RESET +"___________________________________________________________" + ANSI_RESET);
         statePrint((JSONObject) message.get("state"), "");
     }
 }
