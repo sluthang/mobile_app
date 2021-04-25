@@ -31,7 +31,7 @@ public class FireCommand extends Command{
     public void execute(World world, Server server) {
         // If robot has no shots left a message is sent to the client to reload.
         if (server.robot.getShots() == 0) {
-            server.response.add("response", "Error");
+            server.response.add("result", "ERROR");
             JSONObject data = new JSONObject();
             data.put("message", "Please reload.");
             server.response.addData(data);
