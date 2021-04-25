@@ -19,7 +19,7 @@ public class FireCommand extends Command{
 
     @Override
     public void execute(World world, Server server) {
-        if (server.robot.getShields() == 0) {
+        if (server.robot.getShots() == 0) {
             server.response.add("response", "Error");
             JSONObject data = new JSONObject();
             data.put("message", "Please reload.");

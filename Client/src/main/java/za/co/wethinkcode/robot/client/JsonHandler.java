@@ -5,6 +5,7 @@ import org.json.simple.*;
 import java.util.Arrays;
 import java.util.Collections;
 
+@SuppressWarnings("unchecked")
 public class JsonHandler {
 
     static public String convertCommand(String instruction, String name) {
@@ -18,6 +19,7 @@ public class JsonHandler {
                 newInstruction.put("arguments", Arrays.asList(command));
                 command = "turn";
                 break;
+            case "reload":
             case "fire":
             case "mine":
             case "repair":
