@@ -17,7 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author Nicholas Seward
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("ALL")
 public class Turtle implements Runnable, ActionListener, MouseListener, MouseMotionListener, KeyListener, ComponentListener, MouseWheelListener
 {
 

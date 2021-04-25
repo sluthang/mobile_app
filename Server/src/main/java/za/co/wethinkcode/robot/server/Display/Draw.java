@@ -32,6 +32,9 @@ public class Draw {
         Turtle.zoomFit();
     }
 
+    /**
+     * Draws the boundary of the map on the turtle interface.
+     */
     private void drawBorder() {
         display.penColor(Color.BLACK);
         display.up();
@@ -64,7 +67,6 @@ public class Draw {
             display.up();
             display.setPosition(obs.getBottomLeftX(), obs.getBottomLeftY());
             display.down();
-//            display.dot(color, 3);
             display.setDirection(0);
             display.forward(steps);
             display.left(90);

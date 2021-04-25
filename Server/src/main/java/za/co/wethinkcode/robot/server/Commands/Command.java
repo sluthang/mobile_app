@@ -69,6 +69,8 @@ public abstract class Command {
                     case "right":
                         return new RightCommand();
                 }
+            case "look":
+                return new LookCommand();
             case "mine":
                 return new LayMineCommand();
             case "repair":
