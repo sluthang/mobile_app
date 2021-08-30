@@ -16,7 +16,7 @@ public class MultiServer {
     // All client threads will be stored in the Vector array allowing us to use them individually.
     public static Vector<Server> clients = new Vector<>();
     // The loaded world with the map inserted, this will hold all the robots and data.
-    public static World world = new World();
+    public static World world;
 
     public static void main(String[] args) throws IOException {
         //Prints out the servers IP address and port.
@@ -28,6 +28,12 @@ public class MultiServer {
         ServerSocket s = new ServerSocket(config.getPort());
         System.out.println("Server running & waiting for client connections.");
 
+        //Checks to see if an argument was provided for determining what maze to use.
+        if(args.length != 0){
+            world = new World(args[0]);
+        }else{
+            world = new World("Random");
+        }
         // Create our Thread for using the System.in of the server, this will run along side the server.
         Thread output = new Thread(new ServerManagement(world));
         output.start();

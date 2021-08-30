@@ -40,13 +40,6 @@ public class LaunchCommand extends Command{
             server.response.addData(data);
             server.response.add("result", "ERROR");
             return;
-        } else {
-            // Create
-            server.robot = new Robot(server.robotName);
-            world.addRobot(server.robot);
-            int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), world.MAX_SHIELDS);
-            int maxShot = Math.min(Integer.parseInt(args.get(2).toString()), world.MAX_SHOTS);
-            server.robot.setMaxes(maxShield, maxShot);
         }
 
         Random random = new Random();
@@ -58,6 +51,11 @@ public class LaunchCommand extends Command{
 
 
             if (world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName) == UpdateResponse.SUCCESS){
+                server.robot = new Robot(server.robotName);
+                world.addRobot(server.robot);
+                int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), world.MAX_SHIELDS);
+                int maxShot = Math.min(Integer.parseInt(args.get(2).toString()), world.MAX_SHOTS);
+                server.robot.setMaxes(maxShield, maxShot);
                 server.robot.setPosition(new Position(x, y));
                 positionSet = true;
                 break;

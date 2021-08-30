@@ -19,7 +19,7 @@ public class World{
     public final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
     public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
     // The map that the world will be using.
-    public Maze maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
+    public Maze maze;
     //Values that were received from the config file.
     public final int MAX_SHOTS = MultiServer.config.getMaxShots();
     public final int MAX_SHIELDS = MultiServer.config.getMaxShieldStrength();
@@ -28,6 +28,13 @@ public class World{
     public final int VISIBILITY = MultiServer.config.getVisibility();
     public final int MINE_SET_TIME = MultiServer.config.getMineSetTime();
 
+    public World(String maze) {
+        if(maze.equalsIgnoreCase("nofreespacemaze")){
+            this.maze = new NoFreeSpaceMaze(TOP_LEFT, BOTTOM_RIGHT);
+        }else{
+            this.maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
+        }
+    }
 
     /**
      * getter to get the maze.
