@@ -5,7 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import za.co.wethinkcode.server.robotclient.RobotWorldClient;
 import za.co.wethinkcode.server.robotclient.RobotWorldJsonClient;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * As a player
@@ -31,7 +33,7 @@ public class LaunchRobotTests {
 
 
     @Test
-    public void validLaunchShouldSucceed() {
+    public void validLaunchShouldSucceed(){
 
         // Given that I am connected to a running Robot Worlds server
         // And the world is of size 1x1 (The world is configured or hardcoded to this size)
@@ -59,5 +61,37 @@ public class LaunchRobotTests {
 
         // And I should also get the state of the robot
         assertNotNull(response.get("state"));
+    }
+
+    @Test
+    public void invalidLaunchExistingRobotName() {
+
+        // Given that I am connected to a running Robot Worlds server
+        // And the world is of size 1x1 (The world is configured or hardcoded to this size)
+
+        RobotWorldClient secondClient = new RobotWorldJsonClient();
+        secondClient.connect(DEFAULT_IP, DEFAULT_PORT);
+
+        assertTrue(serverClient.isConnected());
+
+        // When I send a launch command with an existing robot name
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        JsonNode first_response = serverClient.sendRequest(request);
+        JsonNode second_response = secondClient.sendRequest(request);
+
+        // Then I should get an "ERROR" response
+        assertNotNull(first_response.get("result"));
+        assertEquals("OK", first_response.get("result").asText());
+        assertEquals("ERROR", second_response.get("result").asText());
+
+        // And the message "Too many of you in this world"
+        assertTrue(second_response.get("data").get("message").asText().contains("Too many of you in this world"));
+
+        secondClient.disconnect();
     }
 }
