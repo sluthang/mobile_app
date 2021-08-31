@@ -30,6 +30,7 @@ public class LaunchCommand extends Command{
      * @param world of the server.
      * @param server associated with the client.
      */
+    
     @Override
     public void execute(World world, Server server) {
         JSONObject data = new JSONObject();
@@ -46,8 +47,8 @@ public class LaunchCommand extends Command{
 
         boolean positionSet = false;
         for (int i = 0; i < 1000; i++) {
-            int x = random.nextInt(world.BOTTOM_RIGHT.getX() - world.TOP_LEFT.getX()) - world.BOTTOM_RIGHT.getX();
-            int y = random.nextInt(world.TOP_LEFT.getY() - world.BOTTOM_RIGHT.getY()) - world.TOP_LEFT.getY();
+            int x = random.nextInt((world.BOTTOM_RIGHT.getX() - world.TOP_LEFT.getX()) - world.BOTTOM_RIGHT.getX() + 1);
+            int y = random.nextInt((world.TOP_LEFT.getY() - world.BOTTOM_RIGHT.getY()) - world.TOP_LEFT.getY() + 1);
 
 
             if (world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName) == UpdateResponse.SUCCESS){
