@@ -96,6 +96,44 @@ public class LaunchRobotTests {
     }
 
     @Test
+    public void invalidLaunchNotEnoughSpace() {
+
+        // Given that I am connected to a running Robot Worlds server
+        // And the world is of size 1x1 (The world is configured or hardcoded to this size)
+
+        RobotWorldClient secondClient = new RobotWorldJsonClient();
+        secondClient.connect(DEFAULT_IP, DEFAULT_PORT);
+
+        assertTrue(serverClient.isConnected());
+
+        // When I send a launch command with an existing robot name
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        String requestTwo = "{" +
+                "  \"robot\": \"BOB\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        JsonNode first_response = serverClient.sendRequest(request);
+        JsonNode second_response = secondClient.sendRequest(requestTwo);
+
+        // Then I should get an "ERROR" response
+        assertNotNull(first_response.get("result"));
+        assertEquals("OK", first_response.get("result").asText());
+        assertEquals("ERROR", second_response.get("result").asText());
+
+        // And the message "No more space in this world"
+        assertEquals(second_response.get("data").get("message").asText(), "No more space in this world");
+
+        secondClient.disconnect();
+    }
+
+    @Test
     public void getStateOfLaunchedRobot() {
 
         // Given that I am connected to a running Robot Worlds server

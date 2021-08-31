@@ -91,8 +91,5 @@ public class NoFreeSpaceMaze extends BaseMaze{
                 }
             }
         }
-        for(int i=obstaclesList.size()-1;i >= 0; i--){
-            System.out.println(obstaclesList.get(i).getBottomLeftX()+" "+obstaclesList.get(i).getBottomLeftY());
-        }
     }
 }
