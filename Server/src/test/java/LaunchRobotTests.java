@@ -94,4 +94,40 @@ public class LaunchRobotTests {
 
         secondClient.disconnect();
     }
+
+    @Test
+    public void getStateOfLaunchedRobot() {
+
+        // Given that I am connected to a running Robot Worlds server
+        // And the world is of size 1x1 (The world is configured or hardcoded to this size)
+
+        assertTrue(serverClient.isConnected());
+
+        // When I send a launch command
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Then I should get an "OK" response
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
+
+        // And I issue a state command
+
+        String stateRequest = " {\"robot\":\"HAL\"," +
+                "\"arguments\":[]," +
+                "\"command\":\"state" +
+                "\"}";
+        JsonNode stateResponse = serverClient.sendRequest(stateRequest);
+        assertNotNull(stateResponse.get("result"));
+        assertNotNull(stateResponse.get("state"));
+        assertEquals("OK", stateResponse.get("result").asText());
+
+        assertTrue(stateResponse.get("state").get("direction").asText().contains("NORTH"));
+    }
+
 }
