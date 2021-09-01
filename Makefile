@@ -19,8 +19,8 @@ run_server_tests:
 	cd Server; mvn test
 
 run_acceptance_tests:
-	@echo "Running tests..."
-	mvn surefire:test -Dtest=LaunchRobotTests
+	@echo -e "${RED}Running acceptance tests..."
+	cd Server; mvn surefire:test -Dtest=LaunchRobotTests
 
 run_reference_server:
 	@echo "Running The Reference Server Jar File..."
@@ -30,6 +30,7 @@ run_reference_server:
 run_uss_victory_server:
 	@echo "Running The USS Victory Server..."
 	cd Server ; java -jar target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar &
+	sleep 1
 	@echo "Started uss server..."
 
 stop_reference_server:
