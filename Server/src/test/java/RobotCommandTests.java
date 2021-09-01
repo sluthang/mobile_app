@@ -1,9 +1,10 @@
-package za.co.wethinkcode.server.robotclient;
-
 import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import za.co.wethinkcode.server.robotclient.RobotWorldClient;
+import za.co.wethinkcode.server.robotclient.RobotWorldJsonClient;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,7 +33,7 @@ public class RobotCommandTests {
         // And the world is of size 1x1 (The world is configured or hardcoded to this size)
         serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
 
-        assertTrue(serverClient.isConnected());
+        Assertions.assertTrue(serverClient.isConnected());
 
         // When I send a valid launch request to the server
         String launchRequest = "{" +

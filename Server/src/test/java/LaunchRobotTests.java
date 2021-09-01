@@ -167,5 +167,4 @@ public class LaunchRobotTests {
 
         assertTrue(stateResponse.get("state").get("direction").asText().contains("NORTH"));
     }
-
 }
