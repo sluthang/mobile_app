@@ -105,7 +105,7 @@ public class LookCommand extends Command{
 
         json.put("direction", direction);
         json.put("type", "EDGE");
-        json.put("distance", String.valueOf(distance+1));
+        json.put("distance", distance+1);
 
         return json;
     }
