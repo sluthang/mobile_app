@@ -1,11 +1,9 @@
 package za.co.wethinkcode.robot.server.Server;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.Display.Draw;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.World;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +15,6 @@ public class ServerManagement implements Runnable {
     public static final String ANSI_PURPLE = "\u001B[35;1m";
     public static final String ANSI_CYAN = "\u001B[36m";
     //Display to be drawn on for the dump command.
-    private final Draw display;
     private final Scanner sc;
     private final World world;
     boolean running;
@@ -26,11 +23,10 @@ public class ServerManagement implements Runnable {
         this.sc = new Scanner(System.in);
         this.world = world;
         running = true;
-        this.display = new Draw(MultiServer.config.getHeight(), MultiServer.config.getWidth());
     }
 
     public void run() {
-        //Sleep for 3 seconds due to threads printing at the same time when run on fast CPU's.
+        //Sleep foren 3 seconds due to threads printing at the same time when run on fast CPU's.
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -153,14 +149,7 @@ public class ServerManagement implements Runnable {
      * Obstacles in Purple.
      * Bottomless pits in Black.
      */
+
     private void dump() {
-        //Clears the display before printing out.
-        display.clear();
-        // Calls the methods to display the separate objects on the field.
-        display.drawObstacles(world.getObstacles(), Color.MAGENTA);
-        display.drawObstacles(world.getMaze().getPits(), Color.BLACK);
-        display.drawObstacles(world.getMaze().getMines(), Color.RED);
-        display.drawRobots(world.getRobots(), Color.GREEN);
-        display.zoom();
     }
 }

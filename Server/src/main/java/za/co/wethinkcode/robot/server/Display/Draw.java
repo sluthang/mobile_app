@@ -57,7 +57,7 @@ public class Draw {
      * @param color of the obstacles.
      */
     public void drawObstacles(Vector<Obstacle> list, Color color) {
-        drawBorder();
+//        drawBorder();
         display.penColor(color);
         for (Obstacle obs : list) {
             int steps = obs.getSize();

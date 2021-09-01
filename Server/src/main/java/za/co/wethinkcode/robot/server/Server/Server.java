@@ -87,6 +87,7 @@ public class Server implements Runnable {
      */
     private void handleClientMessage(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
+        System.out.println(jsonMessage);
         printClientMessage(jsonMessage);
 
         this.robotName = (String)jsonMessage.get("robot");
