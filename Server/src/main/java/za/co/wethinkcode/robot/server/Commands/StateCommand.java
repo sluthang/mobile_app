@@ -19,8 +19,16 @@ public class StateCommand extends Command{
     @Override
     public void execute(World world, Server server) {
         JSONObject data = new JSONObject();
-        data.put("message", "State");
-        server.response.addData(data);
-        server.response.add("result", "OK");
+
+        if (server.robot == null){
+            data.put("message", "Robot does not exist");
+            server.response.addData(data);
+            server.response.add("result", "ERROR");
+        }
+         else if (server.robot.getName() != null) {
+            data.put("message", "State");
+            server.response.addData(data);
+            server.response.add("result", "OK");
+        }
     }
 }

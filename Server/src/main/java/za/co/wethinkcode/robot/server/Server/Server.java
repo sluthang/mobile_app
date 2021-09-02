@@ -77,6 +77,7 @@ public class Server implements Runnable {
         if (this.robot != null) {
             this.response.add("state", this.robot.getState());
         }
+        System.out.println(this.response.toString());
         out.println(this.response.toString());
     }
 
@@ -87,7 +88,6 @@ public class Server implements Runnable {
      */
     private void handleClientMessage(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
-        System.out.println(jsonMessage);
         printClientMessage(jsonMessage);
 
         this.robotName = (String)jsonMessage.get("robot");

@@ -52,6 +52,11 @@ buildNumber.properties
 # *.iml
 # *.ipr
 
+# jar file output directory
+Server/output
+output/
+
+
 # CMake
 cmake-build-*/
 
