@@ -78,35 +78,49 @@ public class Robot {
      */
     public void updateDirection(boolean turnRight) {
         if (turnRight) {
-            switch (getCurrentDirection()){
-                case NORTH:
-                    this.currentDirection = Direction.EAST;
-                    break;
-                case EAST:
-                    this.currentDirection = Direction.SOUTH;
-                    break;
-                case SOUTH:
-                    this.currentDirection = Direction.WEST;
-                    break;
-                case WEST:
-                    this.currentDirection = Direction.NORTH;
-                    break;
-            }
+            turnRight();
         } else {
-            switch (getCurrentDirection()) {
-                case NORTH:
-                    this.currentDirection = Direction.WEST;
-                    break;
-                case WEST:
-                    this.currentDirection = Direction.SOUTH;
-                    break;
-                case SOUTH:
-                    this.currentDirection = Direction.EAST;
-                    break;
-                case EAST:
-                    this.currentDirection = Direction.NORTH;
-                    break;
-            }
+            turnLeft();
+        }
+    }
+
+    /**
+     * Updates the current direction the robot is facing when a turn right command is given.
+     */
+    private void turnRight(){
+        switch (getCurrentDirection()) {
+            case NORTH:
+                this.currentDirection = Direction.EAST;
+                break;
+            case EAST:
+                this.currentDirection = Direction.SOUTH;
+                break;
+            case SOUTH:
+                this.currentDirection = Direction.WEST;
+                break;
+            case WEST:
+                this.currentDirection = Direction.NORTH;
+                break;
+        }
+    }
+
+    /**
+     * Updates the current direction the robot is facing when a turn left command is given.
+     */
+    private void turnLeft(){
+        switch (getCurrentDirection()) {
+            case NORTH:
+                this.currentDirection = Direction.WEST;
+                break;
+            case WEST:
+                this.currentDirection = Direction.SOUTH;
+                break;
+            case SOUTH:
+                this.currentDirection = Direction.EAST;
+                break;
+            case EAST:
+                this.currentDirection = Direction.NORTH;
+                break;
         }
     }
 
