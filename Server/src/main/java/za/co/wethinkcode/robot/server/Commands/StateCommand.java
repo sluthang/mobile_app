@@ -20,15 +20,15 @@ public class StateCommand extends Command{
     public void execute(World world, Server server) {
         JSONObject data = new JSONObject();
 
-        if (server.robot == null){
-            data.put("message", "Robot does not exist");
-            server.response.addData(data);
-            server.response.add("result", "ERROR");
-        }
-         else if (server.robot.getName() != null) {
+        if (server.robot != null){
             data.put("message", "State");
             server.response.addData(data);
             server.response.add("result", "OK");
+        }
+         else {
+            data.put("message", "Robot does not exist");
+            server.response.addData(data);
+            server.response.add("result", "ERROR");
         }
     }
 }
