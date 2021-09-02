@@ -167,4 +167,31 @@ public class LaunchRobotTests {
 
         assertTrue(stateResponse.get("state").get("direction").asText().contains("NORTH"));
     }
+
+
+    @Test
+    public void getStateOfNoneExistingRobot() {
+
+        // Given that I am connected to a running Robot Worlds server
+        // And the world is of size 1x1 (The world is configured or hardcoded to this size)
+
+        assertTrue(serverClient.isConnected());
+
+        // And I issue a state command with a robot name that isn't launched
+
+        String stateRequest = " {\"robot\":\"HAL\"," +
+                "\"arguments\":[]," +
+                "\"command\":\"state" +
+                "\"}";
+
+        JsonNode stateResponse = serverClient.sendRequest(stateRequest);
+
+        assertNotNull(stateResponse.get("result"));
+
+        // Then I should receive a response with the ERROR result
+        assertEquals("ERROR", stateResponse.get("result").asText());
+
+        // And the message on the response should be "Robot does not exist"
+        assertEquals(stateResponse.get("data").get("message").asText(), "Robot does not exist");
+    }
 }
