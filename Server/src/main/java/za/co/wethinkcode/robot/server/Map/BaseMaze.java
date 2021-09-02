@@ -147,32 +147,66 @@ public class BaseMaze implements Maze {
      * @return UpdateResponse.
      */
     public UpdateResponse blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName) {
+        if (pitBlockPosition(position)) {
+            return UpdateResponse.FAILED_OBSTRUCTED;
+        }
+        else if(mineBlockPosition(position)){
+            return UpdateResponse.FAILED_HIT_MINE;
+        }
+        else if(robotBlockPosition(robots,robotName,position)){
+            return UpdateResponse.FAILED_OBSTRUCTED;
+        }else{
+            return UpdateResponse.SUCCESS;
+        }
+    }
+
+    /**
+     * This method check to see if a pit blocks the position the robot is trying to move to.
+     * And returns true or false depending on if the position is blocked or not.
+     * @param position
+     * @return boolean
+     */
+    private boolean pitBlockPosition(Position position){
         for (Obstacle pit : this.pitsList) {
             if (pit.blocksPosition(position))
-                return UpdateResponse.FAILED_BOTTOMLESS_PIT;
+                return true;
         }
+        return false;
+    }
 
-        for (Obstacle obst : this.obstaclesList) {
-            if (obst.blocksPosition(position)) {
-                return UpdateResponse.FAILED_OBSTRUCTED;
-            }
-        }
-
+    /**
+     * This method check to see if a mine blocks the position the robot is trying to move to.
+     * And returns true or false depending on if the position is blocked or not.
+     * @param position
+     * @return boolean
+     */
+    private boolean mineBlockPosition(Position position){
         for (Obstacle mine : this.minesList) {
             if (mine.blocksPosition(position)) {
-                return UpdateResponse.FAILED_HIT_MINE;
+                return true;
             }
         }
+        return false;
+    }
 
+    /**
+     * This method check to see if another robot blocks the position the players' robot is trying to move to.
+     * And returns true or false depending on if the position is blocked or not.
+     * @param robots
+     * @param robotName
+     * @param position
+     * @return boolean
+     */
+    private boolean robotBlockPosition(ConcurrentHashMap<String, Robot> robots, String robotName, Position position){
         Set<String> keys = robots.keySet();
         for (String key : keys) {
             if (key.equals(robotName)) {
                 continue;
             }
             if (robots.get(key).blocksPosition(position)) {
-                return UpdateResponse.FAILED_OBSTRUCTED;
+                return true;
             }
         }
-        return UpdateResponse.SUCCESS;
+        return false;
     }
 }
