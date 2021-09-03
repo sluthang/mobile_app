@@ -40,19 +40,32 @@ public class Server implements Runnable {
     }
 
     public void run() {
+        JSONObject data = new JSONObject();
+        JSONObject result = new JSONObject();
         try {
             String messageFromClient;
             while(robot == null) {
                 messageFromClient = in.readLine();
                 handleMessageBeforeLaunch(messageFromClient);
+                System.out.println(messageFromClient);
             }
 
             MultiServer.clients.add(this);
             while(running) {
                 messageFromClient = in.readLine();
                 handleClientMessage(messageFromClient);
+                System.out.println(messageFromClient);
             }
-        } catch(IOException | NullPointerException  ex) {
+        }catch(IllegalArgumentException e){
+
+            data.put("message","Unsupported command");
+            response = new ResponseBuilder(result,data);
+
+            System.out.println(response);
+            out.println(response); /** Printing response as it should appear when it's an invalid command */
+        }
+
+        catch(IOException | NullPointerException  ex) {
             System.out.println("Shutting down single client server");
         } finally {
             closeQuietly();
@@ -67,12 +80,14 @@ public class Server implements Runnable {
     private void handleMessageBeforeLaunch(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
         printClientMessage(jsonMessage);
+      //  System.out.println(messageFromClient);/** Printing message from client for testing purpose */
 
         this.robotName = (String)jsonMessage.get("robot");
         this.response = new ResponseBuilder();
 
         Command command = Command.create(jsonMessage);
         world.handleCommand(command, this);
+
 
         if (this.robot != null) {
             this.response.add("state", this.robot.getState());

@@ -82,7 +82,8 @@ public abstract class Command {
             case "fire":
                 return new FireCommand();
             default:
-                throw new IllegalArgumentException("Unsupported command: " + instruction);
+                throw new IllegalArgumentException("Unsupported command: " );
+                //throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
     }
 
