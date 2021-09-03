@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,6 +62,29 @@ public class LaunchRobotTests {
 
         // And I should also get the state of the robot
         assertNotNull(response.get("state"));
+    }
+
+    @Test
+    void invalidLaunchShouldFail(){
+        // Given that I am connected to a running Robot Worlds server
+        Assert.assertTrue(serverClient.isConnected());
+
+        // When I send a invalid launch request with the command "luanch" instead of "launch"
+        String request = "{" +
+                "\"robot\": \"HAL\"," +
+                "\"command\": \"luanch\"," +
+                "\"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Then I should get an error response
+        Assert.assertNotNull(response.get("result"));
+        Assert.assertEquals("ERROR", response.get("result").asText());
+
+        // And the message "Unsupported command"
+        Assert.assertNotNull(response.get("data"));
+        Assert.assertNotNull(response.get("data").get("message"));
+        Assert.assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
     }
 
     @Test

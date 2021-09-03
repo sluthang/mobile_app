@@ -12,6 +12,13 @@ public class ResponseBuilder {
     public ResponseBuilder(){
         response = new JSONObject();
         response.put("data", null);
+        //System.out.println(response);
+    }
+
+    public ResponseBuilder(JSONObject result, JSONObject data) {
+        this.response = new JSONObject();
+        response.put("result" , "ERROR");
+        response.put("data",data);
     }
 
     /**

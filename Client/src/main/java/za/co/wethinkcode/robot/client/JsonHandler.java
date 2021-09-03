@@ -45,8 +45,8 @@ public class JsonHandler {
                     throw new IllegalArgumentException();
                 }
                 break;
-            default: throw new IllegalArgumentException();
             }
+
 
         newInstruction.put("robot", OutputThread.name);
         newInstruction.put("command", command.toLowerCase());
