@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.Robot.Direction;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
@@ -61,12 +62,35 @@ public class ForwardCommand extends Command {
                 server.robot.kill(world, server, "Mine");
             }
         } else if (response == UpdateResponse.FAILED_OUTSIDE_WORLD){
-            message = "Obstructed";
+            message = setMessageAtEdge(server.robot.getCurrentDirection());
         }
 
         data.put("message", message);
         server.response.addData(data);
         server.response.add("result", "OK");
+    }
+
+    /**
+     * Sets the message for if the robot is at the edge of the world.
+     * @param direction
+     * @return String
+     */
+    public String setMessageAtEdge(Direction direction){
+        String message;
+        switch (direction){
+            case NORTH:
+                message = "At the NORTH edge";
+                break;
+            case EAST:
+                message = "At the EAST edge";
+                break;
+            case WEST:
+                message = "At the WEST edge";
+                break;
+            default:
+                message = "At the SOUTH edge";
+        }
+        return message;
     }
 }
 
