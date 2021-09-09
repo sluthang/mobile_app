@@ -5,13 +5,15 @@ import org.json.simple.JSONObject;
 @SuppressWarnings({"unchecked", "unused"})
 public class ResponseBuilder {
     JSONObject response;
-
+    JSONObject second_response;
     /**
      * Constructs a new JsonResponseBuilder and adds the data field.
      */
     public ResponseBuilder(){
         response = new JSONObject();
-        response.put("data", null);
+        second_response = new JSONObject();/**Added this line for testing purpose*/
+        response.put("data",null);
+        second_response.put("data", null);/** Added this line for testing purpose*/
         //System.out.println(response);
     }
 
