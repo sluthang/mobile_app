@@ -218,4 +218,5 @@ public class LaunchRobotTests {
         // And the message on the response should be "Robot does not exist"
         assertEquals(stateResponse.get("data").get("message").asText(), "Robot does not exist");
     }
+
 }

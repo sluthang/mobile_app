@@ -162,7 +162,7 @@ public class Robot {
     }
 
     /**
-     * Method will kill the robot and and purge user that is associated with that robot.
+     * Method will kill the robot and purge user that is associated with that robot.
      * @param world;
      * @param server;
      * @param message;

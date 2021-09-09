@@ -31,6 +31,9 @@ public class World{
     public World(String maze) {
         if(maze.equalsIgnoreCase("nofreespacemaze")){
             this.maze = new NoFreeSpaceMaze(TOP_LEFT, BOTTOM_RIGHT);
+        }
+        else if(maze.equalsIgnoreCase("emptymaze")){
+            this.maze = new EmptyMaze();
         }else{
             this.maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
         }
