@@ -209,4 +209,15 @@ public class BaseMaze implements Maze {
         }
         return false;
     }
+    /**
+     * Add custom obstacle if -o was issued
+     * @param specified
+     * @param position
+     */
+    public void addSpecifiedObstacle(boolean specified, Position position){
+        if(specified){
+            createObstacles(position);
+        }
+    }
+
 }

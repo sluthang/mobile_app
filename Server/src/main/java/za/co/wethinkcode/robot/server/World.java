@@ -16,8 +16,8 @@ public class World{
     //Hashmap of robots currently in play.
     private final ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
     //Sets the maps Bottom-right and top-left positions set in the config file.
-    public final Position BOTTOM_RIGHT = new Position((MultiServer.config.getWidth()/2),(-MultiServer.config.getHeight()/2));
-    public final Position TOP_LEFT = new Position((-MultiServer.config.getWidth()/2),(MultiServer.config.getHeight()/2));
+    public Position BOTTOM_RIGHT;
+    public Position TOP_LEFT;
     // The map that the world will be using.
     public Maze maze;
     //Values that were received from the config file.
@@ -28,13 +28,15 @@ public class World{
     public final int VISIBILITY = MultiServer.config.getVisibility();
     public final int MINE_SET_TIME = MultiServer.config.getMineSetTime();
 
-    public World(String maze) {
+    public World(String maze,Position BOTTOM_RIGHT, Position TOP_LEFT, Position obstaclePosition, boolean specified) {
+        this.TOP_LEFT = TOP_LEFT;
+        this.BOTTOM_RIGHT = BOTTOM_RIGHT;
         if(maze.equalsIgnoreCase("nofreespacemaze")){
             this.maze = new NoFreeSpaceMaze(TOP_LEFT, BOTTOM_RIGHT);
         }
         else if(maze.equalsIgnoreCase("emptymaze")){
-            this.maze = new EmptyMaze();
-        }else{
+            this.maze = new EmptyMaze(obstaclePosition, specified);
+        } else{
             this.maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
         }
     }
