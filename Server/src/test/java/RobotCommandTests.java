@@ -48,7 +48,6 @@ public class RobotCommandTests {
         assertNotNull(response.get("result"));
         assertEquals("OK", response.get("result").asText());
 
-
         //Sending a look request after a successful launch.
         String lookRequest = "{" +
                 "  \"robot\": \"HAL\"," +
@@ -63,44 +62,6 @@ public class RobotCommandTests {
         assertTrue(serverResponse.contains("\"direction\":\"NORTH\"") && serverResponse.contains("\"type\":\"EDGE\"") && serverResponse.contains("\"distance\":1"));
         assertTrue(serverResponse.contains("\"direction\":\"WEST\"") && serverResponse.contains("\"type\":\"EDGE\"") && serverResponse.contains("\"distance\":1"));
         assertTrue(serverResponse.contains("\"direction\":\"EAST\"") && serverResponse.contains("\"type\":\"EDGE\"") && serverResponse.contains("\"distance\":1"));
-    }
-
-    @Test
-    public void launchAnotherRobot(){
-        // Given that I am connected to a running Robot Worlds server
-        // And the world is of size 2x2 (The world is configured )
-        serverClient.connect(DEFAULT_IP,DEFAULT_PORT);
-
-        Assertions.assertTrue(serverClient.isConnected());
-
-        //when I send a valid launch request to the server
-        String launchRequest = "{" +
-                "  \"robot\": \"R2D2\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"sniper\",\"5\",\"5\"]" +
-                "}";
-
-        JsonNode response = serverClient.sendRequest(launchRequest);
-
-        // Then I should get a valid response from the server
-        assertNotNull(response.get("result"));
-        assertEquals("OK", response.get("result").asText());
-        /**
-        //Sending a look request after launching another robot
-        String lookRequest = "{"+
-                " \"robot\": \"R2D2\"," +
-                " \"command\": \"look\"," +
-                " \"arguments\": [] " +
-                "}";
-
-        JsonNode lookResponse = serverClient.sendRequest(lookRequest);
-        String serverResponse = lookResponse.get("data").get("objects").toString();
-
-        assertTrue(serverResponse.contains("\"direction\":\"SOUTH\"") && serverResponse.contains("\"type\":\"EDGE\"") && serverResponse.contains("\"distance\":1"));
-        assertTrue(serverResponse.contains("\"direction\":\"NORTH\"") && serverResponse.contains("\"type\":\"EDGE\"") && serverResponse.contains("\"distance\":1"));
-        assertTrue(serverResponse.contains("\"direction\":\"WEST\"") && serverResponse.contains("\"type\":\"EDGE\"") && serverResponse.contains("\"distance\":1"));
-        assertTrue(serverResponse.contains("\"direction\":\"EAST\"") && serverResponse.contains("\"type\":\"EDGE\"") && serverResponse.contains("\"distance\":1"));
-        */
     }
 
     @Test

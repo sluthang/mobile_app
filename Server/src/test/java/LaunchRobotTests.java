@@ -3,7 +3,6 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import java.util.Random;
 import za.co.wethinkcode.server.robotclient.RobotWorldClient;
 import za.co.wethinkcode.server.robotclient.RobotWorldJsonClient;
 
@@ -63,41 +62,6 @@ public class LaunchRobotTests {
 
         // And I should also get the state of the robot
         assertNotNull(response.get("state"));
-    }
-
-    @Test
-    public void canLaunchAnotherRobot(){
-        // Given a world of size 2x2
-        // And that I am connected to a running Robot Worlds server
-        // And robot "HAL" has already been launched int the world
-        serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
-        //Random  random = new Random();
-
-        assertTrue(serverClient.isConnected());
-
-        //When I launch robot "R2D2" into the world
-        String second_request = "{" +
-                "  \"robot\": \"R2D2\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"sniper\",\"5\",\"5\"]" +
-                "}";
-
-        JsonNode second_response = serverClient.sendRequest(second_request);
-
-        // Then I should get a valid response from the server for the second robot R2D2
-        assertNotNull(second_response.get("result"));
-        assertEquals("OK", second_response.get("result").asText());
-
-        // And the position for robot R2D2 should be randomly
-        assertNotNull(second_response.get("data"));
-        assertNotNull(second_response.get("data").get("position"));
-       // assertEquals(0, second_response.get("data").get("position").get(0).asInt());
-        assertEquals(0, second_response.get("data").get("position").get(1).asInt());
-
-        // And I should also get the state of the robot
-        assertNotNull(second_response.get("state"));
-
-
     }
 
     @Test
