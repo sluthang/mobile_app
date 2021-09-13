@@ -56,6 +56,8 @@ public class MultiServer {
             worldSize = Integer.parseInt(cmd.getOptionValue("size"));
         }
 
+        System.out.println("World Size: " + worldSize + "x" + worldSize);
+
         Position BOTTOM_RIGHT = new Position((worldSize/2),(-worldSize/2));
         Position TOP_LEFT = new Position((-worldSize/2),(worldSize/2));
 

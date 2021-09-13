@@ -18,7 +18,7 @@ public class CreateConfig {
                             "width=1\n" +
                             "height=1\n" +
                             "visibility=10\n" +
-                            "map=RandomMaze\n" +
+                            "map=emptymaze\n" +
                             "max_shield_strength=5\n" +
                             "max_shots=5\n" +
                             "shield_recharge_time=10\n" +
