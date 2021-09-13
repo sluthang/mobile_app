@@ -8,6 +8,7 @@ import java.util.Properties;
 public class ConfigReader {
     private int width,height,visibility, maxShieldStrength, shieldRechargeTime
             ,mineSetTime, reloadTime, port, maxShots, worldSize;
+    private String map;
 
     public ConfigReader() {
         try {
@@ -41,6 +42,7 @@ public class ConfigReader {
             this.reloadTime = Integer.parseInt(prop.getProperty("reload_time"));
             this.port = Integer.parseInt(prop.getProperty("port"));
             this.maxShots = Integer.parseInt(prop.getProperty("max_shots"));
+            this.map = prop.getProperty("map");
 
         } catch (Exception e) {
             System.out.println("Exception: " + e);
@@ -86,4 +88,6 @@ public class ConfigReader {
     public int getPort() {
         return port;
     }
+
+    public String getMap(){ return map; }
 }

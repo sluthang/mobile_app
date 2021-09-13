@@ -30,43 +30,101 @@ public class TwoByTwoWorldTests {
 
     @Test
     public void lookAndFindingAnotherRobot() {
+        boolean loop = true;
 
-        // Given that I am connected to a running Robot Worlds server
-        // And the world is of size 2x2 (The world is configured or hardcoded to this size)
+        while(loop){
+            disconnectFromServer();
+            connectToServer();
 
-        assertTrue(serverClient.isConnected());
-        assertTrue(serverClientTwo.isConnected());
+            // Given that I am connected to a running Robot Worlds server
+            // And the world is of size 2x2 (The world is configured or hardcoded to this size)
 
-        // When I send a launch command
-        String requestHal = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
+            assertTrue(serverClient.isConnected());
+            assertTrue(serverClientTwo.isConnected());
 
-        String requestR2D2 = "{" +
-                "  \"robot\": \"R2D2\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
+            // When I send a launch command
+            String requestHal = "{" +
+                    "  \"robot\": \"HAL\"," +
+                    "  \"command\": \"launch\"," +
+                    "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                    "}";
 
-        JsonNode responseHal = serverClient.sendRequest(requestHal);
-        JsonNode responseR2D2 = serverClientTwo.sendRequest(requestR2D2);
+            String requestR2D2 = "{" +
+                    "  \"robot\": \"R2D2\"," +
+                    "  \"command\": \"launch\"," +
+                    "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                    "}";
 
-        // Then I should get an "OK" response
-        assertNotNull(responseHal.get("result"));
-        assertNotNull(responseR2D2.get("result"));
-        assertEquals("OK", responseHal.get("result").asText());
-        assertEquals("OK", responseR2D2.get("result").asText());
+            JsonNode responseHal = serverClient.sendRequest(requestHal);
+            JsonNode responseR2D2 = serverClientTwo.sendRequest(requestR2D2);
 
-        // And I issue a state command
+            // Then I should get an "OK" response
+            assertNotNull(responseHal.get("result"));
+            assertNotNull(responseR2D2.get("result"));
+            assertEquals("OK", responseHal.get("result").asText());
+            assertEquals("OK", responseR2D2.get("result").asText());
 
-        String stateRequest = " {\"robot\":\"HAL\"," +
-                "\"arguments\":[]," +
-                "\"command\":\"look" +
-                "\"}";
+            // And I issue a state command
 
-        JsonNode stateResponse = serverClient.sendRequest(stateRequest);
-        assertTrue(stateResponse.get("data").get("objects").toString().contains("ROBOT"));
+            String stateRequest = " {\"robot\":\"HAL\"," +
+                    "\"arguments\":[]," +
+                    "\"command\":\"look" +
+                    "\"}";
+
+            JsonNode stateResponse = serverClient.sendRequest(stateRequest);
+
+            if(!stateResponse.get("data").get("objects").toString().contains("ROBOT")){
+                disconnectFromServer();
+                connectToServer();
+            }else{
+                loop = false;
+                assertTrue(stateResponse.get("data").get("objects").toString().contains("ROBOT"));
+            }
+        }
+    }
+
+    @Test
+    public void lookAndFindingObstacle() {
+        boolean loop = true;
+
+        while(loop){
+            disconnectFromServer();
+            connectToServer();
+
+            // Given that I am connected to a running Robot Worlds server
+            // And the world is of size 2x2 (The world is configured or hardcoded to this size)
+
+            assertTrue(serverClient.isConnected());
+
+            // When I send a launch command
+            String requestHal = "{" +
+                    "  \"robot\": \"HAL\"," +
+                    "  \"command\": \"launch\"," +
+                    "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                    "}";
+
+            JsonNode responseHal = serverClient.sendRequest(requestHal);
+
+            // Then I should get an "OK" response
+            assertNotNull(responseHal.get("result"));
+            assertEquals("OK", responseHal.get("result").asText());
+
+            // And I issue a state command
+
+            String stateRequest = " {\"robot\":\"HAL\"," +
+                    "\"arguments\":[]," +
+                    "\"command\":\"look" +
+                    "\"}";
+
+            JsonNode stateResponse = serverClient.sendRequest(stateRequest);
+
+            if(!stateResponse.get("data").get("objects").toString().contains("OBSTACLE")){
+                disconnectFromServer();
+                connectToServer();
+            }else{
+                loop = false;
+                assertTrue(stateResponse.get("data").get("objects").toString().contains("OBSTACLE"));
+            }
+        }
     }
 }

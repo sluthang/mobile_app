@@ -79,7 +79,7 @@ public class MultiServer {
             specifiedObstacle = true;
         }
 
-        world = new World("emptymaze", BOTTOM_RIGHT, TOP_LEFT, getObstaclePosition(cmd.getOptionValue("obstacle")), specifiedObstacle);
+        world = new World(config.getMap(), BOTTOM_RIGHT, TOP_LEFT, getObstaclePosition(cmd.getOptionValue("obstacle")), specifiedObstacle);
 
         //Print world size
         System.out.println("Obstacles: " + world.getObstacles().size());
