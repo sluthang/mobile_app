@@ -82,49 +82,4 @@ public class TwoByTwoWorldTests {
             }
         }
     }
-
-    @Test
-    public void lookAndFindingObstacle() {
-        boolean loop = true;
-
-        while(loop){
-            disconnectFromServer();
-            connectToServer();
-
-            // Given that I am connected to a running Robot Worlds server
-            // And the world is of size 2x2 (The world is configured or hardcoded to this size)
-
-            assertTrue(serverClient.isConnected());
-
-            // When I send a launch command
-            String requestHal = "{" +
-                    "  \"robot\": \"HAL\"," +
-                    "  \"command\": \"launch\"," +
-                    "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                    "}";
-
-            JsonNode responseHal = serverClient.sendRequest(requestHal);
-
-            // Then I should get an "OK" response
-            assertNotNull(responseHal.get("result"));
-            assertEquals("OK", responseHal.get("result").asText());
-
-            // And I issue a state command
-
-            String stateRequest = " {\"robot\":\"HAL\"," +
-                    "\"arguments\":[]," +
-                    "\"command\":\"look" +
-                    "\"}";
-
-            JsonNode stateResponse = serverClient.sendRequest(stateRequest);
-
-            if(!stateResponse.get("data").get("objects").toString().contains("OBSTACLE")){
-                disconnectFromServer();
-                connectToServer();
-            }else{
-                loop = false;
-                assertTrue(stateResponse.get("data").get("objects").toString().contains("OBSTACLE"));
-            }
-        }
-    }
 }
