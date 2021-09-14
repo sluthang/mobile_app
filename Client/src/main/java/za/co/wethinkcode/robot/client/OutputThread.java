@@ -20,15 +20,10 @@ public class OutputThread implements Runnable{
         while (true) {
             System.out.println("What should I do next?");
             String requestMessage = sc.nextLine();
-            //try {
             requestMessage = JsonHandler.convertCommand(requestMessage, name);
-            //}// catch (IllegalArgumentException e) {
-               // System.out.println("Something bonk");
-              //  continue;
-            //}
+
             output.println(requestMessage);
             if (launched || JsonHandler.isLaunch(requestMessage)) {
-                //output.println(requestMessage);
                 output.flush();
                 launched = true;
             }

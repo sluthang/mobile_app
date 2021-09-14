@@ -61,6 +61,7 @@ public class LaunchCommand extends Command{
                 positionSet = true;
                 break;
             }
+
         }
         if (!positionSet) {
             data.put("message", "No more space in this world");

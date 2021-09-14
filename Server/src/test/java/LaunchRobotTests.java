@@ -69,7 +69,7 @@ public class LaunchRobotTests {
         // Given that I am connected to a running Robot Worlds server
         Assert.assertTrue(serverClient.isConnected());
 
-        // When I send a invalid launch request with the command "luanch" instead of "launch"
+        // When I send an invalid launch request with the command "luanch" instead of "launch"
         String request = "{" +
                 "\"robot\": \"HAL\"," +
                 "\"command\": \"luanch\"," +
@@ -218,5 +218,6 @@ public class LaunchRobotTests {
         // And the message on the response should be "Robot does not exist"
         assertEquals(stateResponse.get("data").get("message").asText(), "Robot does not exist");
     }
+
 
 }
