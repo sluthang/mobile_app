@@ -73,7 +73,7 @@ public class MultiServer {
         }
 
         // Create a new Socket that will be used for the server with the port given from config.
-        ServerSocket s = new ServerSocket(port);
+        ServerSocket s = new ServerSocket(config.getPort());
 
         //Checks to see if an argument was provided for determining what maze to use.
         boolean specifiedObstacle = false;
