@@ -79,6 +79,59 @@ public class TwoByTwoWorldWithObstacleTests {
     }
 
     @Test
+    public void launchRobotsIntoAWorldWithAnObstacle(){
+           //Given a world of size 2x2
+          //and the world has an obstacle at coordinate [1,1]
+
+        assertTrue(serverClient.isConnected());
+        assertTrue(serverClientTwo.isConnected());
+        assertTrue(serverClientThree.isConnected());
+
+        // When I launch 3 robots into the world
+        String requestHal = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        String requestR2D2 = "{" +
+                "  \"robot\": \"R2D2\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        String requestR2D = "{" +
+                "  \"robot\": \"R2D\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        JsonNode responseHal = serverClient.sendRequest(requestHal);
+        JsonNode responseR2D2 = serverClientTwo.sendRequest(requestR2D2);
+        JsonNode responseR2D = serverClientThree.sendRequest(requestR2D);
+
+        assertNotNull(responseHal.get("result"));
+        assertNotNull(responseR2D2.get("result"));
+        assertNotNull(responseR2D.get("result"));
+
+
+        assertEquals("OK", responseHal.get("result").asText());
+        assertEquals("OK", responseR2D2.get("result").asText());
+        assertEquals("OK", responseR2D.get("result").asText());
+
+        //Then each robot cannot be in position [1,1].
+        assertNotNull(responseHal.get("data"));
+        assertNotNull(responseHal.get("data").get("position"));
+
+        assertNotNull(responseR2D2.get("data"));
+        assertNotNull(responseR2D2.get("data").get("position"));
+
+        assertNotNull(responseR2D.get("data"));
+        assertNotNull(responseR2D.get("data").get("position"));
+
+
+    }
+    @Test
     public void worldWithAnObstacleIsFull() {
 
 //        Given a world of size 2x2

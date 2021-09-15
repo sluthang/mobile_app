@@ -68,6 +68,7 @@ public class TwoByTwoWorldTests {
 
     }
 
+
     @Test
     public void lookAndFindingAnotherRobot() {
         boolean loop = true;
