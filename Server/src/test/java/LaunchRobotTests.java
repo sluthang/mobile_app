@@ -174,7 +174,6 @@ public class LaunchRobotTests {
 
         JsonNode response = serverClient.sendRequest(request);
 
-        // Then I should get an "OK" response
         assertNotNull(response.get("result"));
         assertEquals("OK", response.get("result").asText());
 
@@ -218,4 +217,5 @@ public class LaunchRobotTests {
         // And the message on the response should be "Robot does not exist"
         assertEquals(stateResponse.get("data").get("message").asText(), "Robot does not exist");
     }
+
 }

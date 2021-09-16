@@ -147,7 +147,7 @@ public class BaseMaze implements Maze {
      * @return UpdateResponse.
      */
     public UpdateResponse blocksPosition(ConcurrentHashMap<String, Robot> robots, Position position, String robotName) {
-        if (pitBlockPosition(position)) {
+        if (pitBlockPosition(position) || obstacleBlockPosition(position)) {
             return UpdateResponse.FAILED_OBSTRUCTED;
         }
         else if(mineBlockPosition(position)){
@@ -163,7 +163,7 @@ public class BaseMaze implements Maze {
     /**
      * This method check to see if a pit blocks the position the robot is trying to move to.
      * And returns true or false depending on if the position is blocked or not.
-     * @param position
+     * @param position  position
      * @return boolean
      */
     private boolean pitBlockPosition(Position position){
@@ -175,9 +175,23 @@ public class BaseMaze implements Maze {
     }
 
     /**
+     * This method check to see if a obstacle blocks the position the robot is trying to move to.
+     * And returns true or false depending on if the position is blocked or not.
+     * @param position position
+     * @return boolean
+     */
+    private boolean obstacleBlockPosition(Position position){
+        for (Obstacle obstacle : this.obstaclesList) {
+            if (obstacle.blocksPosition(position))
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * This method check to see if a mine blocks the position the robot is trying to move to.
      * And returns true or false depending on if the position is blocked or not.
-     * @param position
+     * @param position  position
      * @return boolean
      */
     private boolean mineBlockPosition(Position position){
@@ -209,4 +223,16 @@ public class BaseMaze implements Maze {
         }
         return false;
     }
+
+    /**
+     * Add custom obstacle if -o was issued
+     * @param specified boolean
+     * @param position position
+     */
+    public void addSpecifiedObstacle(boolean specified, Position position){
+        if(specified){
+            createObstacles(position);
+        }
+    }
+
 }

@@ -13,11 +13,12 @@ public class CreateConfig {
                 System.out.println("config file created: " + newFile.getName());
                 try {
                     FileWriter writer = new FileWriter("config.properties");
-                    writer.write("port=6969\n" +
-                            "width=70\n" +
-                            "height=40\n" +
+                    writer.write("port=5000\n" +
+                            "world_size=1\n" +
+                            "width=1\n" +
+                            "height=1\n" +
                             "visibility=10\n" +
-                            "map=RandomMaze\n" +
+                            "map=emptymaze\n" +
                             "max_shield_strength=5\n" +
                             "max_shots=5\n" +
                             "shield_recharge_time=10\n" +
