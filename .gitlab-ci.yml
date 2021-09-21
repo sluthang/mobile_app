@@ -35,10 +35,7 @@ ref-server-default-world-accpeptance-tests-job:
     - make run_reference_server_jar
 
   script:
-    - make clean
     - mvn verify -DskipTests
     - make run_1x1_acceptance_tests
-    
-  after_script:
-    - make stop_uss_victory_server
+    - make stop_reference_server
 
