@@ -2,6 +2,7 @@
   		run_1x1_acceptance_tests verify_dependencies stop_reference_server\
   		stop_uss_victory_server run_uss_victory_server_main_2x2_with_obstacle\
   		run_uss_victory_server_main_2x2 run_all_non_server_unittests compile clean\
+  		run_reference_server_jar
 
 all: run_reference_server_jar run_1x1_acceptance_tests stop_reference_server
 
@@ -28,7 +29,7 @@ run_reference_server_2x2_world_with_obstacle_tests: run_reference_server_2x2_wor
 
 # VARIABLES
 reference_server:= reference-server-0.2.1.jar
-uss_victory_server := robot-worlds-server-0.2.0-jar-with-dependencies.jar
+uss_victory_server := robot-worlds-server-0.2.0.jar
 2x2_world_port:= 6666
 2x2_world_with_obstacle_port:= 7676
 1x1_world_port:= 6767
@@ -71,17 +72,17 @@ run_2x2_obstacle_acceptance_tests:
 
 run_reference_server_jar:
 	@echo "\033[0;32mRunning The Reference Server Jar File..."
-	cd .libs ; java -jar $(reference_server) &
+	java -jar .libs/$(reference_server) &
 	@echo "\033[0;32mStarted reference server..."
 
 run_reference_server_2x2_world:
 	@echo "\033[0;32mRunning The Reference Server Jar File..."
-	cd .libs ; java -jar $(reference_server) -s 2 &
+	java -jar .libs/$(reference_server) -s 2 &
 	@echo "\033[0;32mStarted reference server..."
 
 run_reference_server_2x2_world_with_obstacle:
 	@echo "\033[0;32mRunning The Reference Server Jar File..."
-	cd libs ; java -jar $(reference_server) -s 2 -o 1,1 &
+	java -jar .libs/$(reference_server) -s 2 -o 1,1 &
 	@echo "\033[0;32mStarted reference server..."
 
 run_uss_victory_server_jar:
