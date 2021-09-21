@@ -23,7 +23,6 @@ unittests-job:
 
   script:
     - echo "Running all unit tests"
-    - make clean
     - mvn verify -DskipTests
     - make run_all_non_server_unittests
 
@@ -38,4 +37,17 @@ ref-server-default-world-accpeptance-tests-job:
     - mvn verify -DskipTests
     - make run_1x1_acceptance_tests
     - make stop_reference_server
+
+uss-victory-default-world-accpeptance-tests-job:
+  stage: test
+
+  before_script:
+    - apt-get update && apt-get install -y make
+    - make development_build
+    - make run_uss_victory_server_jar
+
+  script:
+    - mvn verify -DskipTests
+    - make run_1x1_acceptance_tests
+    - make stop_uss_victory_server
 
