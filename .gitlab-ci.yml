@@ -32,13 +32,13 @@ ref-server-default-world-accpeptance-tests-job:
 
   before_script:
     - apt-get update && apt-get install -y make
-    - fuser -k 5000/tcp
+    - make run_reference_server_jar
 
   script:
     - make clean
     - mvn verify -DskipTests
-    - make test_reference_server_default
+    - make run_1x1_acceptance_tests
     
   after_script:
-    - fuser -k 5000/tcp
+    - make stop_uss_victory_server
 
