@@ -36,7 +36,7 @@ public class TwoByTwoWorldWithObstacleTests {
     @Test
     public void lookAndFindingObstacle() {
         boolean loop = true;
-
+        //We loop because the robots spawn points on our server are random
         while (loop) {
             disconnectFromServer();
             connectToServer();
@@ -73,7 +73,17 @@ public class TwoByTwoWorldWithObstacleTests {
                 connectToServer();
             } else {
                 loop = false;
-                assertTrue(stateResponse.get("data").get("objects").toString().contains("OBSTACLE"));
+                int counter = 0;
+
+                for(int i = 0; i<=stateResponse.get("data").get("objects").size();i++){
+                    if(stateResponse.get("data").get("objects").get(i).get("type").asText().equalsIgnoreCase("OBSTACLE")){
+                        counter = i;
+                        break;
+                    }
+                }
+
+                assertTrue(stateResponse.get("data").get("objects").get(counter).toString().contains("OBSTACLE"));
+                assertTrue(stateResponse.get("data").get("objects").get(counter).toString().contains("1"));
             }
         }
     }
@@ -184,12 +194,7 @@ public class TwoByTwoWorldWithObstacleTests {
         assertNotNull(responseR2D2.get("result"));
         assertNotNull(responseR2D.get("result"));
         assertNotNull(responseR2.get("result"));
-
-//        System.out.println(responseR2D2.get("data"));
-//        System.out.println(responseR2D.get("data"));
-//        System.out.println(responseR2.get("data"));
-//        System.out.println(responseHal.get("data"));
-
+        
         assertEquals("OK", responseHal.get("result").asText());
         assertEquals("OK", responseR2D2.get("result").asText());
         assertEquals("OK", responseR2D.get("result").asText());
