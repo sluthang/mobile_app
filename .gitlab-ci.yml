@@ -29,7 +29,6 @@ unittests-job:
 
 ref-server-default-world-accpeptance-tests-job:
   stage: test
-    - docker
 
   before_script:
     - apt-get update && apt-get install -y make
@@ -39,15 +38,3 @@ ref-server-default-world-accpeptance-tests-job:
     - mvn verify -DskipTests
     - make test_reference_server_default
 
-#uss-victory-default-world-acceptance-tests-job:
-#  stage: test
-#  tags:
-#    - docker
-#
-#  before_script:
-#    - apt-get update && apt-get install -y make
-#
-#  script:
-#    - echo "Maven packaging started"
-#    - make development_build
-#    - make test_uss_server_default
