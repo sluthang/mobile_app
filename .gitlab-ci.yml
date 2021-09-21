@@ -25,6 +25,8 @@ unittests-job:
 
   script:
     - echo "Running all unit tests"
+    - make clean
+    - mvn verify -DskipTests
     - make run_all_non_server_unittests
 
 clean-job:
