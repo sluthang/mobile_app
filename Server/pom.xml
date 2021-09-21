@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>robot-worlds-server</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -98,6 +98,7 @@
                         <version>3.3.0</version>
                         <configuration>
                             <outputDirectory>../output</outputDirectory>
+                            <appendAssemblyId>true</appendAssemblyId>
                             <archive>
                                 <manifest>
                                     <mainClass>za.co.wethinkcode.robot.server.Server.MultiServer</mainClass>
