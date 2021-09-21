@@ -1,0 +1,78 @@
+variables:
+  MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+image: maven:3.8.2-jdk-11-slim
+
+stages:
+  - compile
+  - build
+  - test
+  - package
+  - deploy
+
+cache:
+  paths:
+    - .m2/repository
+    - target
+
+unittests-job:
+  stage: test
+  tags:
+    - docker
+
+  before_script:
+    - apt-get update && apt-get install -y make
+
+  script:
+    - echo "Running all unit tests"
+    - make run_all_non_server_unittests
+
+clean-job:
+  stage: compile
+  tags:
+    - docker
+
+  before_script:
+    - apt-get update && apt-get install -y make
+
+  script:
+    - echo "Maven clean started"
+    - make clean
+
+compile-job:
+  stage: compile
+  tags:
+    - docker
+
+  before_script:
+    - apt-get update && apt-get install make
+
+  script:
+    - echo "Maven compile stated"
+    - make compile
+
+ref-server-default-world-accpeptance-tests-job:
+  stage: test
+  tags:
+    - docker
+
+  before_script:
+    - apt-get update && apt-get install -y make
+
+  script:
+    - make clean
+    - mvn verify -DskipTests
+    - make test_reference_server_default
+
+#uss-victory-default-world-acceptance-tests-job:
+#  stage: test
+#  tags:
+#    - docker
+#
+#  before_script:
+#    - apt-get update && apt-get install -y make
+#
+#  script:
+#    - echo "Maven packaging started"
+#    - make development_build
+#    - make test_uss_server_default
