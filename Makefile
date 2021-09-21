@@ -28,7 +28,7 @@ run_reference_server_2x2_world_with_obstacle_tests: run_reference_server_2x2_wor
 
 # VARIABLES
 reference_server:= reference-server-0.2.1.jar
-uss_victory_server := robot-worlds-server-0.2.0.jar
+uss_victory_server := robot-worlds-server-0.2.0-jar-with-dependencies.jar
 2x2_world_port:= 6666
 2x2_world_with_obstacle_port:= 7676
 1x1_world_port:= 6767
