@@ -31,10 +31,10 @@ ref-server-default-world-accpeptance-tests-job:
 
   before_script:
     - apt-get update && apt-get install -y make
-    - mvn verify -DskipTests
     - make run_reference_server_jar
 
   script:
+    - mvn verify -DskipTests
     - make run_1x1_acceptance_tests
     - make stop_reference_server
 
@@ -44,10 +44,10 @@ uss-victory-default-world-accpeptance-tests-job:
   before_script:
     - apt-get update && apt-get install -y make
     - make development_build
-    - mvn verify -DskipTests
     - make run_uss_victory_server_jar
 
   script:
+    - mvn verify -DskipTests
     - make run_1x1_acceptance_tests
     - make stop_uss_victory_server
 
