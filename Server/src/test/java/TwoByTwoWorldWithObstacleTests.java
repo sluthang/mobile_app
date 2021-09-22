@@ -5,9 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import za.co.wethinkcode.server.robotclient.RobotWorldClient;
 import za.co.wethinkcode.server.robotclient.RobotWorldJsonClient;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TwoByTwoWorldWithObstacleTests {
     private final static int DEFAULT_PORT = 5000;
@@ -222,49 +220,122 @@ public class TwoByTwoWorldWithObstacleTests {
         assertTrue(serverClient.isConnected());
         assertTrue(serverClientTwo.isConnected());
         assertTrue(serverClientThree.isConnected());
+        assertTrue(serverClientFour.isConnected());
+        assertTrue(serverClientFive.isConnected());
+        assertTrue(serverClientSix.isConnected());
+        assertTrue(serverClientSeven.isConnected());
+        assertTrue(serverClientEight.isConnected());
 
-        // When I launch 3 robots into the world
+
+        // When I launch 8 robots into the world
         String requestHal = "{" +
                 "  \"robot\": \"HAL\"," +
                 "  \"command\": \"launch\"," +
                 "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                 "}";
 
-        String requestR2D2 = "{" +
-                "  \"robot\": \"R2D2\"," +
+        String requestSkiper = "{" +
+                "  \"robot\": \"Skiper\"," +
                 "  \"command\": \"launch\"," +
                 "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                 "}";
 
-        String requestR2D = "{" +
-                "  \"robot\": \"R2D\"," +
+        String requestDelta = "{" +
+                "  \"robot\": \"Delta\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        String requestTango = "{" +
+                "  \"robot\": \"Tango\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        String requestRoger = "{" +
+                "  \"robot\": \"Roger\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        String requestX0 = "{" +
+                "  \"robot\": \"X0\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        String requestX1 = "{" +
+                "  \"robot\": \"X1\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        String requestX2 = "{" +
+                "  \"robot\": \"X2\"," +
                 "  \"command\": \"launch\"," +
                 "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                 "}";
 
         JsonNode responseHal = serverClient.sendRequest(requestHal);
-        JsonNode responseR2D2 = serverClientTwo.sendRequest(requestR2D2);
-        JsonNode responseR2D = serverClientThree.sendRequest(requestR2D);
+        JsonNode responseSkiper = serverClientTwo.sendRequest(requestSkiper);
+        JsonNode responseDelta = serverClientThree.sendRequest(requestDelta);
+        JsonNode responseTango = serverClientFour.sendRequest(requestTango);
+        JsonNode responseRoger = serverClientFive.sendRequest(requestRoger);
+        JsonNode responseX0 = serverClientSix.sendRequest(requestX0);
+        JsonNode responseX1 = serverClientSeven.sendRequest(requestX1);
+        JsonNode responseX2 = serverClientEight.sendRequest(requestX2);
+
 
         assertNotNull(responseHal.get("result"));
-        assertNotNull(responseR2D2.get("result"));
-        assertNotNull(responseR2D.get("result"));
+        assertNotNull(responseSkiper.get("result"));
+        assertNotNull(responseDelta.get("result"));
+        assertNotNull(responseTango.get("result"));
+        assertNotNull(responseRoger.get("result"));
+        assertNotNull(responseX0.get("result"));
+        assertNotNull(responseX1.get("result"));
+        assertNotNull(responseX2.get("result"));
 
 
         assertEquals("OK", responseHal.get("result").asText());
-        assertEquals("OK", responseR2D2.get("result").asText());
-        assertEquals("OK", responseR2D.get("result").asText());
+        assertEquals("OK", responseSkiper.get("result").asText());
+        assertEquals("OK", responseDelta.get("result").asText());
+        assertEquals("OK", responseTango.get("result").asText());
+        assertEquals("OK", responseRoger.get("result").asText());
+        assertEquals("OK", responseX0.get("result").asText());
+        assertEquals("OK", responseX1.get("result").asText());
+        assertEquals("OK", responseX2.get("result").asText());
 
         //Then each robot cannot be in position [1,1].
         assertNotNull(responseHal.get("data"));
         assertNotNull(responseHal.get("data").get("position"));
+        assertNotEquals("[1,1]",responseHal.get("data").get("position").asText());
 
-        assertNotNull(responseR2D2.get("data"));
-        assertNotNull(responseR2D2.get("data").get("position"));
+        assertNotNull(responseSkiper.get("data"));
+        assertNotNull(responseSkiper.get("data").get("position"));
+        assertNotEquals("[1,1]",responseSkiper.get("data").get("position").asText());
 
-        assertNotNull(responseR2D.get("data"));
-        assertNotNull(responseR2D.get("data").get("position"));
+        assertNotNull(responseDelta.get("data"));
+        assertNotNull(responseDelta.get("data").get("position"));
+        assertNotEquals("[1,1]",responseDelta.get("data").get("position").asText());
 
+        assertNotNull(responseTango.get("data"));
+        assertNotNull(responseTango.get("data").get("position"));
+        assertNotEquals("[1,1]",responseTango.get("data").get("position").asText());
+
+        assertNotNull(responseRoger.get("data"));
+        assertNotNull(responseRoger.get("data").get("position"));
+        assertNotEquals("[1,1]",responseRoger.get("data").get("position").asText());
+
+        assertNotNull(responseX0.get("data"));
+        assertNotNull(responseX0.get("data").get("position"));
+        assertNotEquals("[1,1]",responseX0.get("data").get("position").asText());
+
+        assertNotNull(responseX1.get("data"));
+        assertNotNull(responseX1.get("data").get("position"));
+        assertNotEquals("[1,1]",responseX1.get("data").get("position").asText());
+
+        assertNotNull(responseX2.get("data"));
+        assertNotNull(responseX2.get("data").get("position"));
+        assertNotEquals("[1,1]",responseX2.get("data").get("position").asText());
 
     }
     @Test

@@ -51,7 +51,6 @@ public class TwoByTwoWorldTests {
         JsonNode responseSecondRobot = serverClientTwo.sendRequest(requestSecondRobot);
 
         // Then the launch should be successful
-        //
         assertNotNull(responseFirstRobot.get("result"));
         assertNotNull(responseSecondRobot.get("result"));
         assertEquals("OK",responseFirstRobot.get("result").asText());
