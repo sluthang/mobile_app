@@ -21,15 +21,18 @@ public class LaunchRobotTests {
     private final static int DEFAULT_PORT = 5000;
     private final static String DEFAULT_IP = "127.0.0.1";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
+    private final RobotWorldClient serverClientTwo = new RobotWorldJsonClient();
 
     @BeforeEach
     public void connectToServer(){
         serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
+        serverClientTwo.connect(DEFAULT_IP, DEFAULT_PORT);
     }
 
      @AfterEach
     public void disconnectFromServer(){
         serverClient.disconnect();
+        serverClientTwo.disconnect();
     }
 
 
@@ -93,10 +96,7 @@ public class LaunchRobotTests {
         // Given that I am connected to a running Robot Worlds server
         // And the world is of size 1x1 (The world is configured or hardcoded to this size)
 
-        RobotWorldClient secondClient = new RobotWorldJsonClient();
-        secondClient.connect(DEFAULT_IP, DEFAULT_PORT);
-
-        assertTrue(serverClient.isConnected());
+        assertTrue(serverClientTwo.isConnected());
 
         // When I send a launch command with an existing robot name
         String request = "{" +
@@ -106,7 +106,7 @@ public class LaunchRobotTests {
                 "}";
 
         JsonNode first_response = serverClient.sendRequest(request);
-        JsonNode second_response = secondClient.sendRequest(request);
+        JsonNode second_response = serverClientTwo.sendRequest(request);
 
         // Then I should get an "ERROR" response
         assertNotNull(first_response.get("result"));
@@ -116,7 +116,6 @@ public class LaunchRobotTests {
         // And the message "Too many of you in this world"
         assertTrue(second_response.get("data").get("message").asText().contains("Too many of you in this world"));
 
-        secondClient.disconnect();
     }
 
     @Test
@@ -124,9 +123,6 @@ public class LaunchRobotTests {
 
         // Given that I am connected to a running Robot Worlds server
         // And the world is of size 1x1 (The world is configured or hardcoded to this size)
-
-        RobotWorldClient secondClient = new RobotWorldJsonClient();
-        secondClient.connect(DEFAULT_IP, DEFAULT_PORT);
 
         assertTrue(serverClient.isConnected());
 
@@ -144,7 +140,7 @@ public class LaunchRobotTests {
                 "}";
 
         JsonNode first_response = serverClient.sendRequest(request);
-        JsonNode second_response = secondClient.sendRequest(requestTwo);
+        JsonNode second_response = serverClientTwo.sendRequest(requestTwo);
 
         // Then I should get an "ERROR" response
         assertNotNull(first_response.get("result"));
@@ -154,7 +150,6 @@ public class LaunchRobotTests {
         // And the message "No more space in this world"
         assertEquals(second_response.get("data").get("message").asText(), "No more space in this world");
 
-        secondClient.disconnect();
     }
 
     @Test
