@@ -1,12 +1,9 @@
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import za.co.wethinkcode.helpers.TestingHelper;
-import za.co.wethinkcode.server.robotclient.RobotWorldClient;
 import za.co.wethinkcode.server.robotclient.RobotWorldJsonClient;
-
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,25 +16,24 @@ public class TwoByTwoWorldTests {
     private final static String DEFAULT_IP = "127.0.0.1";
     private TestingHelper helper = new TestingHelper();
     private final ArrayList<RobotWorldJsonClient> twoConnectionsList = helper.createConnections(2);
-    private final ArrayList<RobotWorldJsonClient> nineConnectionsList = helper.createConnections(10);
+    private final ArrayList<RobotWorldJsonClient> tenConnectionsList = helper.createConnections(10);
 
 
     @BeforeEach
     public void connectToServer(){
         helper.connectMultipleRobotClientObjects(twoConnectionsList, DEFAULT_PORT, DEFAULT_IP);
-        helper.connectMultipleRobotClientObjects(nineConnectionsList, DEFAULT_PORT, DEFAULT_IP);
+        helper.connectMultipleRobotClientObjects(tenConnectionsList, DEFAULT_PORT, DEFAULT_IP);
     }
 
     @AfterEach
     public void disconnectFromServer(){
         helper.disconnectMultipleRobotClientObjects(twoConnectionsList);
-        helper.disconnectMultipleRobotClientObjects(nineConnectionsList);
+        helper.disconnectMultipleRobotClientObjects(tenConnectionsList);
     }
 
     @Test
     public void launchAnotherRobot(){
         // Given a world of size 2 x 2
-//        helper.connectMultipleRobotClientObjects(twoConnectionsList, DEFAULT_PORT, DEFAULT_IP);
 
         assertTrue(twoConnectionsList.get(0).isConnected());
         assertTrue(twoConnectionsList.get(1).isConnected());
@@ -85,22 +81,22 @@ public class TwoByTwoWorldTests {
         // And the world is of size 2x2 (The world is configured or hardcoded to this size)
 
 
-        for (int i = 1; i < nineConnectionsList.size(); i++){
-            assertTrue(nineConnectionsList.get(i).isConnected());
+        for (int i = 1; i < tenConnectionsList.size(); i++){
+            assertTrue(tenConnectionsList.get(i).isConnected());
         }
 
         ArrayList<String> launchCommandJsonStrings = helper.generateLaunchCommands(10);
 
-        JsonNode one = nineConnectionsList.get(0).sendRequest(launchCommandJsonStrings.get(0));
-        JsonNode two = nineConnectionsList.get(1).sendRequest(launchCommandJsonStrings.get(1));
-        JsonNode three = nineConnectionsList.get(2).sendRequest(launchCommandJsonStrings.get(2));
-        JsonNode four = nineConnectionsList.get(3).sendRequest(launchCommandJsonStrings.get(3));
-        JsonNode five = nineConnectionsList.get(4).sendRequest(launchCommandJsonStrings.get(4));
-        JsonNode six = nineConnectionsList.get(5).sendRequest(launchCommandJsonStrings.get(5));
-        JsonNode seven = nineConnectionsList.get(6).sendRequest(launchCommandJsonStrings.get(6));
-        JsonNode eight = nineConnectionsList.get(7).sendRequest(launchCommandJsonStrings.get(7));
-        JsonNode nine = nineConnectionsList.get(8).sendRequest(launchCommandJsonStrings.get(8));
-        JsonNode ten = nineConnectionsList.get(9).sendRequest(launchCommandJsonStrings.get(9));
+        JsonNode one = tenConnectionsList.get(0).sendRequest(launchCommandJsonStrings.get(0));
+        JsonNode two = tenConnectionsList.get(1).sendRequest(launchCommandJsonStrings.get(1));
+        JsonNode three = tenConnectionsList.get(2).sendRequest(launchCommandJsonStrings.get(2));
+        JsonNode four = tenConnectionsList.get(3).sendRequest(launchCommandJsonStrings.get(3));
+        JsonNode five = tenConnectionsList.get(4).sendRequest(launchCommandJsonStrings.get(4));
+        JsonNode six = tenConnectionsList.get(5).sendRequest(launchCommandJsonStrings.get(5));
+        JsonNode seven = tenConnectionsList.get(6).sendRequest(launchCommandJsonStrings.get(6));
+        JsonNode eight = tenConnectionsList.get(7).sendRequest(launchCommandJsonStrings.get(7));
+        JsonNode nine = tenConnectionsList.get(8).sendRequest(launchCommandJsonStrings.get(8));
+        JsonNode ten = tenConnectionsList.get(9).sendRequest(launchCommandJsonStrings.get(9));
 
         // Then I should get an "OK" response
         assertEquals("OK", one.get("result").asText());
