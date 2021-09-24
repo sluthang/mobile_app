@@ -1,25 +1,21 @@
 variables:
   MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
-
-image: maven:3.8.2-jdk-11-slim
-
-stages:
-  - compile
-  - build
-  - test
-  - package
-  - deploy
-
-cache:
-  paths:
-    - .m2/repository
-    - target
-
-unittests-job:
-  stage: test
+  
+default:
+  image: maven:3.8.2-jdk-11-slim
 
   before_script:
     - apt-get update && apt-get install -y make
+
+  cache:
+    paths:
+      - .m2/repository
+      - target
+      - Server/target
+      - Client/target
+
+unittests-job:
+  stage: test
 
   script:
     - echo "Running all unit tests"
@@ -30,7 +26,6 @@ ref-server-default-world-accpeptance-tests-job:
   stage: test
 
   before_script:
-    - apt-get update && apt-get install -y make
     - make run_reference_server_jar
 
   script:
@@ -42,7 +37,6 @@ uss-victory-default-world-accpeptance-tests-job:
   stage: test
 
   before_script:
-    - apt-get update && apt-get install -y make
     - make development_build
     - make run_uss_victory_server_jar
 
@@ -55,7 +49,6 @@ uss-victory-2x2-world-acceptance-tests-job:
   stage: test
 
   before_script:
-    - apt-get update && apt-get install -y make
     - make development_build
     - make run_dev_build_2x2_world
 
