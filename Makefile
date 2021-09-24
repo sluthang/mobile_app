@@ -48,7 +48,7 @@ development_build:
 
 run_dev_build_2x2_world:
 	@echo "Running Dev build jar file..."
-	java -jar output/$(uss_victory_server) -s 2
+	java -jar output/$(uss_victory_server) -s 2 &
 
 run_all_non_server_unittests:
 	@echo "Running unit tests..."
