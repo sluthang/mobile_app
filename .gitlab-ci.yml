@@ -51,3 +51,15 @@ uss-victory-default-world-accpeptance-tests-job:
     - make run_1x1_acceptance_tests
     - make stop_uss_victory_server
 
+uss-victory-2x2-world-acceptance-tests-job:
+  stage: test
+
+  before_script:
+    - apt-get update && apt-get install -y make
+    - make development_build
+    - make run_dev_build_2x2_world
+
+  script:
+    - mvn verify -DskipTests
+    - make run_2x2_acceptance_tests
+    - make stop_uss_victory_server

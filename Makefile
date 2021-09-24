@@ -46,6 +46,10 @@ development_build:
 	@echo "Building the release jar file..."
 	cd Server ; mvn package -Pserver-development-build
 
+run_dev_build_2x2_world:
+	@echo "Running Dev build jar file..."
+	java -jar output/$(uss_victory_server) -s 2
+
 run_all_non_server_unittests:
 	@echo "Running unit tests..."
 	cd Server; mvn surefire:test -Dtest=ForwardCommandTests
