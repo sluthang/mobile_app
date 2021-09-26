@@ -39,6 +39,7 @@ uss-victory-default-world-accpeptance-tests-job:
     - make run_uss_victory_server_jar
     - mvn verify -DskipTests
     - make run_1x1_acceptance_tests
+  after_script:
     - make stop_uss_victory_server
 
 uss-victory-2x2-world-acceptance-tests-job:
@@ -49,4 +50,16 @@ uss-victory-2x2-world-acceptance-tests-job:
     - make run_dev_build_2x2_world
     - mvn verify -DskipTests
     - make run_2x2_acceptance_tests
+  after_script:
+    - make stop_uss_victory_server
+
+uss-victory-obstacle-1,1-2x2-world-acceptance-tests-job:
+  stage: test
+
+  script:
+    - make development_build
+    - make run_dev_build_1,1_obstacle_2x2_world
+    - mvn verify -DskipTests
+    - make run_2x2_1,1_obstacle_acceptance_tests
+  after_script:
     - make stop_uss_victory_server

@@ -59,9 +59,9 @@ public class LookWithObstacleAtZeroOne {
 
         JsonNode stateResponse = eightConnections.get(0).sendRequest(stateRequest);
 
-
-        assertTrue(stateResponse.get("data").get("objects").get(0).toString().contains("OBSTACLE"));
-        assertTrue(stateResponse.get("data").get("objects").get(0).toString().contains("1"));
+        assertTrue(stateResponse.get("data").get("objects").toString().contains("distance\":\"1"));
+        assertTrue(stateResponse.get("data").get("objects").toString().contains("type\":\"OBSTACLE"));
+        assertTrue(stateResponse.get("data").get("objects").toString().contains("direction\":\"NORTH"));
     }
 
     @Test
