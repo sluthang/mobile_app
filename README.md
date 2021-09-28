@@ -37,3 +37,5 @@ Advice:
 4. Keep in mind reload/setmine/repair times, as you are vulnerable while doing these things.
 5. Reloading as a miner robot is a waste of time and should not be done.
 6. If the robot returns a response saying 'Busy etc.' it cannot do anything until it is done with this action.
+
+release tag 0.2.0
