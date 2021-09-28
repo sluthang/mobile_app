@@ -46,22 +46,35 @@ public class LaunchCommand extends Command{
         Random random = new Random();
 
         boolean positionSet = false;
-        for (int i = 0; i < 1000; i++) {
-            int x = random.nextInt((world.BOTTOM_RIGHT.getX() - world.TOP_LEFT.getX()) - world.BOTTOM_RIGHT.getX() + 1);
-            int y = random.nextInt((world.TOP_LEFT.getY() - world.BOTTOM_RIGHT.getY()) - world.TOP_LEFT.getY() + 1);
+        for (int x = - world.TOP_LEFT.getY(); x <= world.TOP_LEFT.getY(); x++) {
+            for(int y = - world.TOP_LEFT.getY(); y <= world.TOP_LEFT.getY(); y++){
 
-
-            if (world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName) == UpdateResponse.SUCCESS){
-                server.robot = new Robot(server.robotName);
-                world.addRobot(server.robot);
-                int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), world.MAX_SHIELDS);
-                int maxShot = Math.min(Integer.parseInt(args.get(2).toString()), world.MAX_SHOTS);
-                server.robot.setMaxes(maxShield, maxShot);
-                server.robot.setPosition(new Position(x, y));
-                positionSet = true;
+                if (world.maze.blocksPosition(world.getRobots(), new Position(0, 0), server.robotName) == UpdateResponse.SUCCESS){
+                    server.robot = new Robot(server.robotName);
+                    world.addRobot(server.robot);
+                    int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), world.MAX_SHIELDS);
+                    int maxShot = Math.min(Integer.parseInt(args.get(2).toString()), world.MAX_SHOTS);
+                    server.robot.setMaxes(maxShield, maxShot);
+                    server.robot.setPosition(new Position(0, 0));
+                    positionSet = true;
+                    break;
+                }
+                else if(world.maze.blocksPosition(world.getRobots(), new Position(x, y), server.robotName) == UpdateResponse.SUCCESS){
+                    server.robot = new Robot(server.robotName);
+                    world.addRobot(server.robot);
+                    int maxShield = Math.min(Integer.parseInt(args.get(1).toString()), world.MAX_SHIELDS);
+                    int maxShot = Math.min(Integer.parseInt(args.get(2).toString()), world.MAX_SHOTS);
+                    server.robot.setMaxes(maxShield, maxShot);
+                    server.robot.setPosition(new Position(x, y));
+                    positionSet = true;
+                    break;
+                }
+            }
+            if(positionSet){
                 break;
             }
         }
+
         if (!positionSet) {
             data.put("message", "No more space in this world");
             server.response.addData(data);

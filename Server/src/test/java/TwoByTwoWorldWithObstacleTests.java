@@ -2,200 +2,140 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import za.co.wethinkcode.server.robotclient.RobotWorldClient;
+import za.co.wethinkcode.helpers.TestingHelper;
 import za.co.wethinkcode.server.robotclient.RobotWorldJsonClient;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TwoByTwoWorldWithObstacleTests {
     private final static int DEFAULT_PORT = 5000;
     private final static String DEFAULT_IP = "127.0.0.1";
-    private final RobotWorldClient serverClient = new RobotWorldJsonClient();
-    private final RobotWorldClient serverClientTwo = new RobotWorldJsonClient();
-    private final RobotWorldClient serverClientThree = new RobotWorldJsonClient();
-    private final RobotWorldClient serverClientFour = new RobotWorldJsonClient();
+    private final TestingHelper helper = new TestingHelper();
+    private final ArrayList<RobotWorldJsonClient> nineConnectionsList = helper.createConnections(9);
 
     @BeforeEach
     public void connectToServer() {
-        serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
-        serverClientTwo.connect(DEFAULT_IP, DEFAULT_PORT);
-        serverClientThree.connect(DEFAULT_IP, DEFAULT_PORT);
-        serverClientFour.connect(DEFAULT_IP, DEFAULT_PORT);
+        helper.connectMultipleRobotClientObjects(nineConnectionsList, DEFAULT_PORT, DEFAULT_IP);
     }
 
     @AfterEach
     public void disconnectFromServer() {
-        serverClient.disconnect();
-        serverClientTwo.disconnect();
-        serverClientThree.disconnect();
-        serverClientFour.disconnect();
-    }
-
-    @Test
-    public void lookAndFindingObstacle() {
-        boolean loop = true;
-
-        while (loop) {
-            disconnectFromServer();
-            connectToServer();
-
-            // Given that I am connected to a running Robot Worlds server
-            // And the world is of size 2x2 (The world is configured or hardcoded to this size)
-
-            assertTrue(serverClient.isConnected());
-
-            // When I send a launch command
-            String requestHal = "{" +
-                    "  \"robot\": \"HAL\"," +
-                    "  \"command\": \"launch\"," +
-                    "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                    "}";
-
-            JsonNode responseHal = serverClient.sendRequest(requestHal);
-
-            // Then I should get an "OK" response
-            assertNotNull(responseHal.get("result"));
-            assertEquals("OK", responseHal.get("result").asText());
-
-            // And I issue a state command
-
-            String stateRequest = " {\"robot\":\"HAL\"," +
-                    "\"arguments\":[]," +
-                    "\"command\":\"look" +
-                    "\"}";
-
-            JsonNode stateResponse = serverClient.sendRequest(stateRequest);
-
-            if (!stateResponse.get("data").get("objects").toString().contains("OBSTACLE")) {
-                disconnectFromServer();
-                connectToServer();
-            } else {
-                loop = false;
-                assertTrue(stateResponse.get("data").get("objects").toString().contains("OBSTACLE"));
-            }
-        }
+        helper.disconnectMultipleRobotClientObjects(nineConnectionsList);
     }
 
     @Test
     public void launchRobotsIntoAWorldWithAnObstacle(){
-           //Given a world of size 2x2
-          //and the world has an obstacle at coordinate [1,1]
+        //Given a world of size 2x2
+        //and the world has an obstacle at coordinate [1,1]
 
-        assertTrue(serverClient.isConnected());
-        assertTrue(serverClientTwo.isConnected());
-        assertTrue(serverClientThree.isConnected());
+        for (int i = 1; i < nineConnectionsList.size(); i++){
+            assertTrue(nineConnectionsList.get(i).isConnected());
+        }
+        
+        // When I launch 8 robots into the world
+        ArrayList<String> launchCommandJsonStrings = helper.generateLaunchCommands(8);
 
-        // When I launch 3 robots into the world
-        String requestHal = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-
-        String requestR2D2 = "{" +
-                "  \"robot\": \"R2D2\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-
-        String requestR2D = "{" +
-                "  \"robot\": \"R2D\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-
-        JsonNode responseHal = serverClient.sendRequest(requestHal);
-        JsonNode responseR2D2 = serverClientTwo.sendRequest(requestR2D2);
-        JsonNode responseR2D = serverClientThree.sendRequest(requestR2D);
-
-        assertNotNull(responseHal.get("result"));
-        assertNotNull(responseR2D2.get("result"));
-        assertNotNull(responseR2D.get("result"));
+        JsonNode one = nineConnectionsList.get(0).sendRequest(launchCommandJsonStrings.get(0));
+        JsonNode two = nineConnectionsList.get(1).sendRequest(launchCommandJsonStrings.get(1));
+        JsonNode three = nineConnectionsList.get(2).sendRequest(launchCommandJsonStrings.get(2));
+        JsonNode four = nineConnectionsList.get(3).sendRequest(launchCommandJsonStrings.get(3));
+        JsonNode five = nineConnectionsList.get(4).sendRequest(launchCommandJsonStrings.get(4));
+        JsonNode six = nineConnectionsList.get(5).sendRequest(launchCommandJsonStrings.get(5));
+        JsonNode seven = nineConnectionsList.get(6).sendRequest(launchCommandJsonStrings.get(6));
+        JsonNode eight = nineConnectionsList.get(7).sendRequest(launchCommandJsonStrings.get(7));
+ 
 
 
-        assertEquals("OK", responseHal.get("result").asText());
-        assertEquals("OK", responseR2D2.get("result").asText());
-        assertEquals("OK", responseR2D.get("result").asText());
+        assertNotNull(one.get("result")); assertNotNull(two.get("result"));
+        assertNotNull(three.get("result")); assertNotNull(four.get("result"));
+        assertNotNull(five.get("result")); assertNotNull(six.get("result"));
+        assertNotNull(seven.get("result")); assertNotNull(eight.get("result"));
+
+
+        assertEquals("OK", one.get("result").asText());
+        assertEquals("OK", two.get("result").asText());
+        assertEquals("OK", three.get("result").asText());
+        assertEquals("OK", four.get("result").asText());
+        assertEquals("OK", five.get("result").asText());
+        assertEquals("OK", six.get("result").asText());
+        assertEquals("OK", seven.get("result").asText());
+        assertEquals("OK", eight.get("result").asText());
 
         //Then each robot cannot be in position [1,1].
-        assertNotNull(responseHal.get("data"));
-        assertNotNull(responseHal.get("data").get("position"));
+        assertNotNull(one.get("data"));
+        assertNotNull(one.get("data").get("position"));
+        assertNotEquals("[1,1]",one.get("data").get("position").asText());
 
-        assertNotNull(responseR2D2.get("data"));
-        assertNotNull(responseR2D2.get("data").get("position"));
+        assertNotNull(two.get("data"));
+        assertNotNull(two.get("data").get("position"));
+        assertNotEquals("[1,1]",two.get("data").get("position").asText());
 
-        assertNotNull(responseR2D.get("data"));
-        assertNotNull(responseR2D.get("data").get("position"));
+        assertNotNull(three.get("data"));
+        assertNotNull(three.get("data").get("position"));
+        assertNotEquals("[1,1]",three.get("data").get("position").asText());
 
+        assertNotNull(four.get("data"));
+        assertNotNull(four.get("data").get("position"));
+        assertNotEquals("[1,1]",four.get("data").get("position").asText());
+
+        assertNotNull(five.get("data"));
+        assertNotNull(five.get("data").get("position"));
+        assertNotEquals("[1,1]",five.get("data").get("position").asText());
+
+        assertNotNull(six.get("data"));
+        assertNotNull(six.get("data").get("position"));
+        assertNotEquals("[1,1]",six.get("data").get("position").asText());
+
+        assertNotNull(seven.get("data"));
+        assertNotNull(seven.get("data").get("position"));
+        assertNotEquals("[1,1]",seven.get("data").get("position").asText());
+
+        assertNotNull(eight.get("data"));
+        assertNotNull(eight.get("data").get("position"));
+        assertNotEquals("[1,1]",eight.get("data").get("position").asText());
 
     }
+
     @Test
     public void worldWithAnObstacleIsFull() {
-
-//        Given a world of size 2x2
-//        and the world has an obstacle at coordinate [1,1]
-//        and I have successfully launched 3 robots into the world
-//        When I launch one more robot
-//        Then I should get an error response back with the message "No more space in this world"
+        // Given a world of size 2x2
+        // and the world has an obstacle at coordinate [1,1]
+        // and I have successfully launched 3 robots into the world
+        // When I launch one more robot
+        // Then I should get an error response back with the message "No more space in this world"
 
         // Given that I am connected to a running Robot Worlds server
         // And the world is of size 2x2 (The world is configured or hardcoded to this size)
 
-        assertTrue(serverClient.isConnected());
-        assertTrue(serverClientTwo.isConnected());
-        assertTrue(serverClientThree.isConnected());
-        assertTrue(serverClientFour.isConnected());
+        for (int i = 1; i < nineConnectionsList.size(); i++){
+            assertTrue(nineConnectionsList.get(i).isConnected());
+        }
 
         // When I send a launch command
-        String requestHal = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
+        ArrayList<String> launchCommandJsonStrings = helper.generateLaunchCommands(9);
 
-        String requestR2D2 = "{" +
-                "  \"robot\": \"R2D2\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-
-        String requestR2D = "{" +
-                "  \"robot\": \"R2D\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-
-        String requestR2 = "{" +
-                "  \"robot\": \"R2\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-
-
-        JsonNode responseHal = serverClient.sendRequest(requestHal);
-        JsonNode responseR2D2 = serverClientTwo.sendRequest(requestR2D2);
-        JsonNode responseR2D = serverClientThree.sendRequest(requestR2D);
-        JsonNode responseR2 = serverClientFour.sendRequest(requestR2);
+        JsonNode one = nineConnectionsList.get(0).sendRequest(launchCommandJsonStrings.get(0));
+        JsonNode two = nineConnectionsList.get(1).sendRequest(launchCommandJsonStrings.get(1));
+        JsonNode three = nineConnectionsList.get(2).sendRequest(launchCommandJsonStrings.get(2));
+        JsonNode four = nineConnectionsList.get(3).sendRequest(launchCommandJsonStrings.get(3));
+        JsonNode five = nineConnectionsList.get(4).sendRequest(launchCommandJsonStrings.get(4));
+        JsonNode six = nineConnectionsList.get(5).sendRequest(launchCommandJsonStrings.get(5));
+        JsonNode seven = nineConnectionsList.get(6).sendRequest(launchCommandJsonStrings.get(6));
+        JsonNode eight = nineConnectionsList.get(7).sendRequest(launchCommandJsonStrings.get(7));
+        JsonNode nine = nineConnectionsList.get(8).sendRequest(launchCommandJsonStrings.get(8));
 
         // Then I should get an "OK" response
-        assertNotNull(responseHal.get("result"));
-        assertNotNull(responseR2D2.get("result"));
-        assertNotNull(responseR2D.get("result"));
-        assertNotNull(responseR2.get("result"));
+        assertEquals("OK", one.get("result").asText());
+        assertEquals("OK", two.get("result").asText());
+        assertEquals("OK", three.get("result").asText());
+        assertEquals("OK", four.get("result").asText());
+        assertEquals("OK", five.get("result").asText());
+        assertEquals("OK", six.get("result").asText());
+        assertEquals("OK", seven.get("result").asText());
+        assertEquals("OK", eight.get("result").asText());
+        assertEquals("ERROR", nine.get("result").asText());
 
-//        System.out.println(responseR2D2.get("data"));
-//        System.out.println(responseR2D.get("data"));
-//        System.out.println(responseR2.get("data"));
-//        System.out.println(responseHal.get("data"));
-
-        assertEquals("OK", responseHal.get("result").asText());
-        assertEquals("OK", responseR2D2.get("result").asText());
-        assertEquals("OK", responseR2D.get("result").asText());
-        assertEquals("ERROR", responseR2.get("result").asText());
-
-        assertEquals(responseR2.get("data").get("message").asText() , "No more space in this world");
+        assertEquals(nine.get("data").get("message").asText() , "No more space in this world");
 
     }
 }

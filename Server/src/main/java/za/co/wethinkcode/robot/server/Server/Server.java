@@ -47,21 +47,17 @@ public class Server implements Runnable {
             while(robot == null) {
                 messageFromClient = in.readLine();
                 handleMessageBeforeLaunch(messageFromClient);
-                System.out.println(messageFromClient);
             }
 
             MultiServer.clients.add(this);
             while(running) {
                 messageFromClient = in.readLine();
                 handleClientMessage(messageFromClient);
-                System.out.println(messageFromClient);
             }
         }catch(IllegalArgumentException e){
 
             data.put("message","Unsupported command");
             response = new ResponseBuilder(result,data);
-
-            System.out.println(response);
             out.println(response); /** Printing response as it should appear when it's an invalid command */
         }
 
@@ -80,8 +76,6 @@ public class Server implements Runnable {
     private void handleMessageBeforeLaunch(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
         printClientMessage(jsonMessage);
-      //  System.out.println(messageFromClient);/** Printing message from client for testing purpose */
-
         this.robotName = (String)jsonMessage.get("robot");
         this.response = new ResponseBuilder();
 
@@ -92,7 +86,6 @@ public class Server implements Runnable {
         if (this.robot != null) {
             this.response.add("state", this.robot.getState());
         }
-        System.out.println(this.response.toString());
         out.println(this.response.toString());
     }
 

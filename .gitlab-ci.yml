@@ -1,0 +1,65 @@
+variables:
+  MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+  
+default:
+  image: maven:3.8.2-jdk-11-slim
+
+  before_script:
+    - apt-get update && apt install make
+
+  cache:
+    paths:
+      - .m2/repository
+      - target
+      - Server/target
+      - Client/target
+
+unittests-job:
+  stage: test
+
+  script:
+    - echo "Running all unit tests"
+    - mvn verify -DskipTests
+    - make run_all_non_server_unittests
+
+ref-server-default-world-accpeptance-tests-job:
+  stage: test
+
+  script:
+    - make run_reference_server_jar
+    - mvn verify -DskipTests
+    - make run_1x1_acceptance_tests
+    - make stop_reference_server
+
+uss-victory-default-world-accpeptance-tests-job:
+  stage: test
+
+  script:
+    - make development_build
+    - make run_uss_victory_server_jar
+    - mvn verify -DskipTests
+    - make run_1x1_acceptance_tests
+  after_script:
+    - make stop_uss_victory_server
+
+uss-victory-2x2-world-acceptance-tests-job:
+  stage: test
+
+  script:
+    - make development_build
+    - make run_dev_build_2x2_world
+    - mvn verify -DskipTests
+    - make run_2x2_acceptance_tests
+  after_script:
+    - make stop_uss_victory_server
+
+uss-victory-obstacle-1,1-2x2-world-acceptance-tests-job:
+  stage: test
+
+  script:
+    - make development_build
+    - make run_dev_build_1,1_obstacle_2x2_world
+    - mvn verify -DskipTests
+    - make run_2x2_1,1_obstacle_acceptance_tests
+  after_script:
+    - make stop_uss_victory_server

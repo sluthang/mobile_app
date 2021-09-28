@@ -69,6 +69,7 @@ public class MultiServer {
         //Prints out the servers IP address and port.
         try(final DatagramSocket socket = new DatagramSocket()){
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+            //socket.connect(InetAddress.getByName("localhost"), 5000);
             System.out.println("IP address: "+socket.getLocalAddress().getHostAddress()+"\nPORT: "+port);
         }
 

@@ -35,7 +35,7 @@ public class SquareObstacle implements Obstacle {
      * Getter for the size of the obstacle (square 5x5 on curriculum page).
      * */
     public int getSize() {
-        return 5;
+        return 1;
     }
 
     /**
@@ -44,8 +44,8 @@ public class SquareObstacle implements Obstacle {
      * @return: true if blocked (inside an obs.)
      * */
     public boolean blocksPosition(Position position) {
-        return (position.getX() >= bottomLeftX && position.getX() <= (bottomLeftX + 4)) &&
-                (position.getY() >= bottomLeftY && position.getY() <= (bottomLeftY + 4));
+        return (position.getX() >= bottomLeftX && position.getX() <= (bottomLeftX)) &&
+                (position.getY() >= bottomLeftY && position.getY() <= (bottomLeftY));
     }
 
     /**
