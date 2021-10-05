@@ -19,7 +19,7 @@ public class Database implements Persistence    {
     private Connection conn;
 
     public Database() throws SQLException {
-        this.connection = new DatabaseConnection("jdbc:sqlite:/home/sphe/problems/comit/uss-victory/uss_victory_db.sqlite");
+        this.connection = new DatabaseConnection("jdbc:sqlite:uss_victory_db.sqlite");
         conn = connection.connect();
     }
 
