@@ -18,7 +18,7 @@ public class RandomMaze extends BaseMaze {
     /**
      * Constructor for the random maze.
      * */
-    public RandomMaze(Position TOP_LEFT, Position BOTTOM_RIGHT) {
+    public RandomMaze(Position TOP_LEFT, Position BOTTOM_RIGHT, Position position, boolean specified) {
         numberOfObs = ((TOP_LEFT.getY()*2)+(BOTTOM_RIGHT.getX()*2))/20;
         numberOfPits = ((TOP_LEFT.getY()*2)+(BOTTOM_RIGHT.getX()*2))/20;
         this.upperX = BOTTOM_RIGHT.getX()-4;
@@ -28,6 +28,7 @@ public class RandomMaze extends BaseMaze {
         this.maxX = BOTTOM_RIGHT.getX();
         this.maxY = TOP_LEFT.getY();
         generateList();
+        addSpecifiedObstacle(specified, position);
     }
 
     /**

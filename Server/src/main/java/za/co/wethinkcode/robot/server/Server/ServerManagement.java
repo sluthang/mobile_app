@@ -1,9 +1,11 @@
 package za.co.wethinkcode.robot.server.Server;
 
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.persistence.Database;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.World;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,12 +19,14 @@ public class ServerManagement implements Runnable {
     //Display to be drawn on for the dump command.
     private final Scanner sc;
     private final World world;
+    private Database database;
     boolean running;
 
-    public ServerManagement(World world) {
+    public ServerManagement(World world) throws SQLException {
         this.sc = new Scanner(System.in);
         this.world = world;
         running = true;
+        this.database = new Database();
     }
 
     public void run() {
@@ -71,8 +75,14 @@ public class ServerManagement implements Runnable {
                         dump();
                         System.out.println("Displayed to Turtle!");
                         break;
+                    case "save":
+                        if(inputString.size() > 1){
+                            database.saveWorld(world, inputString.get(1), MultiServer.worldSize);
+                        }
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
+            }
         }
     }
 
