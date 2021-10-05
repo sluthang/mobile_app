@@ -8,8 +8,9 @@ public class DesignedMaze extends BaseMaze {
     /**
      * Constructor for designed Maze
      * */
-    public DesignedMaze() {
+    public DesignedMaze(Position position, boolean specified) {
         createMaze();
+        addSpecifiedObstacle(specified, position);
     }
 
     /**

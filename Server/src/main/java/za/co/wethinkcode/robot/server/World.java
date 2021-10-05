@@ -37,7 +37,7 @@ public class World{
         else if(maze.equalsIgnoreCase("emptymaze")){
             this.maze = new EmptyMaze(obstaclePosition, specified);
         } else{
-            this.maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
+            this.maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT, obstaclePosition, specified);
         }
     }
 

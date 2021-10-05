@@ -10,6 +10,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Vector;
 
 public class MultiServer {
@@ -24,8 +25,9 @@ public class MultiServer {
     public static Option obstacle;
     public static CommandLine cmd;
     public static Options options = new Options();
+    public static int worldSize;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
         //Create command line argument options
         {
             port = new Option("p", "port", true, "Server port number to listen on");
@@ -51,7 +53,7 @@ public class MultiServer {
             return;
         }
 
-        int worldSize = config.getWorldSize();
+        worldSize = config.getWorldSize();
         if (cmd.getOptionValue("size") != null){
             worldSize = Integer.parseInt(cmd.getOptionValue("size"));
         }
