@@ -21,6 +21,12 @@ public interface Maze {
 
     Vector<Obstacle> getMines();
 
+    void setMinesList();
+
+    void setPitsList();
+
+    void setObstaclesList();
+
     void hitMine(Position minePosition, Server server);
 
     void createMine(Position position);

@@ -235,4 +235,25 @@ public class BaseMaze implements Maze {
         }
     }
 
+    /**
+     *
+     */
+    public void setPitsList(){
+
+    }
+
+    /**
+     *
+     */
+    public void  setMinesList(){
+
+    }
+
+    /**
+     *
+     */
+    public void setObstaclesList(){
+        this.obstaclesList = new Vector<>();
+    }
+
 }

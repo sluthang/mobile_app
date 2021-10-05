@@ -71,6 +71,9 @@ public class ServerManagement implements Runnable {
                         dump();
                         System.out.println("Displayed to Turtle!");
                         break;
+                    case "restore":
+                        restore();
+                        break;
                 }
             } catch (Exception ignored) {}
         }
@@ -151,5 +154,16 @@ public class ServerManagement implements Runnable {
      */
 
     private void dump() {
+    }
+
+    /**
+     * This method is used to connect to a database that will then find if a particular world has been
+     * saved if the world has been saved/exists on the DB it will then configure the server world to match the previous
+     * world.
+     * @return boolean
+     */
+    public boolean restore(){
+        System.out.println("...World Loaded");
+        return true;
     }
 }
