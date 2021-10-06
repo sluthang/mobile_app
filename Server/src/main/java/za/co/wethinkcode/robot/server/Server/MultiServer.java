@@ -53,9 +53,10 @@ public class MultiServer {
             return;
         }
 
-        worldSize = config.getWorldSize();
         if (cmd.getOptionValue("size") != null){
             worldSize = Integer.parseInt(cmd.getOptionValue("size"));
+        } else {
+            worldSize = config.getWorldSize();
         }
 
         System.out.println("World Size: " + worldSize + "x" + worldSize);
@@ -115,5 +116,10 @@ public class MultiServer {
             return new Position(x,y);
         }
         return null;
+    }
+
+    public static int getWorldSize(){
+
+        return worldSize;
     }
 }

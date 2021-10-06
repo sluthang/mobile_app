@@ -24,6 +24,16 @@ public class Database implements Persistence    {
 
     @Override
     public void createDatabase(World world) {
+        try (Statement stmt = conn.createStatement()){
+            stmt.executeUpdate("CREATE TABLE worlds (" +
+                    "id         INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                    "name       TEXT        NOT NULL UNIQUE," +
+                    "size       INTEGER     NOT NULL," +
+                    "data       VARCHAR     NOT NULL)");
+            System.out.println("CREATED TABLE SUCCESSFULLY!");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
@@ -31,7 +41,7 @@ public class Database implements Persistence    {
         addAllObstacles(world);
         String SQL = "INSERT INTO worlds (size, name, data) VALUES (?, ?, ?)";
         try(PreparedStatement statement = conn.prepareStatement(SQL)){
-            statement.setInt(1, 1);
+            statement.setInt(1, size);
             statement.setString(2, name);
             statement.setString(3, this.objects.toString());
             final boolean resultSet = statement.execute();
@@ -41,19 +51,19 @@ public class Database implements Persistence    {
             } else {
                 System.out.println("World save successfully!");
             }
-//            statement.executeUpdate("INSERT INTO worlds (size, name, data) " +
-//                    "VALUES ("+size+",'"+name+"', '"+this.objects+"');");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            if(e.getErrorCode() == 19){
+                System.out.println("World name already exists.");
+            }
         }
     }
 
     @Override
-    public void updateWorld() {
+    public void updateWorld(String name) {
     }
 
     @Override
-    public void deleteWorld() {
+    public void deleteWorld(String name) {
     }
 
     @Override
@@ -100,15 +110,6 @@ public class Database implements Persistence    {
 
         for (int i = 0; i < obstacles.length(); i++){
             this.objects.append("objects", obstacles.get(i));
-        }
-    }
-
-    @Override
-    public void checkWorldNameExistence() {
-        try(Statement statement = conn.createStatement()){
-            statement.executeUpdate("");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 }
