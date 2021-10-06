@@ -179,7 +179,7 @@ public class BaseMaze implements Maze {
     }
 
     /**
-     * This method check to see if a obstacle blocks the position the robot is trying to move to.
+     * This method check to see if an obstacle blocks the position the robot is trying to move to.
      * And returns true or false depending on if the position is blocked or not.
      * @param position position
      * @return boolean
@@ -210,9 +210,9 @@ public class BaseMaze implements Maze {
     /**
      * This method check to see if another robot blocks the position the players' robot is trying to move to.
      * And returns true or false depending on if the position is blocked or not.
-     * @param robots
-     * @param robotName
-     * @param position
+     * @param robots Robot
+     * @param robotName String
+     * @param position Position
      * @return boolean
      */
     private boolean robotBlockPosition(ConcurrentHashMap<String, Robot> robots, String robotName, Position position){
@@ -251,13 +251,12 @@ public class BaseMaze implements Maze {
     /**
      * Restores a saved worlds obstacles that was stored in a DB.
      * @param data String
-     * @throws ParseException
+     * @throws ParseException exception
      */
     public void restoreAllObstacles(String data) throws ParseException {
         JSONObject jsonObject = stringToJson(data);
         JSONArray jsonArray = (JSONArray) jsonObject.get("objects");
         resetAllObstacles();
-
 
         for (Object o : jsonArray) {
             JSONObject json = (JSONObject) o;
@@ -279,6 +278,12 @@ public class BaseMaze implements Maze {
         }
     }
 
+    /**
+     * Converts a json string into a json object.
+     * @param data String
+     * @return JSONObject
+     * @throws ParseException exception
+     */
     public JSONObject stringToJson(String data) throws ParseException {
         JSONParser parser = new JSONParser();
 

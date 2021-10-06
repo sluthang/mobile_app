@@ -16,11 +16,7 @@ public interface Persistence {
 
     void deleteWorld(String name);
 
-<<<<<<< HEAD
     void readWorld(World world, String name);
-=======
-    void readWorld(String name);
->>>>>>> 7056246f4d3585d6cdae959fee38fef1782693f5
 
     void addObstacleListType(Vector <Obstacle> objects, String type);
 
