@@ -1,5 +1,9 @@
 package za.co.wethinkcode.robot.server.Map;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
@@ -236,24 +240,49 @@ public class BaseMaze implements Maze {
     }
 
     /**
-     *
+     * Resets all the obstacles and pits inside the maze to empty lists/vectors.
      */
-    public void setPitsList(){
-
-    }
-
-    /**
-     *
-     */
-    public void  setMinesList(){
-
-    }
-
-    /**
-     *
-     */
-    public void setObstaclesList(){
+    public void resetAllObstacles(){
         this.obstaclesList = new Vector<>();
+        this.minesList = new Vector<>();
+        this.pitsList = new Vector<>();
+    }
+
+    /**
+     * Restores a saved worlds obstacles that was stored in a DB.
+     * @param data String
+     * @throws ParseException
+     */
+    public void restoreAllObstacles(String data) throws ParseException {
+        JSONObject jsonObject = stringToJson(data);
+        JSONArray jsonArray = (JSONArray) jsonObject.get("objects");
+        resetAllObstacles();
+
+
+        for (Object o : jsonArray) {
+            JSONObject json = (JSONObject) o;
+            JSONArray position = (JSONArray) json.get("position");
+            int x = Integer.parseInt(position.get(0).toString());
+            int y = Integer.parseInt(position.get(1).toString());
+
+            switch (json.get("type").toString()) {
+                case "OBSTACLE":
+                    createObstacles(new Position(x, y));
+                    break;
+                case "PIT":
+                    createPit(new Position(x, y));
+                    break;
+                case "MINE":
+                    createMine(new Position(x, y));
+                    break;
+            }
+        }
+    }
+
+    public JSONObject stringToJson(String data) throws ParseException {
+        JSONParser parser = new JSONParser();
+
+        return (JSONObject) parser.parse(data);
     }
 
 }

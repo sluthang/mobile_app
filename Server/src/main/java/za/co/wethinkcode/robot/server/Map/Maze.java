@@ -1,5 +1,6 @@
 package za.co.wethinkcode.robot.server.Map;
 
+import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
@@ -21,11 +22,9 @@ public interface Maze {
 
     Vector<Obstacle> getMines();
 
-    void setMinesList();
+    void resetAllObstacles();
 
-    void setPitsList();
-
-    void setObstaclesList();
+    void restoreAllObstacles(String string) throws ParseException;
 
     void hitMine(Position minePosition, Server server);
 

@@ -1,13 +1,12 @@
 package za.co.wethinkcode.robot.persistence;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.server.Map.Obstacle;
+import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.World;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Vector;
 
 
@@ -58,7 +57,31 @@ public class Database implements Persistence    {
     }
 
     @Override
-    public void readWorld() {
+    public void readWorld(World world, String name) {
+        String SQL = "SELECT size, data FROM worlds WHERE name = ?";
+
+        try(PreparedStatement statement = conn.prepareStatement(SQL)){
+            statement.setString(1, name);
+            final boolean resultSet = statement.execute();
+
+            if(!resultSet) {
+                throw new RuntimeException("Got unexpected SQL result set.");
+            }
+            try(ResultSet results = statement.getResultSet()){
+                int worldSize = results.getInt("size");
+                Position BOTTOM_RIGHT = new Position((worldSize/2),(-worldSize/2));
+                Position TOP_LEFT = new Position((-worldSize/2),(worldSize/2));
+
+                world.setTOP_LEFT(TOP_LEFT);
+                world.setBOTTOM_RIGHT(BOTTOM_RIGHT);
+                world.maze.restoreAllObstacles(results.getString("data"));
+
+                System.out.println("World " + name + " has been loaded");
+            }
+        } catch (SQLException | ParseException throwables) {
+            throwables.printStackTrace();
+        }
+
     }
 
     @Override
