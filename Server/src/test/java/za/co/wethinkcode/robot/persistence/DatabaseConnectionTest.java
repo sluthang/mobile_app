@@ -11,14 +11,14 @@ class DatabaseConnectionTest {
 
     @Test
     void connectionTest() throws SQLException {
-        DatabaseConnection conn = new DatabaseConnection("jdbc:sqlite:memory:");
+        DatabaseConnection conn = new DatabaseConnection("jdbc:sqlite::memory:");
         Connection connection = conn.connect();
         assertFalse(connection.isClosed());
     }
 
     @Test
     void disconnectionTest() throws SQLException {
-        DatabaseConnection conn = new DatabaseConnection("jdbc:sqlite:memory:");
+        DatabaseConnection conn = new DatabaseConnection("jdbc:sqlite::memory:");
         Connection connection = conn.connect();
         conn.disconnect(connection);
         assertTrue(connection.isClosed() );
