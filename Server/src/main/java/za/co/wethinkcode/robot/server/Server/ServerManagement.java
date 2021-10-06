@@ -77,7 +77,8 @@ public class ServerManagement implements Runnable {
                         break;
                     case "save":
                         if(inputString.size() > 1){
-                            database.saveWorld(world, inputString.get(1), MultiServer.worldSize);
+                            System.out.println(MultiServer.getWorldSize());
+                            database.saveWorld(world, inputString.get(1), MultiServer.getWorldSize());
                         }
                 }
             } catch (Exception ignored) {
