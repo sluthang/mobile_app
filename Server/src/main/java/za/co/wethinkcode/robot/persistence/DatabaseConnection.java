@@ -7,19 +7,20 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     public String dbUrl;
-
+    public Connection connection;
     public DatabaseConnection(String dbUrl){
         this.dbUrl = dbUrl;
     }
 
-    public Connection connect() throws SQLException {
-        Connection connection;
-        connection = DriverManager.getConnection(dbUrl);
-        
-        return connection;
+    public void connect() throws SQLException {
+        this.connection = DriverManager.getConnection(dbUrl);
     }
 
-    public void disconnect(Connection connection) throws SQLException {
-        connection.close();
+    public void disconnect() throws SQLException {
+        this.connection.close();
+    }
+
+    public Connection getConnection() {
+        return this.connection;
     }
 }

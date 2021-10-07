@@ -12,16 +12,16 @@ class DatabaseConnectionTest {
     @Test
     void connectionTest() throws SQLException {
         DatabaseConnection conn = new DatabaseConnection("jdbc:sqlite::memory:");
-        Connection connection = conn.connect();
-        assertFalse(connection.isClosed());
+        conn.connect();
+        assertFalse(conn.getConnection().isClosed());
     }
 
     @Test
     void disconnectionTest() throws SQLException {
         DatabaseConnection conn = new DatabaseConnection("jdbc:sqlite::memory:");
-        Connection connection = conn.connect();
-        conn.disconnect(connection);
-        assertTrue(connection.isClosed() );
+        conn.connect();
+        conn.disconnect();
+        assertTrue(conn.getConnection().isClosed());
 
     }
 }

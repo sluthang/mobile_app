@@ -21,7 +21,7 @@ public class ServerCommandTests {
         assertEquals(2, world.BOTTOM_RIGHT.getX());
         assertEquals(0,world.getObstacles().size());
 
-        Database database = new Database();
+        Database database = new Database("jdbc:sqlite:uss_victory_db.sqlite");
         database.readWorld(world, "beau");
 
         assertEquals(1, world.BOTTOM_RIGHT.getX());

@@ -26,7 +26,7 @@ public class ServerManagement implements Runnable {
         this.sc = new Scanner(System.in);
         this.world = world;
         running = true;
-        this.database = new Database();
+        this.database = new Database("jdbc:sqlite:uss_victory_db.sqlite");
     }
 
     public void run() {

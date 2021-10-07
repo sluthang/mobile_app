@@ -14,17 +14,16 @@ public class Database implements Persistence    {
 
     public JSONArray obstacles = new JSONArray();
     public JSONObject objects = new JSONObject();
-    private DatabaseConnection connection;
-    private Connection conn;
+    private final DatabaseConnection connection;
 
-    public Database() throws SQLException {
-        this.connection = new DatabaseConnection("jdbc:sqlite:uss_victory_db.sqlite");
-        conn = connection.connect();
+    public Database(String dbUrl){
+        this.connection = new DatabaseConnection(dbUrl);
     }
 
     @Override
-    public void createDatabase(World world) {
-        try (Statement stmt = conn.createStatement()){
+    public void createDatabase(World world) throws SQLException {
+        connection.connect();
+        try (Statement stmt = connection.getConnection().createStatement()){
             stmt.executeUpdate("CREATE TABLE worlds (" +
                     "id         INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT," +
                     "name       TEXT        NOT NULL UNIQUE," +
@@ -34,13 +33,15 @@ public class Database implements Persistence    {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+        connection.disconnect();
     }
 
     @Override
-    public void saveWorld(World world, String name, int size) {
+    public void saveWorld(World world, String name, int size) throws SQLException {
+        connection.connect();
         addAllObstacles(world);
         String SQL = "INSERT INTO worlds (size, name, data) VALUES (?, ?, ?)";
-        try(PreparedStatement statement = conn.prepareStatement(SQL)){
+        try(PreparedStatement statement = connection.getConnection().prepareStatement(SQL)){
             statement.setInt(1, size);
             statement.setString(2, name);
             statement.setString(3, this.objects.toString());
@@ -56,6 +57,7 @@ public class Database implements Persistence    {
                 System.out.println("World name already exists.");
             }
         }
+        connection.disconnect();
     }
 
     @Override
@@ -67,10 +69,11 @@ public class Database implements Persistence    {
     }
 
     @Override
-    public void readWorld(World world, String name) {
+    public void readWorld(World world, String name) throws SQLException {
+        connection.connect();
         String SQL = "SELECT size, data FROM worlds WHERE name = ?";
 
-        try(PreparedStatement statement = conn.prepareStatement(SQL)){
+        try(PreparedStatement statement = connection.getConnection().prepareStatement(SQL)){
             statement.setString(1, name);
             final boolean resultSet = statement.execute();
 
@@ -91,7 +94,7 @@ public class Database implements Persistence    {
         } catch (SQLException | ParseException throwables) {
             throwables.printStackTrace();
         }
-
+        connection.disconnect();
     }
 
     @Override
