@@ -84,6 +84,7 @@ public class ServerManagement implements Runnable {
                     case "restore":
                         if(inputString.size() > 1){
                             database.readWorld(world, inputString.get(1));
+                            purgeAllUsers();
                         }
                         break;
                 }
@@ -147,6 +148,17 @@ public class ServerManagement implements Runnable {
         try {
             world.removeRobot(username);
         } catch (NullPointerException ignored) {}
+    }
+
+    /**
+     * Removes all clients connected to the server.
+     */
+    private void purgeAllUsers(){
+        try {
+            for (Server client : MultiServer.clients) {
+                client.closeThread();
+            }
+        } catch (Exception ignored) {}
     }
 
     /**
