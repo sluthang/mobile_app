@@ -35,7 +35,7 @@ uss_victory_server := robot-worlds-server-0.2.0-jar-with-dependencies.jar
 1x1_world_port:= 6767
 
 compile:
-	@echo "\033[0;32mVerifying Dependencies and compiling..."
+	@echo "Verifying Dependencies and compiling..."
 	mvn verify -DskipTests; mvn compile
 
 release_build:

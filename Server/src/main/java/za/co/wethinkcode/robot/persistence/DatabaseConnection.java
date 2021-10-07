@@ -8,6 +8,7 @@ public class DatabaseConnection {
 
     public String dbUrl;
     public Connection connection;
+
     public DatabaseConnection(String dbUrl){
         this.dbUrl = dbUrl;
     }

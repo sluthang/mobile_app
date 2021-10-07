@@ -57,6 +57,7 @@ public class Database implements Persistence    {
                 System.out.println("World name already exists.");
             }
         }
+        connection.disconnect();
     }
 
     @Override
@@ -68,7 +69,7 @@ public class Database implements Persistence    {
     }
 
     @Override
-    public boolean readWorld(World world, String name) {
+    public boolean readWorld(World world, String name) throws SQLException {
         connection.connect();
         String SQL = "SELECT size, data FROM worlds WHERE name = ?";
 
@@ -89,14 +90,15 @@ public class Database implements Persistence    {
                 world.maze.restoreAllObstacles(results.getString("data"));
 
                 System.out.println("World " + name + " has been loaded.");
+                connection.disconnect();
 
                 return true;
             }
         } catch (SQLException | ParseException throwables) {
             System.out.println("World " + name + " does not exist.");
+            connection.disconnect();
             return false;
         }
-        connection.disconnect();
     }
 
     @Override

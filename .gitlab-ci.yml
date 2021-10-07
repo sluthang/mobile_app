@@ -54,3 +54,22 @@ uss-victory-obstacle-1,1-2x2-world-acceptance-tests-job:
     - make run_2x2_1,1_obstacle_acceptance_tests
   after_script:
     - make stop_uss_victory_server
+
+compile:
+  stage: build
+
+  script:
+    - make compile
+
+release_docker_image:
+  stage: deploy
+  image: docker:latest
+
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    -
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
