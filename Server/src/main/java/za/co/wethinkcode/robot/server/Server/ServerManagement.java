@@ -30,7 +30,7 @@ public class ServerManagement implements Runnable {
     }
 
     public void run() {
-        //Sleep foren 3 seconds due to threads printing at the same time when run on fast CPU's.
+        //Sleep for 3 seconds due to threads printing at the same time when run on fast CPU's.
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -85,8 +85,9 @@ public class ServerManagement implements Runnable {
                         break;
                     case "restore":
                         if(inputString.size() > 1){
-                            database.readWorld(world, inputString.get(1));
-                            purgeAllUsers();
+                            if(database.readWorld(world, inputString.get(1))){
+                                purgeAllUsers();
+                            }
                         }
                         break;
                 }
@@ -101,7 +102,7 @@ public class ServerManagement implements Runnable {
      * then it will close the server completely.
      */
     private void quitServer() {
-        //Loops through the client list and closes the.
+        //Loops through the client list and closes their threads.
         try {
             for (Server client : MultiServer.clients) {
                 client.closeThread();
