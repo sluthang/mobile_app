@@ -41,6 +41,8 @@ public class ServerManagement implements Runnable {
                 ANSI_PURPLE + "Server can issue commands using the command name.\n" +
                 ANSI_GREEN +"       eg. <command> <tag>\n" + ANSI_RESET +
                 ANSI_GREEN+"       <purge> <client-name>"+ANSI_RESET+" - Purges the selected user from the server.\n" +
+                ANSI_GREEN+"       <save> <save-name>"        +ANSI_RESET+" - Saves the current worlds size along with all obstacles to a database.\n" +
+                ANSI_GREEN+"       <restore> <saved-name>"     +ANSI_RESET+" - Restores the world to a previously saved state from the database if it exists in the database.\n" +
                 ANSI_GREEN+"       <clients> <>         "+ANSI_RESET+" - Lists all the currently connected users and their username.\n" +
                 ANSI_GREEN+"       <robots> <>          "+ANSI_RESET+" - Lists the robots currently on the map and their states.\n" +
                 ANSI_GREEN+"       <quit> <>            "+ANSI_RESET+" - Closes all currently connected clients and threads. Quits program.");
