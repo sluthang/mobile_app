@@ -37,7 +37,7 @@ public class World{
         else if(maze.equalsIgnoreCase("emptymaze")){
             this.maze = new EmptyMaze(obstaclePosition, specified);
         } else{
-            this.maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT);
+            this.maze = new RandomMaze(TOP_LEFT, BOTTOM_RIGHT, obstaclePosition, specified);
         }
     }
 
@@ -130,5 +130,21 @@ public class World{
     public UpdateResponse isInWorld(Position oldPosition, Position newPosition) {
         if (newPosition.isIn(TOP_LEFT, BOTTOM_RIGHT)) return UpdateResponse.SUCCESS;
         else return UpdateResponse.FAILED_OUTSIDE_WORLD;
+    }
+
+    /**
+     * Sets the bottom right position of the world.
+     * @param BOTTOM_RIGHT Position
+     */
+    public void setBOTTOM_RIGHT(Position BOTTOM_RIGHT) {
+        this.BOTTOM_RIGHT = BOTTOM_RIGHT;
+    }
+
+    /**
+     * Sets the top left position of the world.
+     * @param TOP_LEFT Position
+     */
+    public void setTOP_LEFT(Position TOP_LEFT) {
+        this.TOP_LEFT = TOP_LEFT;
     }
 }

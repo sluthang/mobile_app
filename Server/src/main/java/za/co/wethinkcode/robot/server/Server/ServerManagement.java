@@ -1,9 +1,11 @@
 package za.co.wethinkcode.robot.server.Server;
 
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.persistence.Database;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.World;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,16 +19,18 @@ public class ServerManagement implements Runnable {
     //Display to be drawn on for the dump command.
     private final Scanner sc;
     private final World world;
+    private Database database;
     boolean running;
 
-    public ServerManagement(World world) {
+    public ServerManagement(World world) throws SQLException {
         this.sc = new Scanner(System.in);
         this.world = world;
         running = true;
+        this.database = new Database("jdbc:sqlite:uss_victory_db.sqlite");
     }
 
     public void run() {
-        //Sleep foren 3 seconds due to threads printing at the same time when run on fast CPU's.
+        //Sleep for 3 seconds due to threads printing at the same time when run on fast CPU's.
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -37,6 +41,8 @@ public class ServerManagement implements Runnable {
                 ANSI_PURPLE + "Server can issue commands using the command name.\n" +
                 ANSI_GREEN +"       eg. <command> <tag>\n" + ANSI_RESET +
                 ANSI_GREEN+"       <purge> <client-name>"+ANSI_RESET+" - Purges the selected user from the server.\n" +
+                ANSI_GREEN+"       <save> <save-name>"        +ANSI_RESET+" - Saves the current worlds size along with all obstacles to a database.\n" +
+                ANSI_GREEN+"       <restore> <saved-name>"     +ANSI_RESET+" - Restores the world to a previously saved state from the database if it exists in the database.\n" +
                 ANSI_GREEN+"       <clients> <>         "+ANSI_RESET+" - Lists all the currently connected users and their username.\n" +
                 ANSI_GREEN+"       <robots> <>          "+ANSI_RESET+" - Lists the robots currently on the map and their states.\n" +
                 ANSI_GREEN+"       <quit> <>            "+ANSI_RESET+" - Closes all currently connected clients and threads. Quits program.");
@@ -71,8 +77,23 @@ public class ServerManagement implements Runnable {
                         dump();
                         System.out.println("Displayed to Turtle!");
                         break;
+                    case "save":
+                        if(inputString.size() > 1){
+                            System.out.println(MultiServer.getWorldSize());
+                            database.saveWorld(world, inputString.get(1), MultiServer.getWorldSize());
+                        }
+                        break;
+                    case "restore":
+                        if(inputString.size() > 1){
+                            if(database.readWorld(world, inputString.get(1))){
+                                purgeAllUsers();
+                            }
+                        }
+                        break;
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
+            }
         }
     }
 
@@ -81,7 +102,7 @@ public class ServerManagement implements Runnable {
      * then it will close the server completely.
      */
     private void quitServer() {
-        //Loops through the client list and closes the.
+        //Loops through the client list and closes their threads.
         try {
             for (Server client : MultiServer.clients) {
                 client.closeThread();
@@ -130,6 +151,17 @@ public class ServerManagement implements Runnable {
         try {
             world.removeRobot(username);
         } catch (NullPointerException ignored) {}
+    }
+
+    /**
+     * Removes all clients connected to the server.
+     */
+    private void purgeAllUsers(){
+        try {
+            for (Server client : MultiServer.clients) {
+                client.closeThread();
+            }
+        } catch (Exception ignored) {}
     }
 
     /**
