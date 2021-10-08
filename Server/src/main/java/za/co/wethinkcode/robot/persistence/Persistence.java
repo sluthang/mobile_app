@@ -9,7 +9,9 @@ import java.util.Vector;
 public interface Persistence {
 
 
-    void createDatabase(World world) throws SQLException;
+    void createDatabase() throws SQLException;
+
+    void dropTable() throws SQLException;
 
     void saveWorld(World world, String name, int size) throws SQLException;
 

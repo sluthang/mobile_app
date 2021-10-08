@@ -21,7 +21,7 @@ public class Database implements Persistence    {
     }
 
     @Override
-    public void createDatabase(World world) throws SQLException {
+    public void createDatabase() throws SQLException {
         connection.connect();
         try (Statement stmt = connection.getConnection().createStatement()){
             stmt.executeUpdate("CREATE TABLE worlds (" +
@@ -30,6 +30,18 @@ public class Database implements Persistence    {
                     "size       INTEGER     NOT NULL," +
                     "data       VARCHAR     NOT NULL)");
             System.out.println("CREATED TABLE SUCCESSFULLY!");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        connection.disconnect();
+    }
+
+    @Override
+    public void dropTable() throws SQLException {
+        connection.connect();
+        try (Statement stmt = connection.getConnection().createStatement()){
+            stmt.executeUpdate("DROP TABLE worlds;");
+            System.out.println("DELETED TABLE SUCCESSFULLY!");
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
