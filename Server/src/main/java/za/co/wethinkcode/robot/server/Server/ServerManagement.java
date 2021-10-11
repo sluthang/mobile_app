@@ -37,15 +37,7 @@ public class ServerManagement implements Runnable {
             e.printStackTrace();
         }
         //Pretty print the instructions for using the server to the server admin.
-        System.out.println("Server is running and live!\n" +
-                ANSI_PURPLE + "Server can issue commands using the command name.\n" +
-                ANSI_GREEN +"       eg. <command> <tag>\n" + ANSI_RESET +
-                ANSI_GREEN+"       <purge> <client-name>"+ANSI_RESET+" - Purges the selected user from the server.\n" +
-                ANSI_GREEN+"       <save> <save-name>"        +ANSI_RESET+" - Saves the current worlds size along with all obstacles to a database.\n" +
-                ANSI_GREEN+"       <restore> <saved-name>"     +ANSI_RESET+" - Restores the world to a previously saved state from the database if it exists in the database.\n" +
-                ANSI_GREEN+"       <clients> <>         "+ANSI_RESET+" - Lists all the currently connected users and their username.\n" +
-                ANSI_GREEN+"       <robots> <>          "+ANSI_RESET+" - Lists the robots currently on the map and their states.\n" +
-                ANSI_GREEN+"       <quit> <>            "+ANSI_RESET+" - Closes all currently connected clients and threads. Quits program.");
+        serverCommandsPrint();
 
         while (running) {
             try {
@@ -54,43 +46,12 @@ public class ServerManagement implements Runnable {
                 List<String> inputString = Arrays.asList(serverMessage.split(" ", 2));
 
                 //execute server commands that will alter the world.
-                switch (inputString.get(0)) {
-                    case "quit":
-                        quitServer();
-                        System.out.println("Quiting the server!");
-                        break;
-                    case "robots":
-                        listRobots();
-                        System.out.println("Listed robots!");
-                        break;
-                    case "purge":
-                        if (inputString.size() > 1) {
-                            purgeUser(inputString.get(1));
-                            System.out.println("Purged user!");
-                        }
-                        break;
-                    case "clients":
-                        showUsers();
-                        System.out.println("Showed users!");
-                        break;
-                    case "dump":
-                        dump();
-                        System.out.println("Displayed to Turtle!");
-                        break;
-                    case "save":
-                        if(inputString.size() > 1){
-                            System.out.println(MultiServer.getWorldSize());
-                            database.saveWorld(world, inputString.get(1), MultiServer.getWorldSize());
-                        }
-                        break;
-                    case "restore":
-                        if(inputString.size() > 1){
-                            if(database.readWorld(world, inputString.get(1))){
-                                purgeAllUsers();
-                            }
-                        }
-                        break;
+                if(inputString.size() == 1){
+                    singleArgCommand(inputString);
+                }else{
+                    multiArgCommands(inputString);
                 }
+
             } catch (Exception ignored) {
                 ignored.printStackTrace();
             }
@@ -145,6 +106,7 @@ public class ServerManagement implements Runnable {
         for (Server client:MultiServer.clients) {
             if (client.robotName.equalsIgnoreCase(username)) {
                 client.robot.kill(world, client, "Bonk");
+                System.out.println("Purged user!");
                 break;
             }
         }
@@ -183,5 +145,69 @@ public class ServerManagement implements Runnable {
      */
 
     private void dump() {
+    }
+
+    /**
+     * Takes in a list of user input commands one string and uses a switch
+     * To determine which command functions to run.
+     * @param inputString List<String>
+     */
+    private void singleArgCommand(List<String> inputString){
+
+        switch (inputString.get(0)) {
+            case "quit":
+                quitServer();
+                System.out.println("Quiting the server!");
+                break;
+            case "robots":
+                listRobots();
+                System.out.println("Listed robots!");
+                break;
+            case "clients":
+                showUsers();
+                System.out.println("Showed users!");
+                break;
+            case "dump":
+                dump();
+                System.out.println("Displayed to Turtle!");
+                break;
+        }
+    }
+
+    /**
+     * Takes in a list of user input commands that contains more than one string and uses a switch
+     * To determine which command functions to run.
+     * @param inputString List<String>
+     * @throws SQLException exception
+     */
+    private void multiArgCommands(List<String> inputString) throws SQLException {
+        switch (inputString.get(0)) {
+            case "purge":
+                purgeUser(inputString.get(1));
+                break;
+            case "save":
+                database.saveWorld(world, inputString.get(1), MultiServer.getWorldSize());
+                break;
+            case "restore":
+                if(database.readWorld(world, inputString.get(1))){
+                    purgeAllUsers();
+                }
+                break;
+        }
+    }
+
+    /**
+     * Prints a list of all server commands to the terminal.
+     */
+    private void serverCommandsPrint(){
+        System.out.println("Server is running and live!\n" +
+                ANSI_PURPLE+"Server can issue commands using the command name.\n" +
+                ANSI_GREEN+"       eg. <command> <tag>\n" + ANSI_RESET +
+                ANSI_GREEN+"       <purge> <client-name>"+ANSI_RESET+" - Purges the selected user from the server.\n" +
+                ANSI_GREEN+"       <save> <save-name>"        +ANSI_RESET+" - Saves the current worlds size along with all obstacles to a database.\n" +
+                ANSI_GREEN+"       <restore> <saved-name>"     +ANSI_RESET+" - Restores the world to a previously saved state from the database if it exists in the database.\n" +
+                ANSI_GREEN+"       <clients> <>         "+ANSI_RESET+" - Lists all the currently connected users and their username.\n" +
+                ANSI_GREEN+"       <robots> <>          "+ANSI_RESET+" - Lists the robots currently on the map and their states.\n" +
+                ANSI_GREEN+"       <quit> <>            "+ANSI_RESET+" - Closes all currently connected clients and threads. Quits program.");
     }
 }
