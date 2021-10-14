@@ -61,16 +61,17 @@ compile:
   script:
     - make compile
 
-release_docker_image:
+release_multiserver:
+  
   stage: deploy
-  image: docker:latest
-
-  services:
-    - docker:dind
 
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - apt-get update -y
+    - apt-get install docker.io -y
+    - apt-get install make -y
+    - docker login -u sluthang -p QBytvCSqKQ1uXbPefsNW gitlab.wethinkco.de:5050
 
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    - docker push "$CI_REGISTRY_IMAGE"
+    - make release_build
+    - docker tag uss-victory-server:0.3.0 gitlab.wethinkco.de:5050/sprocopo/uss-victory
+    - docker push gitlab.wethinkco.de:5050/sprocopo/uss-victory
