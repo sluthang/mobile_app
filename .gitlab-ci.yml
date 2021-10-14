@@ -74,3 +74,7 @@ compile:
 #   script:
 #     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
 #     - docker push "$CI_REGISTRY_IMAGE"
+realese_api:
+  stage: build
+  script:
+    - apt-get install update && apt-get install docker.io
