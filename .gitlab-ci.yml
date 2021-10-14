@@ -74,8 +74,14 @@ compile:
 #   script:
 #     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
 #     - docker push "$CI_REGISTRY_IMAGE"
-realese_api:
-  stage: build
+release_api:
+  
+  stage: deploy
+
   script:
-    - apt-get install update -y
+    - apt-get update -y
     - apt-get install docker.io -y
+    - apt-get install make -y
+
+  before_script:
+    - docker login -u Sebastian Procopos -p ACCESS_TOKEN gitlab.wethinkco.de:5050
