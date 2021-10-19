@@ -13,7 +13,7 @@ public abstract class Command {
     private final String name;
     private String argument;
 
-    public abstract void execute(World world, Server server);
+    public abstract String execute(World world, Server server);
 
     /**
      * constructor for command with no arguments
@@ -83,7 +83,6 @@ public abstract class Command {
                 return new FireCommand();
             default:
                 throw new IllegalArgumentException("Unsupported command: " );
-                //throw new IllegalArgumentException("Unsupported command: " + instruction);
         }
     }
 

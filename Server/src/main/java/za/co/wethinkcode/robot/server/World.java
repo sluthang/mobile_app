@@ -70,8 +70,8 @@ public class World{
      * @param command to be executed.
      * @param server that the command will issue data.
      */
-    public void handleCommand(Command command, Server server) {
-        command.execute(this, server);
+    public String handleCommand(Command command, Server server) {
+        return command.execute(this, server);
     }
 
     /**

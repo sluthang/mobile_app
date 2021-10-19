@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Utility.Schedule;
 import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
@@ -24,8 +25,9 @@ public class LayMineCommand extends Command{
      * @param server;
      */
     @Override
-    public void execute(World world, Server server) {
+    public String execute(World world, Server server) {
         // Checks if the robot is allowed to lay mines.
+        ResponseBuilder responseBuilder = new ResponseBuilder();
         if (canLay(server)) {
             // Create a forward command to move the robot 1 step ahead after laying mine.
             server.robot.setStatus("SETMINE");
@@ -39,14 +41,17 @@ public class LayMineCommand extends Command{
 
             JSONObject data = new JSONObject();
             data.put("message", "Done");
-            server.response.addData(data);
-            server.response.add("result", "OK");
+            responseBuilder.addData(data);
+            responseBuilder.add("result", "OK");
         } else {
             JSONObject data = new JSONObject();
             data.put("message", "No mines while using a gun.");
-            server.response.addData(data);
-            server.response.add("result", "ERROR");
+            responseBuilder.addData(data);
+            responseBuilder.add("result", "ERROR");
         }
+
+        responseBuilder.add("state", server.robot.getState());
+        return responseBuilder.toString();
     }
 
     private boolean canLay(Server server) {

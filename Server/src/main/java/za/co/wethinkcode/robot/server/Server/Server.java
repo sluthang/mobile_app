@@ -23,7 +23,6 @@ public class Server implements Runnable {
     public World world;
     public Robot robot;
     public String robotName;
-    public ResponseBuilder response;
 
     public Server(Socket socket, World world) throws IOException {
         // Constructor for the class will create the in and out streams.
@@ -57,7 +56,7 @@ public class Server implements Runnable {
         }catch(IllegalArgumentException e){
 
             data.put("message","Unsupported command");
-            response = new ResponseBuilder(result,data);
+            ResponseBuilder response = new ResponseBuilder(result,data);
             out.println(response); /** Printing response as it should appear when it's an invalid command */
         }
 
@@ -75,18 +74,18 @@ public class Server implements Runnable {
      */
     private void handleMessageBeforeLaunch(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
+
         printClientMessage(jsonMessage);
+        String responseData;
         this.robotName = (String)jsonMessage.get("robot");
-        this.response = new ResponseBuilder();
 
         Command command = Command.create(jsonMessage);
-        world.handleCommand(command, this);
+        responseData = world.handleCommand(command, this);
 
-
-        if (this.robot != null) {
-            this.response.add("state", this.robot.getState());
-        }
-        out.println(this.response.toString());
+            if (this.robot != null) {
+//                response.add("state", this.robot.getState());
+            }
+        out.println(responseData);
     }
 
     /**
@@ -96,22 +95,23 @@ public class Server implements Runnable {
      */
     private void handleClientMessage(String messageFromClient) {
         JSONObject jsonMessage = (JSONObject)JSONValue.parse(messageFromClient);
+
         printClientMessage(jsonMessage);
+        String responseData;
 
         this.robotName = (String)jsonMessage.get("robot");
         this.robot = world.getRobot(this.robotName);
-        this.response = new ResponseBuilder();
 
         if(robot.getStatus().equals("NORMAL")) {
             Command command = Command.create(jsonMessage);
-            world.handleCommand(command, this);
+            responseData = world.handleCommand(command, this);
         } else {
             jsonMessage.put("command", "state");
             Command command = Command.create(jsonMessage);
-            world.handleCommand(command, this);
+            responseData = world.handleCommand(command, this);
         }
-        this.response.add("state", this.robot.getState());
-        out.println(this.response.toString());
+
+        out.println(responseData);
     }
 
     /**

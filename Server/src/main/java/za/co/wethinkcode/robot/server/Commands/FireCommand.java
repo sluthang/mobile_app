@@ -28,14 +28,15 @@ public class FireCommand extends Command{
      * @param server of the client calling the fire command.
      */
     @Override
-    public void execute(World world, Server server) {
+    public String execute(World world, Server server) {
+        ResponseBuilder responseBuilder = new ResponseBuilder();
         // If robot has no shots left a message is sent to the client to reload.
         if (server.robot.getShots() == 0) {
-            server.response.add("result", "ERROR");
+            responseBuilder.add("result", "ERROR");
             JSONObject data = new JSONObject();
             data.put("message", "Please reload.");
-            server.response.addData(data);
-            return;
+            responseBuilder.addData(data);
+            return responseBuilder.toString();
         }
 
         // Check which direction the robot is firing in.
@@ -79,7 +80,7 @@ public class FireCommand extends Command{
             distance -= 1;
         } while (distance > 0);
 
-        server.response.add("result", "OK");
+        responseBuilder.add("result", "OK");
         JSONObject data = new JSONObject();
         server.robot.setShots(server.robot.getShots() - 1);
         if (hit) {
@@ -98,7 +99,8 @@ public class FireCommand extends Command{
             }
         }
 
-        server.response.addData(data);
+        responseBuilder.addData(data);
+        return responseBuilder.toString();
     }
 
     /**
@@ -110,19 +112,21 @@ public class FireCommand extends Command{
      * @return Server client that was shot.
      */
     public Server getHit(String robotName) {
+
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+
         Server out = null;
         for (Server client: MultiServer.clients) {
             if (client.robot.getName().equals(robotName)) {
                 out = client;
                 client.robot.takeDamage(1);
                 if (client.robot.getShields() == -1) return client;
-                client.response = new ResponseBuilder();
-                client.response.add("result", "OK");
+                responseBuilder.add("result", "OK");
                 JSONObject data = new JSONObject();
                 data.put("message", "Shot");
-                client.response.addData(data);
-                client.response.add("state", client.robot.getState());
-                client.out.println(client.response.toString());
+                responseBuilder.addData(data);
+                responseBuilder.add("state", client.robot.getState());
+                client.out.println(responseBuilder);
                 break;
             }
         }

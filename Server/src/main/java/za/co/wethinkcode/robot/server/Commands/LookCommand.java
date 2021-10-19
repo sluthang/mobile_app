@@ -7,6 +7,7 @@ import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Server.Server;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.World;
 
 import java.util.Set;
@@ -22,9 +23,10 @@ public class LookCommand extends Command{
         array = new JSONArray();
     }
 
-    public void execute(World world, Server server) {
+    public String execute(World world, Server server) {
+        ResponseBuilder responseBuilder = new ResponseBuilder();
         JSONObject data = new JSONObject();
-        server.response.add("result", "OK");
+        responseBuilder.add("result", "OK");
 
         checkObstacles(server, world.getMaze().getObstacles(), world.VISIBILITY);
         checkObstacles(server, world.getMaze().getPits(), world.VISIBILITY);
@@ -33,8 +35,9 @@ public class LookCommand extends Command{
         checkForEdge(server, world, world.VISIBILITY);
 
         data.put("objects", array);
-        server.response.addData(data);
-        server.response.add("state", server.robot.getState());
+        responseBuilder.addData(data);
+        responseBuilder.add("state", server.robot.getState());
+        return responseBuilder.toString();
     }
 
     private void checkObstacles(Server server, Vector<Obstacle> obsList, int visionRange) {
