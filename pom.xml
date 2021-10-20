@@ -81,7 +81,9 @@
         <dependency>
             <groupId>net.lemnik</groupId>
             <artifactId>eodsql</artifactId>
+            <scope>system</scope>
             <version>2.2</version>
+            <systemPath>${project.basedir}/lib/eodsql.jar</systemPath>
         </dependency>
     </dependencies>
 

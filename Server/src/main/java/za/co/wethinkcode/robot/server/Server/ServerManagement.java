@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Server;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.persistence.Database;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.World;
@@ -19,7 +20,7 @@ public class ServerManagement implements Runnable {
     //Display to be drawn on for the dump command.
     private final Scanner sc;
     private final World world;
-    private Database database;
+    private final Database database;
     boolean running;
 
     public ServerManagement(World world) throws SQLException {
@@ -52,8 +53,9 @@ public class ServerManagement implements Runnable {
                     multiArgCommands(inputString);
                 }
 
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
+            } catch (Exception e) {
+//                e.printStackTrace();
+                System.out.println("ERROR");
             }
         }
     }
@@ -180,13 +182,13 @@ public class ServerManagement implements Runnable {
      * @param inputString List<String>
      * @throws SQLException exception
      */
-    private void multiArgCommands(List<String> inputString) throws SQLException {
+    private void multiArgCommands(List<String> inputString) throws SQLException, ParseException {
         switch (inputString.get(0)) {
             case "purge":
                 purgeUser(inputString.get(1));
                 break;
             case "save":
-                database.saveWorld(world, inputString.get(1), MultiServer.getWorldSize());
+                database.saveWorld(world, inputString.get(1));
                 break;
             case "restore":
                 if(database.readWorld(world, inputString.get(1))){

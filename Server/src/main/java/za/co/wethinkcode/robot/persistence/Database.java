@@ -1,7 +1,10 @@
 package za.co.wethinkcode.robot.persistence;
+import net.lemnik.eodsql.QueryTool;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
+import za.co.wethinkcode.robot.ORM.WorldDAI;
+import za.co.wethinkcode.robot.ORM.WorldDO;
 import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.World;
@@ -15,9 +18,12 @@ public class Database implements Persistence    {
     public JSONArray obstacles = new JSONArray();
     public JSONObject objects = new JSONObject();
     private final DatabaseConnection connection;
+    public final WorldDAI productQuery;
 
-    public Database(String dbUrl){
+    public Database(String dbUrl) throws SQLException {
         this.connection = new DatabaseConnection(dbUrl);
+        this.connection.connect();
+        this.productQuery = QueryTool.getQuery(this.connection.getConnection(), WorldDAI.class );
     }
 
     @Override
@@ -33,6 +39,7 @@ public class Database implements Persistence    {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+        System.out.println("CREATED TABLE SUCCESSFULLY!");
         connection.disconnect();
     }
 
@@ -48,70 +55,34 @@ public class Database implements Persistence    {
         connection.disconnect();
     }
 
-    @Override
-    public void saveWorld(World world, String name, int size) throws SQLException {
-        connection.connect();
+    public void saveWorld(World world, String name) throws SQLException {
         addAllObstacles(world);
-        String SQL = "INSERT INTO worlds (size, name, data) VALUES (?, ?, ?)";
-        try(PreparedStatement statement = connection.getConnection().prepareStatement(SQL)){
-            statement.setInt(1, size);
-            statement.setString(2, name);
-            statement.setString(3, this.objects.toString());
-            final boolean resultSet = statement.execute();
+        connection.connect();
 
-            if(resultSet){
-                throw new RuntimeException("Got unexpected SQL result set.");
-            } else {
-                System.out.println("World save successfully!");
-            }
-        } catch (SQLException e) {
-            if(e.getErrorCode() == 19){
-                System.out.println("World name already exists.");
-            }
-        }
+        this.productQuery.saveWorld(this.objects.toString(), name, world.BOTTOM_RIGHT.getX() * 2);
+
+        System.out.println("WORLD SAVED SUCCESSFULLY!");
         connection.disconnect();
     }
 
-    @Override
-    public void updateWorld(String name) {
+    public boolean readWorld(World world, String name) throws SQLException, ParseException {
+        this.connection.connect();
+        WorldDO dataObject =  this.productQuery.readWorld(name);
+        int worldSize = dataObject.getWorldSize();
+
+        Position BOTTOM_RIGHT = new Position((worldSize/2),(-worldSize/2));
+        Position TOP_LEFT = new Position((-worldSize/2),(worldSize/2));
+
+        world.setTOP_LEFT(TOP_LEFT);
+        world.setBOTTOM_RIGHT(BOTTOM_RIGHT);
+        world.maze.restoreAllObstacles(dataObject.getWorldData());
+
+        System.out.println("WORLD \"" + name + "\" HAS BEEN LOADED.");
+        connection.disconnect();
+
+        return true;
     }
 
-    @Override
-    public void deleteWorld(String name) {
-    }
-
-    @Override
-    public boolean readWorld(World world, String name) throws SQLException {
-        connection.connect();
-        String SQL = "SELECT size, data FROM worlds WHERE name = ?";
-
-        try(PreparedStatement statement = connection.getConnection().prepareStatement(SQL)){
-            statement.setString(1, name);
-            final boolean resultSet = statement.execute();
-
-            if(!resultSet) {
-                throw new RuntimeException("Got unexpected SQL result set.");
-            }
-            try(ResultSet results = statement.getResultSet()){
-                int worldSize = results.getInt("size");
-                Position BOTTOM_RIGHT = new Position((worldSize/2),(-worldSize/2));
-                Position TOP_LEFT = new Position((-worldSize/2),(worldSize/2));
-
-                world.setTOP_LEFT(TOP_LEFT);
-                world.setBOTTOM_RIGHT(BOTTOM_RIGHT);
-                world.maze.restoreAllObstacles(results.getString("data"));
-
-                System.out.println("World " + name + " has been loaded.");
-                connection.disconnect();
-
-                return true;
-            }
-        } catch (SQLException | ParseException throwables) {
-            System.out.println("World " + name + " does not exist.");
-            connection.disconnect();
-            return false;
-        }
-    }
 
     @Override
     public void addObstacleListType(Vector<Obstacle> objects, String type) {
