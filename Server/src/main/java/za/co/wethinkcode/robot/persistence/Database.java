@@ -12,8 +12,6 @@ import java.util.Vector;
 
 public class Database implements Persistence    {
 
-    public JSONArray obstacles = new JSONArray();
-    public JSONObject objects = new JSONObject();
     private final DatabaseConnection connection;
 
     public Database(String dbUrl){
@@ -51,12 +49,12 @@ public class Database implements Persistence    {
     @Override
     public void saveWorld(World world, String name, int size) throws SQLException {
         connection.connect();
-        addAllObstacles(world);
+        world.maze.addAllObstacles(world);
         String SQL = "INSERT INTO worlds (size, name, data) VALUES (?, ?, ?)";
         try(PreparedStatement statement = connection.getConnection().prepareStatement(SQL)){
             statement.setInt(1, size);
             statement.setString(2, name);
-            statement.setString(3, this.objects.toString());
+            statement.setString(3, world.maze.getObjects().toString());
             final boolean resultSet = statement.execute();
 
             if(resultSet){
@@ -71,6 +69,7 @@ public class Database implements Persistence    {
         }
         connection.disconnect();
     }
+
 
     @Override
     public void updateWorld(String name) {
@@ -113,22 +112,27 @@ public class Database implements Persistence    {
         }
     }
 
-    @Override
-    public void addObstacleListType(Vector<Obstacle> objects, String type) {
-        for (Obstacle obstacle: objects){
-            this.obstacles.put(new JSONObject().put("type", type).put("position",
-                    new JSONArray().put(obstacle.getBottomLeftX()).put(obstacle.getBottomLeftY())));
-        }
-    }
 
-    @Override
-    public void addAllObstacles(World world) {
-        addObstacleListType(world.getMaze().getObstacles(), "OBSTACLE");
-        addObstacleListType(world.getMaze().getPits(), "PIT");
-        addObstacleListType(world.getMaze().getMines(), "MINE");
+    public String getWorldObjects(String name) throws SQLException {
+        connection.connect();
+        String SQL = "SELECT size, data FROM worlds WHERE name = ?";
 
-        for (int i = 0; i < obstacles.length(); i++){
-            this.objects.append("objects", obstacles.get(i));
+        try(PreparedStatement statement = connection.getConnection().prepareStatement(SQL)){
+            statement.setString(1, name);
+            final boolean resultSet = statement.execute();
+
+            if(!resultSet) {
+                throw new RuntimeException("Got unexpected SQL result set.");
+            }
+            ResultSet results = statement.getResultSet();
+            String data = results.getString("data");
+            connection.disconnect();
+            return data;
+
+        } catch (SQLException throwables) {
+            System.out.println("World " + name + " does not exist.");
+            connection.disconnect();
+            return null;
         }
     }
 }

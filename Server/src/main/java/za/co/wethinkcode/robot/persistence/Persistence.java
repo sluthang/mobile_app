@@ -21,8 +21,4 @@ public interface Persistence {
 
     boolean readWorld(World world, String name) throws SQLException;
 
-    void addObstacleListType(Vector <Obstacle> objects, String type);
-
-    void addAllObstacles(World world);
-
 }

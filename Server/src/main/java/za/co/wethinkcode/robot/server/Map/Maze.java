@@ -1,12 +1,11 @@
 package za.co.wethinkcode.robot.server.Map;
 
+import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
-
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,6 +22,8 @@ public interface Maze {
 
     Vector<Obstacle> getMines();
 
+    JSONObject getObjects();
+
     void resetAllObstacles();
 
     void restoreAllObstacles(String string) throws ParseException;
@@ -30,6 +31,12 @@ public interface Maze {
     void hitMine(Position minePosition, World world, String name);
 
     void createMine(Position position);
+
+    void addObstacleListType(Vector<Obstacle> objects, String type);
+
+    void addAllObstacles(World world);
+
+    void clearObjects();
 
     /**
      * Checks if this maze has at least one obstacle that blocks the path that goes from coordinate (x1, y1) to (x2, y2).
