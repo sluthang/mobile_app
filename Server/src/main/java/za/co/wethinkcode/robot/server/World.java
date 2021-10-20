@@ -1,5 +1,6 @@
 package za.co.wethinkcode.robot.server;
 
+import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.Map.*;
 import za.co.wethinkcode.robot.server.Robot.Position;
@@ -7,6 +8,7 @@ import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server.MultiServer;
 import za.co.wethinkcode.robot.server.Server.Server;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,6 +58,10 @@ public class World{
         return this.maze.getObstacles();
     }
 
+    public Vector<Obstacle> getPits(){
+        return this.maze.getPits();
+    }
+
     /**
      * Remove the robot at the given key.
      * If a robot is dead or a client is disconnected this method will need to called to remove them from play.
@@ -70,8 +76,8 @@ public class World{
      * @param command to be executed.
      * @param server that the command will issue data.
      */
-    public String handleCommand(Command command, Server server) {
-        return command.execute(this, server);
+    public String handleCommand(Command command, Server server, String name) {
+        return command.execute(this, name);
     }
 
     /**
@@ -89,7 +95,11 @@ public class World{
      * @return Robot object.
      */
     public Robot getRobot(String name){
-        return this.robots.get(name);
+        try {
+            return this.robots.get(name);
+        } catch (Exception e){
+            return null;
+        }
     }
 
     /**
@@ -146,5 +156,25 @@ public class World{
      */
     public void setTOP_LEFT(Position TOP_LEFT) {
         this.TOP_LEFT = TOP_LEFT;
+    }
+
+    public void kill(World world, String message, String name) {
+
+        world.getRobot(name).setShields(-1);
+
+        ResponseBuilder response = new ResponseBuilder();
+        JSONObject data = new JSONObject();
+        data.put("message", message);
+        response.addData(data);
+        response.add("result", "OK");
+        response.add("state", world.getRobot(name).getState());
+
+        System.out.println("\033[31;1m"+"User: "+name+" has been killed!\n"+
+                "Reason for death: "+"\033[0m"+message);
+
+        //Sends response to client and closes their thread.
+        world.getRobot(name).setActivity(false);
+//        if(socket_server)
+        world.getRobot(name).getOut().println(response);
     }
 }

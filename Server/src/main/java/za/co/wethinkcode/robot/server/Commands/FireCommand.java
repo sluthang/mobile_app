@@ -25,13 +25,13 @@ public class FireCommand extends Command{
      * 4. if a robot is found a response is build for the client with the robot hits state.
      * 5. getHit is called and the robot hit is passed through as an argument.
      * @param world object currently used.
-     * @param server of the client calling the fire command.
+//     * @param server of the client calling the fire command.
      */
     @Override
-    public String execute(World world, Server server) {
+    public String execute(World world, String name) {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         // If robot has no shots left a message is sent to the client to reload.
-        if (server.robot.getShots() == 0) {
+        if (world.getRobot(name).getShots() == 0) {
             responseBuilder.add("result", "ERROR");
             JSONObject data = new JSONObject();
             data.put("message", "Please reload.");
@@ -42,7 +42,7 @@ public class FireCommand extends Command{
         // Check which direction the robot is firing in.
         int xStep = 0;
         int yStep = 0;
-        switch (server.robot.getCurrentDirection()) {
+        switch (world.getRobot(name).getCurrentDirection()) {
             case NORTH: yStep = 1; break;
             case EAST: xStep = 1; break;
             case SOUTH: yStep = -1; break;
@@ -50,10 +50,10 @@ public class FireCommand extends Command{
         }
 
         // Create the relevant vars to be used for checking.
-        Position robotPos = server.robot.getPosition();
+        Position robotPos = world.getRobot(name).getPosition();
         Position walker = new Position(robotPos.getX(), robotPos.getY());
         Robot target = null;
-        int distance = 3 - (server.robot.getMaxShots() - 3);
+        int distance = 3 - (world.getRobot(name).getMaxShots() - 3);
         int initialDistance = distance;
         Set<String> keys = world.getRobots().keySet();
         boolean hit = false;
@@ -73,7 +73,7 @@ public class FireCommand extends Command{
                 hit = true;
                 break;
             }
-            if (world.maze.blocksPosition(world.getRobots(), walker, server.robotName)
+            if (world.maze.blocksPosition(world.getRobots(), walker, name)
                     != UpdateResponse.SUCCESS) {
                 break;
             }
@@ -82,7 +82,7 @@ public class FireCommand extends Command{
 
         responseBuilder.add("result", "OK");
         JSONObject data = new JSONObject();
-        server.robot.setShots(server.robot.getShots() - 1);
+        world.getRobot(name).setShots(world.getRobot(name).getShots() - 1);
         if (hit) {
             data.put("message", "Hit");
             data.put("distance", initialDistance - distance + 1);

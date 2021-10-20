@@ -13,6 +13,5 @@ public class EmptyMaze extends BaseMaze {
     public EmptyMaze(Position position, boolean specified) {
         String whatIDo = "I do nothing :)!";
         addSpecifiedObstacle(specified, position);
-
     }
 }

@@ -8,6 +8,7 @@ import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server.Server;
+import za.co.wethinkcode.robot.server.World;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -127,15 +128,15 @@ public class BaseMaze implements Maze {
      * If the mine is found that the robot has triggered their health will be reduced and the mine will be removed
      * from the list of currently active mines on the field.
      * @param robotPosition position of robot on mine.
-     * @param server of the robot that will be hit by the mine.
+//     * @param server of the robot that will be hit by the mine.
      */
-    public void hitMine(Position robotPosition, Server server) {
+    public void hitMine(Position robotPosition, World world, String name) {
         Iterator<Obstacle> i = this.minesList.iterator();
 
         while (i.hasNext()) {
             Obstacle mine = i.next();
             if (mine.blocksPosition(robotPosition)) {
-                server.robot.takeDamage(3);
+                world.getRobot(name).takeDamage(3);
                 i.remove();
             }
         }

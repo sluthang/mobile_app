@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
-import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.World;
 
@@ -23,25 +22,25 @@ public class LookCommand extends Command{
         array = new JSONArray();
     }
 
-    public String execute(World world, Server server) {
+    public String execute(World world, String name) {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         JSONObject data = new JSONObject();
         responseBuilder.add("result", "OK");
 
-        checkObstacles(server, world.getMaze().getObstacles(), world.VISIBILITY);
-        checkObstacles(server, world.getMaze().getPits(), world.VISIBILITY);
-        checkObstacles(server, world.getMaze().getMines(), (int) Math.floor(world.VISIBILITY/2.0));
-        checkRobots(server, world.getRobots(), world.VISIBILITY);
-        checkForEdge(server, world, world.VISIBILITY);
+        checkObstacles(world.getMaze().getObstacles(), world.VISIBILITY, world, name);
+        checkObstacles(world.getMaze().getPits(), world.VISIBILITY, world, name);
+        checkObstacles(world.getMaze().getMines(), (int) Math.floor(world.VISIBILITY/2.0), world, name);
+        checkRobots(world.getRobots(), world.VISIBILITY, world, name);
+        checkForEdge(world, world.VISIBILITY, name);
 
         data.put("objects", array);
         responseBuilder.addData(data);
-        responseBuilder.add("state", server.robot.getState());
+        responseBuilder.add("state", world.getRobot(name).getState());
         return responseBuilder.toString();
     }
 
-    private void checkObstacles(Server server, Vector<Obstacle> obsList, int visionRange) {
-        Robot robot = server.robot;
+    private void checkObstacles(Vector<Obstacle> obsList, int visionRange, World world, String name) {
+        Robot robot = world.getRobot(name);
 
         for (Obstacle obstacle: obsList) {
 
@@ -57,49 +56,49 @@ public class LookCommand extends Command{
         }
     }
 
-    private void checkRobots(Server server, ConcurrentHashMap<String, Robot> robots, int visionRange) {
+    private void checkRobots(ConcurrentHashMap<String, Robot> robots, int visionRange, World world, String name ) {
         Set<String> keys = robots.keySet();
 
         for (String key : keys) {
             Robot robot = robots.get(key);
-            if (key.equals(server.robotName)) {
+            if (key.equals(name)) {
                 continue;
             }
-            if (robot.getPosition().getY() > server.robot.getPosition().getY() &&
-                    robot.getPosition().getY() < server.robot.getPosition().getY()+visionRange &&
-                        robot.getPosition().getX() == server.robot.getPosition().getX()) {
-                this.array.add(makeJsonObject(robot, (robot.getPosition().getY() - server.robot.getPosition().getY()), "NORTH"));
-            } if (robot.getPosition().getX() > server.robot.getPosition().getX() &&
-                    robot.getPosition().getX() < server.robot.getPosition().getX()+visionRange &&
-                        robot.getPosition().getY() == server.robot.getPosition().getY()) {
-                this.array.add(makeJsonObject(robot, (robot.getPosition().getX() - server.robot.getPosition().getX()), "EAST"));
-            } if (robot.getPosition().getY() < server.robot.getPosition().getY() &&
-                    robot.getPosition().getY() > server.robot.getPosition().getY()-visionRange &&
-                        robot.getPosition().getX() == server.robot.getPosition().getX()) {
-                this.array.add(makeJsonObject(robot, (server.robot.getPosition().getY() - robot.getPosition().getY()), "SOUTH"));
-            } if (robot.getPosition().getX() < server.robot.getPosition().getX() &&
-                    robot.getPosition().getX() > server.robot.getPosition().getX()-visionRange &&
-                        robot.getPosition().getY() == server.robot.getPosition().getY()) {
-                this.array.add(makeJsonObject(robot, (server.robot.getPosition().getX() - robot.getPosition().getX()), "WEST"));
+            if (robot.getPosition().getY() > world.getRobot(name).getPosition().getY() &&
+                    robot.getPosition().getY() < world.getRobot(name).getPosition().getY()+visionRange &&
+                        robot.getPosition().getX() == world.getRobot(name).getPosition().getX()) {
+                this.array.add(makeJsonObject(robot, (robot.getPosition().getY() - world.getRobot(name).getPosition().getY()), "NORTH"));
+            } if (robot.getPosition().getX() > world.getRobot(name).getPosition().getX() &&
+                    robot.getPosition().getX() < world.getRobot(name).getPosition().getX()+visionRange &&
+                        robot.getPosition().getY() == world.getRobot(name).getPosition().getY()) {
+                this.array.add(makeJsonObject(robot, (robot.getPosition().getX() - world.getRobot(name).getPosition().getX()), "EAST"));
+            } if (robot.getPosition().getY() < world.getRobot(name).getPosition().getY() &&
+                    robot.getPosition().getY() > world.getRobot(name).getPosition().getY()-visionRange &&
+                        robot.getPosition().getX() == world.getRobot(name).getPosition().getX()) {
+                this.array.add(makeJsonObject(robot, (world.getRobot(name).getPosition().getY() - robot.getPosition().getY()), "SOUTH"));
+            } if (robot.getPosition().getX() < world.getRobot(name).getPosition().getX() &&
+                    robot.getPosition().getX() > world.getRobot(name).getPosition().getX()-visionRange &&
+                        robot.getPosition().getY() == world.getRobot(name).getPosition().getY()) {
+                this.array.add(makeJsonObject(robot, (world.getRobot(name).getPosition().getX() - robot.getPosition().getX()), "WEST"));
             }
         }
     }
 
-    private void checkForEdge(Server server, World world, int visionRange) {
+    private void checkForEdge(World world, int visionRange, String name) {
 
 
-        if (server.robot.getPosition().getY() + (visionRange-1) >= world.TOP_LEFT.getY() &&
-                server.robot.getPosition().getY() <= world.TOP_LEFT.getY()) {
-            this.array.add(makeEdgeJson("NORTH", (world.TOP_LEFT.getY() - server.robot.getPosition().getY())));
-        } if (server.robot.getPosition().getX() + (visionRange-1) >= world.BOTTOM_RIGHT.getX() &&
-                server.robot.getPosition().getX() <= world.BOTTOM_RIGHT.getX()) {
-            this.array.add(makeEdgeJson("EAST", (world.BOTTOM_RIGHT.getX() - server.robot.getPosition().getX())));
-        } if (server.robot.getPosition().getY() - (visionRange-1) <= world.BOTTOM_RIGHT.getY() &&
-                server.robot.getPosition().getY() >= world.BOTTOM_RIGHT.getY()) {
-            this.array.add(makeEdgeJson("SOUTH", (server.robot.getPosition().getY() - world.BOTTOM_RIGHT.getY())));
-        } if (server.robot.getPosition().getX() - (visionRange-1) <= world.TOP_LEFT.getX() &&
-                server.robot.getPosition().getX() >= world.TOP_LEFT.getX()) {
-            this.array.add(makeEdgeJson("WEST", (server.robot.getPosition().getX() - world.TOP_LEFT.getX())));
+        if (world.getRobot(name).getPosition().getY() + (visionRange-1) >= world.TOP_LEFT.getY() &&
+                world.getRobot(name).getPosition().getY() <= world.TOP_LEFT.getY()) {
+            this.array.add(makeEdgeJson("NORTH", (world.TOP_LEFT.getY() - world.getRobot(name).getPosition().getY())));
+        } if (world.getRobot(name).getPosition().getX() + (visionRange-1) >= world.BOTTOM_RIGHT.getX() &&
+                world.getRobot(name).getPosition().getX() <= world.BOTTOM_RIGHT.getX()) {
+            this.array.add(makeEdgeJson("EAST", (world.BOTTOM_RIGHT.getX() - world.getRobot(name).getPosition().getX())));
+        } if (world.getRobot(name).getPosition().getY() - (visionRange-1) <= world.BOTTOM_RIGHT.getY() &&
+                world.getRobot(name).getPosition().getY() >= world.BOTTOM_RIGHT.getY()) {
+            this.array.add(makeEdgeJson("SOUTH", (world.getRobot(name).getPosition().getY() - world.BOTTOM_RIGHT.getY())));
+        } if (world.getRobot(name).getPosition().getX() - (visionRange-1) <= world.TOP_LEFT.getX() &&
+                world.getRobot(name).getPosition().getX() >= world.TOP_LEFT.getX()) {
+            this.array.add(makeEdgeJson("WEST", (world.getRobot(name).getPosition().getX() - world.TOP_LEFT.getX())));
         }
     }
 

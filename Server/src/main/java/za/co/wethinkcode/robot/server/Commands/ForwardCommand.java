@@ -1,6 +1,5 @@
 package za.co.wethinkcode.robot.server.Commands;
 
-import org.apache.maven.lifecycle.internal.ReactorBuildStatus;
 import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Robot.Direction;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
@@ -25,7 +24,7 @@ public class ForwardCommand extends Command {
      * number of steps
      * */
     @Override
-    public String execute(World world, Server server) {
+    public String execute(World world, String name) {
         JSONObject data = new JSONObject();
         ResponseBuilder responseBuilder = new ResponseBuilder();
         int nrSteps;
@@ -39,7 +38,7 @@ public class ForwardCommand extends Command {
             data.put("message", "Could not parse arguments");
             responseBuilder.addData(data);
             responseBuilder.add("result", "ERROR");
-            responseBuilder.add("state", server.robot.getState());
+            responseBuilder.add("state", world.getRobot(name).getState());
             return responseBuilder.toString();
         }
 
@@ -47,7 +46,7 @@ public class ForwardCommand extends Command {
         int step = 1;
         if (nrSteps < 0) step = -1;
         while (nrSteps != 0 && response == UpdateResponse.SUCCESS) {
-            response =  updatePosition(step, server, world);
+            response =  updatePosition(step, world, name);
             nrSteps -= step;
         }
 
@@ -58,21 +57,21 @@ public class ForwardCommand extends Command {
             message = "Obstructed";
         } else if (response == UpdateResponse.FAILED_BOTTOMLESS_PIT) {
             message = "Fell";
-            server.robot.kill(world, server, "Fell");
+            world.kill(world, message, name);
         } else if (response == UpdateResponse.FAILED_HIT_MINE) {
             message = "Mine";
-            world.maze.hitMine(server.robot.getPosition(), server);
-            if (server.robot.isDead().equals("DEAD")) {
-                server.robot.kill(world, server, "Mine");
+            world.maze.hitMine(world.getRobot(name).getPosition(), world, name);
+            if (world.getRobot(name).isDead().equals("DEAD")) {
+                world.kill(world, message, name);
             }
         } else if (response == UpdateResponse.FAILED_OUTSIDE_WORLD){
-            message = setMessageAtEdge(server.robot.getCurrentDirection());
+            message = setMessageAtEdge(world.getRobot(name).getCurrentDirection());
         }
 
         data.put("message", message);
         responseBuilder.addData(data);
         responseBuilder.add("result", "OK");
-        responseBuilder.add("state", server.robot.getState());
+        responseBuilder.add("state", world.getRobot(name).getState());
         return responseBuilder.toString();
     }
 
@@ -97,6 +96,21 @@ public class ForwardCommand extends Command {
                 message = "At the SOUTH edge";
         }
         return message;
+    }
+
+    public String deathResponse(World world, Server server, String message, String name) {
+        //Sets the robots shields to below 0.
+        world.getRobot(name).setShields(-1);
+
+        //Builds a Json response to send to client.
+        ResponseBuilder response = new ResponseBuilder();
+        JSONObject data = new JSONObject();
+        data.put("message", message);
+        response.addData(data);
+        response.add("result", "OK");
+        response.add("state", world.getRobot(name).getState());
+
+        return response.toString();
     }
 }
 

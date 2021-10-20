@@ -5,7 +5,6 @@ import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Robot.Direction;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 @SuppressWarnings("unused")
@@ -13,7 +12,7 @@ public abstract class Command {
     private final String name;
     private String argument;
 
-    public abstract String execute(World world, Server server);
+    public abstract String execute(World world, String name  );
 
     /**
      * constructor for command with no arguments
@@ -93,9 +92,9 @@ public abstract class Command {
      * @param nrSteps: the number of steps the robot will move;
      * @return: an UpdateResponse of what the result of moving the robot is.
      * */
-    public UpdateResponse updatePosition(int nrSteps, Server server, World world) {
-        Position currentPosition = server.robot.getPosition();
-        Direction currentDirection = server.robot.getCurrentDirection();
+    public UpdateResponse updatePosition(int nrSteps, World world, String name) {
+        Position currentPosition = world.getRobot(name).getPosition();
+        Direction currentDirection = world.getRobot(name).getCurrentDirection();
 
         int oldX = currentPosition.getX();
         int oldY = currentPosition.getY();
@@ -121,15 +120,15 @@ public abstract class Command {
 
         UpdateResponse response;
         if (Math.abs(nrSteps) == 1) {
-            response = world.maze.blocksPosition(world.getRobots(), newPosition, server.robotName);
+            response = world.maze.blocksPosition(world.getRobots(), newPosition, name);
         }
         else {
-            response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), server.robotName);
+            response = world.maze.blocksPath(oldPosition, newPosition, world.getRobots(), name);
             //this broke, don't touch
         }
 
         if (response == UpdateResponse.FAILED_HIT_MINE) {
-            server.robot.setPosition(newPosition);
+            world.getRobot(name).setPosition(newPosition);
             return response;
         }
         if (response != UpdateResponse.SUCCESS) return response;
@@ -137,7 +136,7 @@ public abstract class Command {
         response = world.isInWorld(oldPosition, newPosition);
         if (response != UpdateResponse.SUCCESS) return response;
 
-        server.robot.setPosition(newPosition);
+        world.getRobot(name).setPosition(newPosition);
         return UpdateResponse.SUCCESS;
     }
 }

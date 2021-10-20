@@ -5,6 +5,7 @@ import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server.Server;
+import za.co.wethinkcode.robot.server.World;
 
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +27,7 @@ public interface Maze {
 
     void restoreAllObstacles(String string) throws ParseException;
 
-    void hitMine(Position minePosition, Server server);
+    void hitMine(Position minePosition, World world, String name);
 
     void createMine(Position position);
 
