@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Utility.Schedule;
 import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
@@ -22,7 +23,8 @@ public class RepairCommand extends Command{
      * @param world;
      * @param server;
      */
-    public void execute(World world, Server server) {
+    public String execute(World world, Server server) {
+        ResponseBuilder responseBuilder  =  new ResponseBuilder();
         try {
             server.robot.setStatus("REPAIR");
             new Schedule(server, world, "repair", world.REPAIR_TIME);
@@ -31,7 +33,10 @@ public class RepairCommand extends Command{
         }
         JSONObject data = new JSONObject();
         data.put("message", "Repair");
-        server.response.addData(data);
-        server.response.add("result", "OK");
+        responseBuilder.addData(data);
+        responseBuilder.add("result", "OK");
+        responseBuilder.add("state", server.robot.getState());
+
+        return responseBuilder.toString();
     }
 }

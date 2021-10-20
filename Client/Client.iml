@@ -70,14 +70,5 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.12.5" level="project" />
     <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.4" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.36.0.3" level="project" />
-    <orderEntry type="module-library">
-      <library name="Maven: net.lemnik:eodsql:2.2">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/eodsql.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
   </component>
 </module>

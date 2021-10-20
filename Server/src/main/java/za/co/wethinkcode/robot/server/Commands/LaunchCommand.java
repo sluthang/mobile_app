@@ -2,11 +2,13 @@ package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.junit.internal.RealSystem;
 import za.co.wethinkcode.robot.server.Server.MultiServer;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server.Server;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.World;
 
 import java.util.Random;
@@ -32,18 +34,17 @@ public class LaunchCommand extends Command{
      */
     
     @Override
-    public void execute(World world, Server server) {
+    public String execute(World world, Server server) {
         JSONObject data = new JSONObject();
+        ResponseBuilder responseBuilder = new ResponseBuilder();
         // Checks if the Robot exists already, then returns error if it is.
         if (!doesRobotExist(world, server) || server.robot != null) {
             server.robotName = null;
             data.put("message", "Too many of you in this world");
-            server.response.addData(data);
-            server.response.add("result", "ERROR");
-            return;
+            responseBuilder.addData(data);
+            responseBuilder.add("result", "ERROR");
+            return responseBuilder.toString();
         }
-
-        Random random = new Random();
 
         boolean positionSet = false;
         for (int x = - world.TOP_LEFT.getY(); x <= world.TOP_LEFT.getY(); x++) {
@@ -77,9 +78,9 @@ public class LaunchCommand extends Command{
 
         if (!positionSet) {
             data.put("message", "No more space in this world");
-            server.response.addData(data);
-            server.response.add("result", "ERROR");
-            return;
+            responseBuilder.addData(data);
+            responseBuilder.add("result", "ERROR");
+            return responseBuilder.toString();
         }
 
         data.put("position", server.robot.getPosition().getAsList());
@@ -89,8 +90,11 @@ public class LaunchCommand extends Command{
         data.put("mine", MultiServer.config.getMineSetTime());
         data.put("shields", server.robot.getShields());
 
-        server.response.addData(data);
-        server.response.add("result", "OK");
+        responseBuilder.addData(data);
+        responseBuilder.add("result", "OK");
+        responseBuilder.add("state", server.robot.getState());
+
+        return responseBuilder.toString();
     }
 
     private boolean doesRobotExist(World world, Server server) {

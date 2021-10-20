@@ -1,9 +1,11 @@
 package za.co.wethinkcode.robot.server.Commands;
 
+import org.apache.maven.lifecycle.internal.ReactorBuildStatus;
 import org.json.simple.JSONObject;
 import za.co.wethinkcode.robot.server.Robot.Direction;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server.Server;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.World;
 
 @SuppressWarnings({"unchecked", "unused"})
@@ -23,8 +25,9 @@ public class ForwardCommand extends Command {
      * number of steps
      * */
     @Override
-    public void execute(World world, Server server) {
+    public String execute(World world, Server server) {
         JSONObject data = new JSONObject();
+        ResponseBuilder responseBuilder = new ResponseBuilder();
         int nrSteps;
         try {
             String argument = getArgument();
@@ -34,9 +37,10 @@ public class ForwardCommand extends Command {
             nrSteps = Integer.parseInt(argument);
         }catch (NumberFormatException e) {
             data.put("message", "Could not parse arguments");
-            server.response.addData(data);
-            server.response.add("result", "ERROR");
-            return;
+            responseBuilder.addData(data);
+            responseBuilder.add("result", "ERROR");
+            responseBuilder.add("state", server.robot.getState());
+            return responseBuilder.toString();
         }
 
         UpdateResponse response = UpdateResponse.SUCCESS;
@@ -66,8 +70,10 @@ public class ForwardCommand extends Command {
         }
 
         data.put("message", message);
-        server.response.addData(data);
-        server.response.add("result", "OK");
+        responseBuilder.addData(data);
+        responseBuilder.add("result", "OK");
+        responseBuilder.add("state", server.robot.getState());
+        return responseBuilder.toString();
     }
 
     /**
