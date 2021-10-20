@@ -28,8 +28,11 @@ public class WorldApiHandler {
     }
 
     public static void launchRobotCommand(Context context, World world){
+        String name = context.pathParamAsClass("name", String.class).get();
+        context.header("Location", "/robot/" + name);
         JSONObject request = (JSONObject)JSONValue.parse(context.body());
         Command command = Command.create(request);
-        //TODO
+        context.status(HttpCode.CREATED);
+        context.result(world.handleCommand(command, name));
     }
 }

@@ -62,8 +62,7 @@ public class Server implements Runnable {
             out.println(response); /** Printing response as it should appear when it's an invalid command */
         }
 
-        catch(IOException | NullPointerException  ex) {
-            ex.printStackTrace();
+        catch(IOException | NullPointerException ex) {
             System.out.println("Shutting down single client server");
         } finally {
             closeQuietly();
@@ -83,7 +82,7 @@ public class Server implements Runnable {
         this.robotName = jsonMessage.get("robot").toString();
 
         Command command = Command.create(jsonMessage);
-        responseData = world.handleCommand(command, this, this.robotName);
+        responseData = world.handleCommand(command, this.robotName);
 
         JSONObject response = (JSONObject)JSONValue.parse(responseData);
 
@@ -110,11 +109,11 @@ public class Server implements Runnable {
 
         if(robot.getStatus().equals("NORMAL")) {
             Command command = Command.create(jsonMessage);
-            responseData = world.handleCommand(command, this, this.robotName);
+            responseData = world.handleCommand(command, this.robotName);
         } else {
             jsonMessage.put("command", "state");
             Command command = Command.create(jsonMessage);
-            responseData = world.handleCommand(command, this, this.robotName);
+            responseData = world.handleCommand(command, this.robotName);
         }
 
         if(robot.getStatus().equalsIgnoreCase("dead")){

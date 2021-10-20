@@ -74,9 +74,8 @@ public class World{
     /**
      * Method will call the execute method on the given command.
      * @param command to be executed.
-     * @param server that the command will issue data.
      */
-    public String handleCommand(Command command, Server server, String name) {
+    public String handleCommand(Command command, String name) {
         return command.execute(this, name);
     }
 

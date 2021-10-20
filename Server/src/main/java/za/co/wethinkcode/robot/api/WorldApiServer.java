@@ -13,7 +13,6 @@ import za.co.wethinkcode.robot.server.World;
 
 public class WorldApiServer {
 
-    //    public static World world;
     public static Option port;
     public static Option size;
     public static Option obstacle;
@@ -31,6 +30,7 @@ public class WorldApiServer {
 
         this.server.get("/world", context -> WorldApiHandler.getObstaclesFromCurrentWorld(context, world));
         this.server.get("/world/{world}", context -> WorldApiHandler.getObstaclesFromDatabase(context));
+        this.server.post("/robot/{name}", context -> WorldApiHandler.launchRobotCommand(context, world));
     }
 
     private OpenApiOptions getApiOptions(){
