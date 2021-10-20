@@ -1,4 +1,3 @@
-import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import za.co.wethinkcode.robot.persistence.Database;
 import za.co.wethinkcode.robot.server.Robot.Position;
@@ -12,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ServerCommandTests {
 
     @Test
-    public void restoreCommand() throws SQLException, ParseException {
+    public void restoreCommand() throws SQLException {
         int worldSize = 4;
         Position BOTTOM_RIGHT = new Position((worldSize/2),(-worldSize/2));
         Position TOP_LEFT = new Position((-worldSize/2),(worldSize/2));
