@@ -1,6 +1,5 @@
 package za.co.wethinkcode.robot.persistence;
 
-import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.World;
 
@@ -14,11 +13,13 @@ public interface Persistence {
 
     void dropTable() throws SQLException;
 
-    void saveWorld(World world, String name) throws SQLException;
+    void saveWorld(World world, String name, int size) throws SQLException;
 
     void updateWorld(String name);
 
     void deleteWorld(String name);
+
+    boolean readWorld(World world, String name) throws SQLException;
 
     void addObstacleListType(Vector <Obstacle> objects, String type);
 

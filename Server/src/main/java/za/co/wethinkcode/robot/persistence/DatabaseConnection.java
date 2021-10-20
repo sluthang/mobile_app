@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import net.lemnik.eodsql.QueryTool;
-
 public class DatabaseConnection {
 
     public String dbUrl;
@@ -26,5 +24,4 @@ public class DatabaseConnection {
     public Connection getConnection() {
         return this.connection;
     }
-
 }

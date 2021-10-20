@@ -1,7 +1,6 @@
 package za.co.wethinkcode.robot.server.Server;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.persistence.Database;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.World;
@@ -181,13 +180,13 @@ public class ServerManagement implements Runnable {
      * @param inputString List<String>
      * @throws SQLException exception
      */
-    private void multiArgCommands(List<String> inputString) throws SQLException, ParseException {
+    private void multiArgCommands(List<String> inputString) throws SQLException {
         switch (inputString.get(0)) {
             case "purge":
                 purgeUser(inputString.get(1));
                 break;
             case "save":
-                database.saveWorld(world, inputString.get(1));
+                database.saveWorld(world, inputString.get(1), MultiServer.getWorldSize());
                 break;
             case "restore":
                 if(database.readWorld(world, inputString.get(1))){
