@@ -107,7 +107,8 @@ public class ServerManagement implements Runnable {
     private void purgeUser(String username) {
         for (Server client:MultiServer.clients) {
             if (client.robotName.equalsIgnoreCase(username)) {
-                client.robot.kill(world, client, "Bonk");
+                client.robot.setActivity(false);
+//                client.robot.kill(world, client, "Bonk");
                 System.out.println("Purged user!");
                 break;
             }

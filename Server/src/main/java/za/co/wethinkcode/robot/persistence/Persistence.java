@@ -13,8 +13,12 @@ public interface Persistence {
 
     void dropTable() throws SQLException;
 
-    void addObstacleListType(Vector <Obstacle> objects, String type);
+    void saveWorld(World world, String name, int size) throws SQLException;
 
-    void addAllObstacles(World world);
+    void updateWorld(String name);
+
+    void deleteWorld(String name);
+
+    boolean readWorld(World world, String name) throws SQLException;
 
 }

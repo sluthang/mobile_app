@@ -16,7 +16,7 @@ import java.net.Socket;
 @SuppressWarnings({"unchecked", "RedundantCollectionOperation"})
 public class Server implements Runnable {
 
-    private boolean running;
+    private boolean running_before_launch;
     public final Socket socket;
     public final BufferedReader in;
     public final PrintStream out;
@@ -34,7 +34,7 @@ public class Server implements Runnable {
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
         System.out.println("Waiting for client...");
-        running = true;
+        running_before_launch = true;
         this.world = world;
     }
 
@@ -43,13 +43,15 @@ public class Server implements Runnable {
         JSONObject result = new JSONObject();
         try {
             String messageFromClient;
-            while(robot == null) {
+            while(running_before_launch) {
                 messageFromClient = in.readLine();
                 handleMessageBeforeLaunch(messageFromClient);
             }
 
             MultiServer.clients.add(this);
-            while(running) {
+            //let the robot object have a copy of the out stream
+            world.getRobot(robotName).setOutStream(out);
+            while(world.getRobot(robotName).getActivity()) {
                 messageFromClient = in.readLine();
                 handleClientMessage(messageFromClient);
             }
@@ -60,7 +62,7 @@ public class Server implements Runnable {
             out.println(response); /** Printing response as it should appear when it's an invalid command */
         }
 
-        catch(IOException | NullPointerException  ex) {
+        catch(IOException | NullPointerException ex) {
             System.out.println("Shutting down single client server");
         } finally {
             closeQuietly();
@@ -77,14 +79,17 @@ public class Server implements Runnable {
 
         printClientMessage(jsonMessage);
         String responseData;
-        this.robotName = (String)jsonMessage.get("robot");
+        this.robotName = jsonMessage.get("robot").toString();
 
         Command command = Command.create(jsonMessage);
-        responseData = world.handleCommand(command, this);
+        responseData = world.handleCommand(command, this.robotName);
 
-            if (this.robot != null) {
-//                response.add("state", this.robot.getState());
-            }
+        JSONObject response = (JSONObject)JSONValue.parse(responseData);
+
+        if(response.get("result").equals("OK")){
+            running_before_launch = false;
+        }
+
         out.println(responseData);
     }
 
@@ -104,11 +109,16 @@ public class Server implements Runnable {
 
         if(robot.getStatus().equals("NORMAL")) {
             Command command = Command.create(jsonMessage);
-            responseData = world.handleCommand(command, this);
+            responseData = world.handleCommand(command, this.robotName);
         } else {
             jsonMessage.put("command", "state");
             Command command = Command.create(jsonMessage);
-            responseData = world.handleCommand(command, this);
+            responseData = world.handleCommand(command, this.robotName);
+        }
+
+        if(robot.getStatus().equalsIgnoreCase("dead")){
+            out.println(responseData);
+            closeQuietly();
         }
 
         out.println(responseData);
@@ -119,7 +129,6 @@ public class Server implements Runnable {
      * Calls the close Quietly command to end the threads process.
      */
     public void closeThread() {
-        this.running = false;
         closeQuietly();
     }
 

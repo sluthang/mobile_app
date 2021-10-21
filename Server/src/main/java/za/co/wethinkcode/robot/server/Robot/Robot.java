@@ -5,6 +5,9 @@ import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
+import java.io.BufferedReader;
+import java.io.PrintStream;
+
 @SuppressWarnings({"unused", "unchecked"})
 public class Robot {
     private final String name;
@@ -16,6 +19,9 @@ public class Robot {
     private int shields;
     private int oldShield;
     private int shots;
+    private boolean activity;
+    private PrintStream out;
+    private BufferedReader in;
 
     /**
      * Constructor for Robot class
@@ -24,6 +30,7 @@ public class Robot {
         this.name = name;
         this.status = "NORMAL";
         this.currentDirection = Direction.NORTH;
+        this.activity = false;
     }
 
     /**
@@ -251,5 +258,33 @@ public class Robot {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+
+    /**
+     * Setting the robot's activity
+     */
+    public void setActivity(boolean activity){
+        this.activity = activity;
+    }
+
+    public boolean getActivity(){
+        return this.activity;
+    }
+
+    public void setOutStream(PrintStream out){
+        this.out = out;
+    }
+
+    public PrintStream getOut(){
+        return this.out;
+    }
+
+    public void setInputStream(BufferedReader in){
+        this.in = in;
+    }
+
+    public BufferedReader getIn(){
+        return this.in;
     }
 }

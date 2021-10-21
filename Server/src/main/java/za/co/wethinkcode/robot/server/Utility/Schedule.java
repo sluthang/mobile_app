@@ -18,18 +18,18 @@ public class Schedule {
     private final Timer timer;
     private final Robot robot;
     private final String todo;
-    private final Server server;
     private final World world;
     private final int seconds;
+    private String name;
 
-    public Schedule(Server server, World world, String todo, int seconds) throws IOException {
+    public Schedule(World world, String todo, int seconds, String name) throws IOException {
         this.response = new ResponseBuilder();
         this.todo = todo;
         this.timer = new Timer();
-        this.robot = server.robot;
-        this.server = server;
+        this.robot = world.getRobot(name);
         this.world = world;
         this.seconds = seconds;
+        this.name = name;
         startTask();
     }
 
@@ -53,7 +53,7 @@ public class Schedule {
      * Robots shields will set to the maximum that were set at launch and state will be set to NORMAL.
      *A JsonObject is constructed to let the user know that the task has completed and is sent to the user with new the new state.
      */
-    private void repairRobot() {
+    private void repairRobot(World world) {
         robot.setShields(robot.getMaxShields());
         changeRobotState("NORMAL");
 
@@ -62,33 +62,33 @@ public class Schedule {
         response.addData(data);
         response.add("result", "OK");
         response.add("state", robot.getState());
-        server.out.println(response);
+        world.getRobot(this.name).getOut().println(response);
     }
 
     /**
      * Method will after a given seconds delay perform a task that repairs the robot.
      * Robot will move forward by one place and place a mine on the old location that he was on.
      * Status of robot is set to NORMAL and a JsonObject is built to send to the user with new state.
-     * @param server to perform task on.
+//     * @param server to perform task on.
      * @param world to update mines list.
      */
-    private void layMine(Server server, World world) {
-        try {Position oldPos = new Position(server.robot.getPosition().getX(),
-                server.robot.getPosition().getY());
+    private void layMine(World world, String name) {
+        try {Position oldPos = new Position(world.getRobot(name).getPosition().getX(),
+                world.getRobot(name).getPosition().getY());
 
-            if (server.robot.getShields() == 0){
+            if (world.getRobot(name).getShields() == 0){
                 world.getMaze().createMine(oldPos);
             }
-            server.robot.setShields(server.robot.getOldShield() - server.robot.getShields());
+            world.getRobot(name).setShields(world.getRobot(name).getOldShield() - world.getRobot(name).getShields());
 
             Command forward1 = new ForwardCommand("1");
-            forward1.execute(world, server);
+            forward1.execute(world, "hal");
             JSONObject data = new JSONObject();
-            if (oldPos.equals(server.robot.getPosition())) {
-                world.getMaze().hitMine(server.robot.getPosition(), server);
+            if (oldPos.equals(world.getRobot(name).getPosition())) {
+                world.getMaze().hitMine(world.getRobot(name).getPosition(), world, name);
                 data.put("message", "Mine");
-                if (server.robot.isDead().equals("DEAD")) {
-                    server.robot.kill(world, server, "Mine");
+                if (world.getRobot(name).isDead().equals("DEAD")) {
+                    world.kill(world, "Mine", name);
                 }
             }
             else {
@@ -96,11 +96,11 @@ public class Schedule {
             }
             response.addData(data);
 
-            server.robot.setStatus("NORMAL");
+            world.getRobot(name).setStatus("NORMAL");
 
             response.add("result", "OK");
             response.add("state", robot.getState());
-            server.out.println(response);
+            world.getRobot(name).getOut().println(response);
         } catch (Exception e) {
             System.out.println("Robot died before completion");
         }
@@ -110,10 +110,9 @@ public class Schedule {
      * Method will after a given seconds delay perform a task that reloads the robots ammo.
      * Robots shots will set to the maximum that were set at launch and state will be set to NORMAL.
      * A JsonObject is constructed to let the user know that the task has completed and is sent to the user with new the new state.
-     * @param server to issue commands to.
      */
-    private void reload(Server server) {
-        robot.setShots(robot.getMaxShots());
+    private void reload(World world, String name) {
+        world.getRobot(name).setShots(robot.getMaxShots());
         changeRobotState("NORMAL");
 
         JSONObject data = new JSONObject();
@@ -121,7 +120,7 @@ public class Schedule {
         response.addData(data);
         response.add("result", "OK");
         response.add("state", robot.getState());
-        server.out.println(response);
+        world.getRobot(name).getOut().println(response);
     }
 
     /**
@@ -131,13 +130,14 @@ public class Schedule {
         public void run() {
             switch (todo) {
                 case "mine":
-                    layMine(server, world);
+                    //ALERT {SPHE}
+                    layMine(world, name);
                     break;
                 case "reload":
-                    reload(server);
+                    reload(world, name);
                     break;
                 case "repair":
-                    repairRobot();
+                    repairRobot(world);
                     break;
             }
             timer.cancel(); //Terminate the timer thread

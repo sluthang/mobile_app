@@ -15,8 +15,6 @@ import java.util.Vector;
 
 public class Database implements Persistence    {
 
-    public JSONArray obstacles = new JSONArray();
-    public JSONObject objects = new JSONObject();
     private final DatabaseConnection connection;
     public final WorldDAI productQuery;
 
@@ -84,22 +82,26 @@ public class Database implements Persistence    {
     }
 
 
-    @Override
-    public void addObstacleListType(Vector<Obstacle> objects, String type) {
-        for (Obstacle obstacle: objects){
-            this.obstacles.put(new JSONObject().put("type", type).put("position",
-                    new JSONArray().put(obstacle.getBottomLeftX()).put(obstacle.getBottomLeftY())));
-        }
-    }
+    public String getWorldObjects(String name) throws SQLException {
+        connection.connect();
+        String SQL = "SELECT size, data FROM worlds WHERE name = ?";
 
-    @Override
-    public void addAllObstacles(World world) {
-        addObstacleListType(world.getMaze().getObstacles(), "OBSTACLE");
-        addObstacleListType(world.getMaze().getPits(), "PIT");
-        addObstacleListType(world.getMaze().getMines(), "MINE");
+        try(PreparedStatement statement = connection.getConnection().prepareStatement(SQL)){
+            statement.setString(1, name);
+            final boolean resultSet = statement.execute();
 
-        for (int i = 0; i < obstacles.length(); i++){
-            this.objects.append("objects", obstacles.get(i));
+            if(!resultSet) {
+                throw new RuntimeException("Got unexpected SQL result set.");
+            }
+            ResultSet results = statement.getResultSet();
+            String data = results.getString("data");
+            connection.disconnect();
+            return data;
+
+        } catch (SQLException throwables) {
+            System.out.println("World " + name + " does not exist.");
+            connection.disconnect();
+            return null;
         }
     }
 }
