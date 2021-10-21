@@ -1,19 +1,17 @@
 package za.co.wethinkcode.robot.persistence;
+
 import net.lemnik.eodsql.QueryTool;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.ORM.WorldDAI;
 import za.co.wethinkcode.robot.ORM.WorldDO;
-import za.co.wethinkcode.robot.server.Map.Obstacle;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.World;
 
-import java.sql.*;
-import java.util.Vector;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
-public class Database implements Persistence    {
+public class Database {
 
     private final DatabaseConnection connection;
     public final WorldDAI productQuery;
@@ -24,7 +22,6 @@ public class Database implements Persistence    {
         this.productQuery = QueryTool.getQuery(this.connection.getConnection(), WorldDAI.class );
     }
 
-    @Override
     public void createDatabase() throws SQLException {
         connection.connect();
         try (Statement stmt = connection.getConnection().createStatement()){
@@ -41,7 +38,6 @@ public class Database implements Persistence    {
         connection.disconnect();
     }
 
-    @Override
     public void dropTable() throws SQLException {
         connection.connect();
         try (Statement stmt = connection.getConnection().createStatement()){
@@ -54,10 +50,10 @@ public class Database implements Persistence    {
     }
 
     public void saveWorld(World world, String name) throws SQLException {
-        addAllObstacles(world);
+        world.getMaze().addAllObstacles(world);
         connection.connect();
 
-        this.productQuery.saveWorld(this.objects.toString(), name, world.BOTTOM_RIGHT.getX() * 2);
+        this.productQuery.saveWorld(world.maze.getObjects().toString(), name, world.BOTTOM_RIGHT.getX() * 2);
 
         System.out.println("WORLD SAVED SUCCESSFULLY!");
         connection.disconnect();
@@ -81,27 +77,10 @@ public class Database implements Persistence    {
         return true;
     }
 
-
     public String getWorldObjects(String name) throws SQLException {
-        connection.connect();
-        String SQL = "SELECT size, data FROM worlds WHERE name = ?";
-
-        try(PreparedStatement statement = connection.getConnection().prepareStatement(SQL)){
-            statement.setString(1, name);
-            final boolean resultSet = statement.execute();
-
-            if(!resultSet) {
-                throw new RuntimeException("Got unexpected SQL result set.");
-            }
-            ResultSet results = statement.getResultSet();
-            String data = results.getString("data");
-            connection.disconnect();
-            return data;
-
-        } catch (SQLException throwables) {
-            System.out.println("World " + name + " does not exist.");
-            connection.disconnect();
-            return null;
-        }
+        this.connection.connect();
+        WorldDO dataObject =  this.productQuery.readWorld(name);
+        
+        return dataObject.getWorldData();
     }
 }

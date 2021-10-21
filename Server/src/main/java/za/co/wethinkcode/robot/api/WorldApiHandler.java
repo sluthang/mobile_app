@@ -12,12 +12,21 @@ import java.sql.SQLException;
 
 public class WorldApiHandler {
 
-    private static final Database database = new Database("jdbc:sqlite:uss_victory_db.sqlite");
+    private static Database database;
+
+    static {
+        try {
+            database = new Database("jdbc:sqlite:uss_victory_db.sqlite");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void getObstaclesFromDatabase(Context context) throws SQLException {
         String name = context.pathParamAsClass("world", String.class).get();
         context.header("Location", "/world/" + name);
         context.status(HttpCode.OK);
+        System.out.println(database);
         context.result(database.getWorldObjects(name));
     }
 
