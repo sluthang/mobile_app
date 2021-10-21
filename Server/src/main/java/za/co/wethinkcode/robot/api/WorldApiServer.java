@@ -105,6 +105,6 @@ public class WorldApiServer {
     }
 
     public void stop(){
-        this.server.start();
+        this.server.stop();
     }
 }

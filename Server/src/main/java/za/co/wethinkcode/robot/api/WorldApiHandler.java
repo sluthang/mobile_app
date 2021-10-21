@@ -26,7 +26,6 @@ public class WorldApiHandler {
         String name = context.pathParamAsClass("world", String.class).get();
         context.header("Location", "/world/" + name);
         context.status(HttpCode.OK);
-        System.out.println(database);
         context.result(database.getWorldObjects(name));
     }
 
