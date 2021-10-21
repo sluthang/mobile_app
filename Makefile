@@ -46,6 +46,10 @@ development_build:
 	@echo "Building the release jar file..."
 	cd Server ; mvn package -Pserver-development-build
 
+api_development_build:
+	@echo "Building the release jar file..."
+	cd Server ; mvn package -Papi-server-development-build
+
 run_dev_build_2x2_world:
 	@echo "Running Dev build jar file..."
 	java -jar output/$(uss_victory_server) -s 2 &
@@ -129,4 +133,9 @@ stop_uss_victory_server:
 clean:
 	@echo "Cleaning up..."
 	rm -rf output Server/outptut Client/output && mvn clean
+
+#must run mvn compile before running this command.
+run_api_sever:
+	@echo "Running API Server..."
+	cd Server; mvn exec:java -Dexec.mainClass="za.co.wethinkcode.robot.api.WorldApiServer" -Dexec.classpathScope="compile"
 

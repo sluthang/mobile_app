@@ -144,6 +144,7 @@ public class Server implements Runnable {
 
             MultiServer.clients.remove(MultiServer.clients.indexOf(this));
             System.out.println(this.robotName + ": has left the server");
+            world.kill(world, "Disconnected", this.robotName);
 
             if (this.robot != null) {
                 world.removeRobot(this.robotName);

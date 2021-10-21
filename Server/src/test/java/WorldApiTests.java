@@ -15,8 +15,8 @@ public class WorldApiTests {
 
     private static WorldApiServer server;
 
-    @BeforeEach
-    public void startServer(){
+    @BeforeAll
+    public static void startServer(){
         int worldSize = 2;
         Position BOTTOM_RIGHT = new Position((worldSize/2),(-worldSize/2));
         Position TOP_LEFT = new Position((-worldSize/2),(worldSize/2));
@@ -25,8 +25,8 @@ public class WorldApiTests {
         server.start(6000);
     }
 
-    @AfterEach
-    public void stopServer(){
+    @AfterAll
+    public static void stopServer(){
         server.stop();
     }
     

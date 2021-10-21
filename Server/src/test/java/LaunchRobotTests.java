@@ -175,7 +175,6 @@ public class LaunchRobotTests {
     }
 
 
-    @Test
     public void getStateOfNoneExistingRobot() {
 
         // Given that I am connected to a running Robot Worlds server
