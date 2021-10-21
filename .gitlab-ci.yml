@@ -73,5 +73,5 @@ release_multiserver:
 
   script:
     - make release_build
-    - docker tag uss-victory-server:0.3.0 gitlab.wethinkco.de:5050/sprocopo/uss-victory
+    - docker tag uss-victory-server:0.1.0 gitlab.wethinkco.de:5050/sprocopo/uss-victory
     - docker push gitlab.wethinkco.de:5050/sprocopo/uss-victory
