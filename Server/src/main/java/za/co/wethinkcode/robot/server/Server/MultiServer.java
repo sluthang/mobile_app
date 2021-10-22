@@ -89,6 +89,7 @@ public class MultiServer {
 
         //Print world size
         System.out.println("Obstacles: " + world.getObstacles().size());
+        System.out.println("Pits: " + world.getPits().size());
         System.out.println("Server running & waiting for client connections.");
 
         // Create our Thread for using the System.in of the server, this will run along side the server.

@@ -1,8 +1,8 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Utility.Schedule;
-import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 import java.io.IOException;
@@ -21,35 +21,39 @@ public class LayMineCommand extends Command{
      * Starts the task scheduler for laying the mine on the field.
      * Build the JsonObject to send to the client stating that the task has started.
      * @param world;
-     * @param server;
+//     * @param server;
      */
     @Override
-    public void execute(World world, Server server) {
+    public String execute(World world, String name) {
         // Checks if the robot is allowed to lay mines.
-        if (canLay(server)) {
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        if (canLay(world, name)) {
             // Create a forward command to move the robot 1 step ahead after laying mine.
-            server.robot.setStatus("SETMINE");
-            server.robot.setOldShield(server.robot.getShields());
-            server.robot.setShields(0);
+            world.getRobot(name).setStatus("SETMINE");
+            world.getRobot(name).setOldShield(world.getRobot(name).getShields());
+            world.getRobot(name).setShields(0);
             try {
-                new Schedule(server, world, "mine", world.MINE_SET_TIME);
+                new Schedule(world, "mine", world.MINE_SET_TIME, name);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             JSONObject data = new JSONObject();
             data.put("message", "Done");
-            server.response.addData(data);
-            server.response.add("result", "OK");
+            responseBuilder.addData(data);
+            responseBuilder.add("result", "OK");
         } else {
             JSONObject data = new JSONObject();
             data.put("message", "No mines while using a gun.");
-            server.response.addData(data);
-            server.response.add("result", "ERROR");
+            responseBuilder.addData(data);
+            responseBuilder.add("result", "ERROR");
         }
+
+        responseBuilder.add("state", world.getRobot(name).getState());
+        return responseBuilder.toString();
     }
 
-    private boolean canLay(Server server) {
-        return (server.robot.getMaxShots() == 0);
+    private boolean canLay(World world, String name) {
+        return (world.getRobot(name).getMaxShots() == 0);
     }
 }

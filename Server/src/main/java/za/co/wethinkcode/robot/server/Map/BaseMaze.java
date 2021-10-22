@@ -1,13 +1,13 @@
 package za.co.wethinkcode.robot.server.Map;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
-import za.co.wethinkcode.robot.server.Server.Server;
+import za.co.wethinkcode.robot.server.World;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,6 +18,8 @@ public class BaseMaze implements Maze {
     Vector<Obstacle> obstaclesList = new Vector<>();
     Vector<Obstacle> pitsList = new Vector<>();
     Vector<Obstacle> minesList = new Vector<>();
+    public JSONObject objects = new JSONObject();
+    public JSONArray obstacles = new JSONArray();
 
 
     /**
@@ -41,6 +43,10 @@ public class BaseMaze implements Maze {
 
     public Vector<Obstacle> getMines() {
         return minesList;
+    }
+
+    public JSONObject getObjects() {
+        return this.objects;
     }
 
     /**
@@ -127,15 +133,15 @@ public class BaseMaze implements Maze {
      * If the mine is found that the robot has triggered their health will be reduced and the mine will be removed
      * from the list of currently active mines on the field.
      * @param robotPosition position of robot on mine.
-     * @param server of the robot that will be hit by the mine.
+//     * @param server of the robot that will be hit by the mine.
      */
-    public void hitMine(Position robotPosition, Server server) {
+    public void hitMine(Position robotPosition, World world, String name) {
         Iterator<Obstacle> i = this.minesList.iterator();
 
         while (i.hasNext()) {
             Obstacle mine = i.next();
             if (mine.blocksPosition(robotPosition)) {
-                server.robot.takeDamage(3);
+                world.getRobot(name).takeDamage(3);
                 i.remove();
             }
         }
@@ -276,6 +282,30 @@ public class BaseMaze implements Maze {
                     break;
             }
         }
+    }
+
+    public void addObstacleListType(Vector<Obstacle> objects, String type) {
+        for (Obstacle obstacle: objects){
+            this.obstacles.put(new JSONObject().put("type", type).put("position",
+                    new JSONArray().put(obstacle.getBottomLeftX()).put(obstacle.getBottomLeftY())));
+        }
+    }
+
+
+    public void addAllObstacles(World world) {
+        addObstacleListType(world.getMaze().getObstacles(), "OBSTACLE");
+        addObstacleListType(world.getMaze().getPits(), "PIT");
+        addObstacleListType(world.getMaze().getMines(), "MINE");
+
+        for (int i = 0; i < obstacles.length(); i++){
+            this.objects.append("objects", obstacles.get(i));
+        }
+    }
+
+    public void clearObjects(){
+        this.obstacles.clear();
+        this.objects.clear();
+
     }
 
     /**

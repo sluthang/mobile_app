@@ -29,7 +29,7 @@ run_reference_server_2x2_world_with_obstacle_tests: run_reference_server_2x2_wor
 
 # VARIABLES
 reference_server:= reference-server-0.2.1.jar
-uss_victory_server := robot-worlds-server-0.2.0-jar-with-dependencies.jar
+uss_victory_server := robot-worlds-server-0.3.0-jar-with-dependencies.jar
 2x2_world_port:= 6666
 2x2_world_with_obstacle_port:= 7676
 1x1_world_port:= 6767
@@ -45,6 +45,10 @@ release_build:
 development_build:
 	@echo "Building the release jar file..."
 	cd Server ; mvn package -Pserver-development-build
+
+api_development_build:
+	@echo "Building the release jar file..."
+	cd Server ; mvn package -Papi-server-development-build
 
 run_dev_build_2x2_world:
 	@echo "Running Dev build jar file..."
@@ -129,4 +133,9 @@ stop_uss_victory_server:
 clean:
 	@echo "Cleaning up..."
 	rm -rf output Server/outptut Client/output && mvn clean
+
+#must run mvn compile before running this command.
+run_api_sever:
+	@echo "Running API Server..."
+	cd Server; mvn exec:java -Dexec.mainClass="za.co.wethinkcode.robot.api.WorldApiServer" -Dexec.classpathScope="compile"
 

@@ -1,7 +1,7 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
-import za.co.wethinkcode.robot.server.Server.Server;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.World;
 
 @SuppressWarnings("unchecked")
@@ -14,21 +14,26 @@ public class StateCommand extends Command{
     /**
      * Builds the JsonObject for the state of the robots to send back to client.
      * @param world;
-     * @param server;
+//     * @param server;
      */
     @Override
-    public void execute(World world, Server server) {
+    public String execute(World world, String name) {
+        ResponseBuilder responseBuilder = new ResponseBuilder();
         JSONObject data = new JSONObject();
 
-        if (server.robot != null){
+        if (world.getRobot(name).getActivity()){
             data.put("message", "State");
-            server.response.addData(data);
-            server.response.add("result", "OK");
+            responseBuilder.addData(data);
+            responseBuilder.add("result", "OK");
+            responseBuilder.add("state", world.getRobot(name).getState());
+
         }
          else {
             data.put("message", "Robot does not exist");
-            server.response.addData(data);
-            server.response.add("result", "ERROR");
+            responseBuilder.addData(data);
+            responseBuilder.add("result", "ERROR");
+
         }
+        return responseBuilder.toString();
     }
 }

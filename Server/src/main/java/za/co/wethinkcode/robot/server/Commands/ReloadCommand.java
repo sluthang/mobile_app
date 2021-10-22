@@ -1,8 +1,8 @@
 package za.co.wethinkcode.robot.server.Commands;
 
 import org.json.simple.JSONObject;
+import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 import za.co.wethinkcode.robot.server.Utility.Schedule;
-import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.World;
 
 import java.io.IOException;
@@ -18,19 +18,23 @@ public class ReloadCommand extends Command{
      * Starts the task scheduler for laying a mine on the field.
      * Build the JsonObject to send to the client stating that the reloading has begun.
      * @param world;
-     * @param server;
+//     * @param server;
      */
     @Override
-    public void execute(World world, Server server) {
+    public String execute(World world, String name) {
+        ResponseBuilder responseBuilder  =  new ResponseBuilder();
         try {
-            server.robot.setStatus("RELOAD");
-            new Schedule(server, world, "reload", world.RELOAD_TIME);
+            world.getRobot(name).setStatus("RELOAD");
+            new Schedule(world, "reload", world.RELOAD_TIME, name);
         } catch (IOException e) {
             e.printStackTrace();
         }
         JSONObject data = new JSONObject();
         data.put("message", "Reload");
-        server.response.addData(data);
-        server.response.add("result", "OK");
+        responseBuilder.addData(data);
+        responseBuilder.add("result", "OK");
+        responseBuilder.add("state", world.getRobot(name).getState());
+
+        return responseBuilder.toString();
     }
 }
