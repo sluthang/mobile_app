@@ -14,9 +14,9 @@ public class WorldApiHandler {
 
     private static Database database;
 
-    static {
+    WorldApiHandler(String dbUrl){
         try {
-            database = new Database("jdbc:sqlite:uss_victory_db.sqlite");
+            database = new Database(dbUrl);
         } catch (SQLException e) {
             e.printStackTrace();
         }

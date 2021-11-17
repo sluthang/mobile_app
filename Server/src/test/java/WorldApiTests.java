@@ -21,7 +21,7 @@ public class WorldApiTests {
         Position BOTTOM_RIGHT = new Position((worldSize/2),(-worldSize/2));
         Position TOP_LEFT = new Position((-worldSize/2),(worldSize/2));
         World world = new World("emptymaze", BOTTOM_RIGHT, TOP_LEFT, new Position(1,1), true);
-        server = new WorldApiServer(world);
+        server = new WorldApiServer(world, "jdbc:sqlite:uss_victory_db.sqlite");
         server.start(6000);
     }
 

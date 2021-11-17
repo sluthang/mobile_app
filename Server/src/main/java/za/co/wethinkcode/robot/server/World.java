@@ -7,14 +7,13 @@ import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.Robot.UpdateResponse;
 import za.co.wethinkcode.robot.server.Server.MultiServer;
-import za.co.wethinkcode.robot.server.Server.Server;
 import za.co.wethinkcode.robot.server.Utility.ResponseBuilder;
 
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("unused")
-public class World{
+public class World {
     //Hashmap of robots currently in play.
     private final ConcurrentHashMap<String, Robot> robots = new ConcurrentHashMap<>();
     //Sets the maps Bottom-right and top-left positions set in the config file.

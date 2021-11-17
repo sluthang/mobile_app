@@ -118,9 +118,4 @@ public class MultiServer {
         }
         return null;
     }
-
-    public static int getWorldSize(){
-
-        return worldSize;
-    }
 }

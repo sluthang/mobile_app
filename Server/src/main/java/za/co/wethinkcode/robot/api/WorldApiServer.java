@@ -22,15 +22,16 @@ public class WorldApiServer {
     public static ConfigReader config = new ConfigReader();
     public final Javalin server;
 
-    public WorldApiServer(World world){
+    public WorldApiServer(World world, String dbUrl){
         server = Javalin.create(config -> {
             config.defaultContentType = "application/json";
             config.registerPlugin(new OpenApiPlugin(getApiOptions()));
         });
+        WorldApiHandler worldApiHandler = new WorldApiHandler(dbUrl);
 
-        this.server.get("/world", context -> WorldApiHandler.getObstaclesFromCurrentWorld(context, world));
-        this.server.get("/world/{world}", context -> WorldApiHandler.getObstaclesFromDatabase(context));
-        this.server.post("/robot/{name}", context -> WorldApiHandler.launchRobotCommand(context, world));
+        this.server.get("/world", context -> worldApiHandler.getObstaclesFromCurrentWorld(context, world));
+        this.server.get("/world/{world}", context -> worldApiHandler.getObstaclesFromDatabase(context));
+        this.server.post("/robot/{name}", context -> worldApiHandler.launchRobotCommand(context, world));
     }
 
     private OpenApiOptions getApiOptions(){
@@ -96,7 +97,7 @@ public class WorldApiServer {
             System.out.println("Obstacles: " + world.getObstacles().size());
             System.out.println("Server running & waiting for client connections.");
 
-            WorldApiServer server = new WorldApiServer(world);
+            WorldApiServer server = new WorldApiServer(world, "jdbc:sqlite:uss_victory_db.sqlite");
             server.start(port);
     }
 

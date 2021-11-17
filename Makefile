@@ -29,6 +29,7 @@ run_reference_server_2x2_world_with_obstacle_tests: run_reference_server_2x2_wor
 
 # VARIABLES
 reference_server:= reference-server-0.2.1.jar
+uss_victory_api:= api-server-jar-with-dependencies.jar
 uss_victory_server := robot-worlds-server-0.3.0-jar-with-dependencies.jar
 2x2_world_port:= 6666
 2x2_world_with_obstacle_port:= 7676
@@ -62,6 +63,10 @@ run_dev_build_0,1_obstacle_2x2_world:
 	@echo "Running Dev build jar with obstacle at 0,1..."
 	java -jar output/$(uss_victory_server) -s 2 -o 0,1 &
 
+run_api_dev_build:
+	@echo "Running api dev build..."
+	java -jar output/$(uss_victory_api) -s 2 -o 1,1 &
+
 run_all_non_server_unittests:
 	@echo "Running unit tests..."
 	cd Server; mvn surefire:test -Dtest=ForwardCommandTests
@@ -89,6 +94,10 @@ run_2x2_1,1_obstacle_acceptance_tests:
 run_2x2_0,1_obstacle_acceptance_tests:
 	@echo "Running 2x2 acceptance tests with obstacle..."
 	cd Server; mvn surefire:test -Dtest=LookWithObstacleAtZeroOne
+
+run_api_acceptance_tests:
+	@echo "Running api acceptance tests"
+	cd Server; mvn surefire:test -Dtest=WorldApiTests
 
 run_reference_server_jar:
 	@echo "Running The Reference Server Jar File..."
@@ -132,7 +141,7 @@ stop_uss_victory_server:
 
 clean:
 	@echo "Cleaning up..."
-	rm -rf output Server/outptut Client/output && mvn clean
+	rm -rf output Server/output Client/output && mvn clean
 
 #must run mvn compile before running this command.
 run_api_sever:

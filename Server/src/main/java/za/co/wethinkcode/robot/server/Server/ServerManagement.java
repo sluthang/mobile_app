@@ -54,8 +54,7 @@ public class ServerManagement implements Runnable {
                 }
 
             } catch (Exception e) {
-//                e.printStackTrace();
-                System.out.println("ERROR");
+                //ignore if input string is empty.
             }
         }
     }
