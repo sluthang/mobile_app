@@ -148,3 +148,9 @@ run_api_sever:
 	@echo "Running API Server..."
 	cd Server; mvn exec:java -Dexec.mainClass="za.co.wethinkcode.robot.api.WorldApiServer" -Dexec.classpathScope="compile"
 
+add_eodsql:
+	@echo "Adding eodsql to .m2/repository"
+	chmod +x add_eodsql.sh
+	./add_eodsql.sh
+
+
