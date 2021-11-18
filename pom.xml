@@ -6,7 +6,7 @@
 
     <groupId>za.co.wethinkcode.robot</groupId>
     <artifactId>0115-robot-world</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>Client</module>
