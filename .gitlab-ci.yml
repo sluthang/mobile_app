@@ -62,6 +62,7 @@ release_multiserver:
   stage: deploy
 
   before_script:
+    - apt-get update -y
     - apt-get install docker.io -y
     - docker login -u sluthang -p QBytvCSqKQ1uXbPefsNW gitlab.wethinkco.de:5050
 
