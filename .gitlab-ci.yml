@@ -81,5 +81,6 @@ release_multiserver:
   script:
     - make add_eodsql
     - make release_build
-    - docker tag uss-victory-server:0.1.0 gitlab.wethinkco.de:5050/sprocopo/uss-victory
+    - docker build -t uss-victory-server:0.4.0 .
+    - docker tag uss-victory-server:0.4.0 gitlab.wethinkco.de:5050/sprocopo/uss-victory
     - docker push gitlab.wethinkco.de:5050/sprocopo/uss-victory
