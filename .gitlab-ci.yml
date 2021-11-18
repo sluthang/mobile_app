@@ -12,26 +12,23 @@ default:
 
   before_script:
     - apt-get update && apt install make
+    - make add_eodsql
+    - mvn clean install -U -DskipTests
+    - mvn verify -DskipTests
+    - make development_build
 
 unittests-job:
   stage: test
 
   script:
-    - mvn clean install -U -DskipTests
     - echo "Running all unit tests"
-    - make add_eodsql
-    - mvn verify -DskipTests
     - make run_all_non_server_unittests
 
 uss-victory-default-world-accpeptance-tests-job:
   stage: test
 
   script:
-    - mvn clean install -U -DskipTests
-    - make add_eodsql
-    - make development_build
     - make run_uss_victory_server_jar
-    - mvn verify -DskipTests
     - make run_1x1_acceptance_tests
   after_script:
     - make stop_uss_victory_server
@@ -40,11 +37,7 @@ uss-victory-2x2-world-acceptance-tests-job:
   stage: test
 
   script:
-    - mvn clean install -U -DskipTests
-    - make add_eodsql
-    - make development_build
     - make run_dev_build_2x2_world
-    - mvn verify -DskipTests
     - make run_2x2_acceptance_tests
   after_script:
     - make stop_uss_victory_server
@@ -53,11 +46,7 @@ uss-victory-obstacle-1,1-2x2-world-acceptance-tests-job:
   stage: test
 
   script:
-    - mvn clean install -U -DskipTests
-    - make add_eodsql
-    - make development_build
     - make run_dev_build_1,1_obstacle_2x2_world
-    - mvn verify -DskipTests
     - make run_2x2_1,1_obstacle_acceptance_tests
   after_script:
     - make stop_uss_victory_server
@@ -73,13 +62,10 @@ release_multiserver:
   stage: deploy
 
   before_script:
-    - apt-get update -y
     - apt-get install docker.io -y
-    - apt-get install make -y
     - docker login -u sluthang -p QBytvCSqKQ1uXbPefsNW gitlab.wethinkco.de:5050
 
   script:
-    - make add_eodsql
     - make release_build
     - docker build -t uss-victory-server:0.4.0 .
     - docker tag uss-victory-server:0.4.0 gitlab.wethinkco.de:5050/sprocopo/uss-victory
