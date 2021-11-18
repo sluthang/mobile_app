@@ -152,5 +152,3 @@ add_eodsql:
 	@echo "Adding eodsql to .m2/repository"
 	chmod +x add_eodsql.sh
 	./add_eodsql.sh
-
-

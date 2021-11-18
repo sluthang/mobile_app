@@ -17,6 +17,7 @@ unittests-job:
   stage: test
 
   script:
+    - mvn clean install -U
     - echo "Running all unit tests"
     - make add_eodsql
     - mvn verify -DskipTests
@@ -26,6 +27,7 @@ uss-victory-default-world-accpeptance-tests-job:
   stage: test
 
   script:
+    - mvn clean install -U
     - make add_eodsql
     - make development_build
     - make run_uss_victory_server_jar
@@ -38,6 +40,7 @@ uss-victory-2x2-world-acceptance-tests-job:
   stage: test
 
   script:
+    - mvn clean install -U
     - make add_eodsql
     - make development_build
     - make run_dev_build_2x2_world
@@ -50,6 +53,7 @@ uss-victory-obstacle-1,1-2x2-world-acceptance-tests-job:
   stage: test
 
   script:
+    - mvn clean install -U
     - make add_eodsql
     - make development_build
     - make run_dev_build_1,1_obstacle_2x2_world
