@@ -43,4 +43,8 @@ public class WorldApiHandler {
         context.status(HttpCode.CREATED);
         context.result(world.handleCommand(command, name));
     }
+
+    public static void getListOfRobots(Context context, World world){
+
+    }
 }
