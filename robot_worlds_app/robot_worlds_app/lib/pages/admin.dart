@@ -43,7 +43,11 @@ class _AdminScreenState extends State<AdminScreen> {
               TextField(
                 keyboardType: TextInputType.text,
                 controller: text,
-                decoration: const InputDecoration(labelText: 'Type Command here!'),
+                decoration: const InputDecoration(
+                  hintText: 'Type Command here!',
+                  border: OutlineInputBorder(),
+                ),
+
               ),
               const SizedBox(
                 height: 15,
@@ -65,13 +69,8 @@ class _AdminScreenState extends State<AdminScreen> {
         title: const Text('Admin Page'),
         backgroundColor: Colors.blue,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(20),
-          itemCount: _commandList.length,
-          itemBuilder: (BuildContext context, int index) => ListTile(
-            title: Text(_commandList[index].text),
+      //body:,
 
-          )),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.edit),
           onPressed: () => _showTextBox(context)),
