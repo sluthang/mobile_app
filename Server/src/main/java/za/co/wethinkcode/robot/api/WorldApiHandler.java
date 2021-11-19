@@ -11,8 +11,6 @@ import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.World;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class WorldApiHandler {
 
@@ -60,7 +58,16 @@ public class WorldApiHandler {
     }
 
     public static void killRobot(Context context, World world){
-
+        String name = context.pathParamAsClass("name", String.class).get();
+        context.header("Location", "/admin/robot/" + name);
+        try {
+            world.kill(world, "Killed by admin", name);
+            context.status(HttpCode.OK);
+            context.result("Success");
+        } catch (Exception e){
+            context.status(HttpCode.BAD_REQUEST);
+            context.result("Robot does not exist");
+        }
     }
 
     public static void addObstaclesToWorld(Context context, World world){

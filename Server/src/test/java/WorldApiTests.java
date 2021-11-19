@@ -58,7 +58,7 @@ public class WorldApiTests {
 
     @Test
     @DisplayName("POST /robot/{name}")
-    public void launchRobotCommandApiEndpoint(){
+    public void launchRobotCommandApiEndpointTest(){
         HttpResponse<JsonNode> response = Unirest.post("http://localhost:6000/robot/HAL")
                 .header("Content-Type", "application/json")
                 .body("{\"robot\":\"HAL\",\"arguments\":[\"sniper\",\"999\",\"1\"],\"command\":\"launch\"}")
@@ -72,7 +72,7 @@ public class WorldApiTests {
     }
 
     @Test
-    public void GetListOfRobots(){
+    public void GetListOfRobotsTest(){
         HttpResponse<JsonNode> response = Unirest.get("http://localhost:6000/admin/robots").asJson();
 
         assertEquals(200, response.getStatus());
@@ -84,7 +84,7 @@ public class WorldApiTests {
     }
 
     @Test
-    public void addOneRobotAndGetListOfRobots(){
+    public void addOneRobotAndGetListOfRobotsTest(){
 
         HttpResponse<JsonNode> launchResponse = Unirest.post("http://localhost:6000/robot/HAL")
                 .header("Content-Type", "application/json")
@@ -101,5 +101,22 @@ public class WorldApiTests {
         assertNotNull(responseData.getObject());
         assertEquals("{\"robots\":[\"HAL\"]}", responseData.getObject().toString());
 
+    }
+
+    @Test
+    public void killRobotEndpointTest() {
+        HttpResponse<JsonNode> launchResponse = Unirest.post("http://localhost:6000/robot/HAL")
+                .header("Content-Type", "application/json")
+                .body("{\"robot\":\"HAL\",\"arguments\":[\"sniper\",\"999\",\"1\"],\"command\":\"launch\"}")
+                .asJson();
+
+        assertEquals(201, launchResponse.getStatus());
+
+        HttpResponse<JsonNode> deleteResponse = Unirest.delete("http://localhost:6000/admin/robot/HAL").
+                header("Content-Type", "application/json")
+                .asJson();
+
+        assertNotNull(deleteResponse);
+        assertEquals(200, deleteResponse.getStatus());
     }
 }
