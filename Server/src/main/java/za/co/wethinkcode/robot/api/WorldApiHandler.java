@@ -2,13 +2,17 @@ package za.co.wethinkcode.robot.api;
 
 import io.javalin.http.Context;
 import io.javalin.http.HttpCode;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import za.co.wethinkcode.robot.persistence.Database;
 import za.co.wethinkcode.robot.server.Commands.Command;
+import za.co.wethinkcode.robot.server.Robot.Robot;
 import za.co.wethinkcode.robot.server.World;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WorldApiHandler {
 
@@ -45,6 +49,33 @@ public class WorldApiHandler {
     }
 
     public static void getListOfRobots(Context context, World world){
+        JSONObject response = new JSONObject();
+        JSONArray robots = new JSONArray();
+        for (Robot worldRobots : world.getRobots().values()){
+            robots.add(worldRobots.getName());
+        }
+        response.put("robots", robots);
+        context.status(HttpCode.OK);
+        context.result(String.valueOf(response));
+    }
+
+    public static void killRobot(Context context, World world){
+
+    }
+
+    public static void addObstaclesToWorld(Context context, World world){
+
+    }
+
+    public static void deleteListOfObstacles(Context context, World world){
+
+    }
+
+    public static void saveWorldMap(Context context, World world){
+
+    }
+
+    public static void loadAndSetMap(Context context, World world){
 
     }
 }

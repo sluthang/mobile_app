@@ -32,6 +32,7 @@ public class WorldApiServer {
         this.server.get("/world", context -> worldApiHandler.getObstaclesFromCurrentWorld(context, world));
         this.server.get("/world/{world}", context -> worldApiHandler.getObstaclesFromDatabase(context));
         this.server.post("/robot/{name}", context -> worldApiHandler.launchRobotCommand(context, world));
+        this.server.get("/admin/robots", context -> worldApiHandler.getListOfRobots(context, world));
     }
 
     private OpenApiOptions getApiOptions(){

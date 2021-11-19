@@ -173,7 +173,5 @@ public class World {
         //Sends response to client and closes their thread.
         world.getRobot(name).setActivity(false);
         world.removeRobot(name);
-//        if(socket_server)
-//        world.getRobot(name).getOut().println(response);
     }
 }

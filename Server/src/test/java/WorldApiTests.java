@@ -1,3 +1,4 @@
+import io.swagger.util.Json;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.UnirestException;
@@ -60,7 +61,7 @@ public class WorldApiTests {
     public void launchRobotCommandApiEndpoint(){
         HttpResponse<JsonNode> response = Unirest.post("http://localhost:6000/robot/HAL")
                 .header("Content-Type", "application/json")
-                .body("{\"robot\":\"hal\",\"arguments\":[\"sniper\",\"999\",\"1\"],\"command\":\"launch\"}")
+                .body("{\"robot\":\"HAL\",\"arguments\":[\"sniper\",\"999\",\"1\"],\"command\":\"launch\"}")
                 .asJson();
         assertEquals(201, response.getStatus());
 
@@ -68,5 +69,37 @@ public class WorldApiTests {
 
         assertNotNull(responseData.getObject());
         assertEquals("OK", responseData.getObject().get("result"));
+    }
+
+    @Test
+    public void GetListOfRobots(){
+        HttpResponse<JsonNode> response = Unirest.get("http://localhost:6000/admin/robots").asJson();
+
+        assertEquals(200, response.getStatus());
+        JsonNode responseData = response.getBody();
+
+        assertNotNull(responseData.getObject());
+        assertEquals("{\"robots\":[]}", responseData.getObject().toString());
+
+    }
+
+    @Test
+    public void addOneRobotAndGetListOfRobots(){
+
+        HttpResponse<JsonNode> launchResponse = Unirest.post("http://localhost:6000/robot/HAL")
+                .header("Content-Type", "application/json")
+                .body("{\"robot\":\"HAL\",\"arguments\":[\"sniper\",\"999\",\"1\"],\"command\":\"launch\"}")
+                .asJson();
+
+        assertEquals(201, launchResponse.getStatus());
+
+        HttpResponse<JsonNode> response = Unirest.get("http://localhost:6000/admin/robots").asJson();
+
+        assertEquals(200, response.getStatus());
+        JsonNode responseData = response.getBody();
+
+        assertNotNull(responseData.getObject());
+        assertEquals("{\"robots\":[\"HAL\"]}", responseData.getObject().toString());
+
     }
 }
