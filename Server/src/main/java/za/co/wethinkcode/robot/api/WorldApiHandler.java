@@ -5,6 +5,7 @@ import io.javalin.http.HttpCode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.persistence.Database;
 import za.co.wethinkcode.robot.server.Commands.Command;
 import za.co.wethinkcode.robot.server.Robot.Robot;
@@ -70,8 +71,12 @@ public class WorldApiHandler {
         }
     }
 
-    public static void addObstaclesToWorld(Context context, World world){
+    public static void addObstaclesToWorld(Context context, World world) throws ParseException{
+        JSONObject request = (JSONObject)JSONValue.parse(context.body());
 
+        world.getMaze().createObjects(request);
+        context.result("Success");
+        context.status(HttpCode.CREATED);
     }
 
     public static void deleteListOfObstacles(Context context, World world){

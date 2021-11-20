@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robot.server.Map;
 
-import org.json.JSONObject;
+//import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.server.Robot.Position;
 import za.co.wethinkcode.robot.server.Robot.Robot;
@@ -37,6 +38,8 @@ public interface Maze {
     void addAllObstacles(World world);
 
     void clearObjects();
+
+    void createObjects(JSONObject jsonObject) throws ParseException;
 
     /**
      * Checks if this maze has at least one obstacle that blocks the path that goes from coordinate (x1, y1) to (x2, y2).

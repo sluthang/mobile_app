@@ -34,6 +34,7 @@ public class WorldApiServer {
         this.server.post("/robot/{name}", context -> worldApiHandler.launchRobotCommand(context, world));
         this.server.get("/admin/robots", context -> worldApiHandler.getListOfRobots(context, world));
         this.server.delete("/admin/robot/{name}", context -> worldApiHandler.killRobot(context, world));
+        this.server.post("/admin/obstacles", context -> worldApiHandler.addObstaclesToWorld(context, world));
     }
 
     private OpenApiOptions getApiOptions(){

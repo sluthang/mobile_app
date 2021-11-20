@@ -1,7 +1,8 @@
 package za.co.wethinkcode.robot.server.Map;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.server.Robot.Position;
@@ -285,9 +286,14 @@ public class BaseMaze implements Maze {
     }
 
     public void addObstacleListType(Vector<Obstacle> objects, String type) {
+
         for (Obstacle obstacle: objects){
-            this.obstacles.put(new JSONObject().put("type", type).put("position",
-                    new JSONArray().put(obstacle.getBottomLeftX()).put(obstacle.getBottomLeftY())));
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(obstacle.getBottomLeftX());
+            jsonArray.add(obstacle.getBottomLeftY());
+            jsonObject.put("type", type);
+            jsonObject.put("position", jsonArray);
         }
     }
 
@@ -297,8 +303,8 @@ public class BaseMaze implements Maze {
         addObstacleListType(world.getMaze().getPits(), "PIT");
         addObstacleListType(world.getMaze().getMines(), "MINE");
 
-        for (int i = 0; i < obstacles.length(); i++){
-            this.objects.append("objects", obstacles.get(i));
+        for (int i = 0; i < obstacles.size(); i++){
+            this.objects.put("objects", obstacles.get(i));
         }
     }
 
@@ -307,6 +313,32 @@ public class BaseMaze implements Maze {
         this.objects.clear();
 
     }
+
+    public void createObjects(JSONObject jsonObject){
+        JSONParser parser = new JSONParser();
+
+        JSONArray jsonArray = (JSONArray) jsonObject.get("objects");
+
+        for (Object o : jsonArray) {
+            JSONObject json = (JSONObject) o;
+            JSONArray position = (JSONArray) json.get("position");
+            int x = Integer.parseInt(position.get(0).toString());
+            int y = Integer.parseInt(position.get(1).toString());
+
+            switch (json.get("type").toString()) {
+                case "OBSTACLE":
+                    createObstacles(new Position(x, y));
+                    break;
+                case "PIT":
+                    createPit(new Position(x, y));
+                    break;
+                case "MINE":
+                    createMine(new Position(x, y));
+                    break;
+            }
+        }
+    }
+
 
     /**
      * Converts a json string into a json object.

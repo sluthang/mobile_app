@@ -15,13 +15,14 @@ public class WorldApiTests {
 
 
     private static WorldApiServer server;
+    private static World world;
 
     @BeforeAll
     public static void startServer(){
         int worldSize = 2;
         Position BOTTOM_RIGHT = new Position((worldSize/2),(-worldSize/2));
         Position TOP_LEFT = new Position((-worldSize/2),(worldSize/2));
-        World world = new World("emptymaze", BOTTOM_RIGHT, TOP_LEFT, new Position(1,1), true);
+        world = new World("emptymaze", BOTTOM_RIGHT, TOP_LEFT, new Position(1,1), true);
         server = new WorldApiServer(world, "jdbc:sqlite:uss_victory_db.sqlite");
         server.start(6000);
     }
@@ -118,5 +119,15 @@ public class WorldApiTests {
 
         assertNotNull(deleteResponse);
         assertEquals(200, deleteResponse.getStatus());
+    }
+
+    @Test
+    public void addObstaclesToWorldEndpointTest(){
+        HttpResponse<JsonNode> response = Unirest.post("http://localhost:6000/admin/obstacles")
+                .header("Content-Type", "application/json")
+                .body("{\"objects\":[{\"position\": [1,1],\"type\":\"OBSTACLE\"}]}")
+                .asJson();
+        assertEquals(201, response.getStatus());
+        assertEquals(2, world.getMaze().getObstacles().size());
     }
 }
