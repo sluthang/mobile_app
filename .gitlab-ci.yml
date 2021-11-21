@@ -71,7 +71,7 @@ release_multiserver:
   script:
     - make release_build
     - docker login -u sluthang -p QBytvCSqKQ1uXbPefsNW gitlab.wethinkco.de:5050
-    - docker build -t uss-victory-server:0.4.2 -f docker/socker-server/Dockerfile .
+    - docker build -t uss-victory-server:0.4.2 -f docker/socket-server/Dockerfile .
     - docker tag uss-victory-server:0.4.2 gitlab.wethinkco.de:5050/sprocopo/uss-victory
     - docker push gitlab.wethinkco.de:5050/sprocopo/uss-victory
 
@@ -82,6 +82,6 @@ release_api:
   script:
     - make api_release_build
     - docker login -u sluthang -p QBytvCSqKQ1uXbPefsNW gitlab.wethinkco.de:5050
-    - docker build -t uss-victory-server:1.3 -f docker/api/Dockerfile .
-    - docker tag uss-victory-api:1.3 gitlab.wethinkco.de:5050/sprocopo/uss-victory
+    - docker build -t uss-victory-api-server:1.3 -f docker/api/Dockerfile .
+    - docker tag uss-victory-api-server:1.3 gitlab.wethinkco.de:5050/sprocopo/uss-victory
     - docker push gitlab.wethinkco.de:5050/sprocopo/uss-victory
