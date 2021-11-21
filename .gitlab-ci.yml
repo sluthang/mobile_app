@@ -70,6 +70,7 @@ release_multiserver:
   stage: deploy
 
   script:
+    - docker images
     - make release_build
     - docker login -u sluthang -p QBytvCSqKQ1uXbPefsNW gitlab.wethinkco.de:5050
     - docker build -t uss-victory-server:0.4.2 -f docker/socket-server/Dockerfile .
