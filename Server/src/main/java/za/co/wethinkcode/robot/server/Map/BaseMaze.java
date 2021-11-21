@@ -74,6 +74,18 @@ public class BaseMaze implements Maze {
         this.minesList.add(new Mines(position.getX(), position.getY()));
     }
 
+    public void deleteObstacle(Position position){
+        this.obstaclesList.removeIf(obstacle -> position.getX() == obstacle.getBottomLeftX() && position.getY() == obstacle.getBottomLeftY());
+    }
+
+    public void deleteMine(Position position){
+        this.minesList.removeIf(obstacle -> position.getX() == obstacle.getBottomLeftX() && position.getY() == obstacle.getBottomLeftY());
+    }
+
+    public void deletePit(Position position){
+        this.pitsList.removeIf(obstacle -> position.getX() == obstacle.getBottomLeftX() && position.getY() == obstacle.getBottomLeftY());
+    }
+
     /**
      * Takes in 3 parameters, old and new position and checks if the path is blocked per each obstacle in the
      * obstacle lists as well as the list of robots currently in play.
@@ -303,8 +315,8 @@ public class BaseMaze implements Maze {
         addObstacleListType(world.getMaze().getPits(), "PIT");
         addObstacleListType(world.getMaze().getMines(), "MINE");
 
-        for (int i = 0; i < obstacles.size(); i++){
-            this.objects.put("objects", obstacles.get(i));
+        for (Object obstacle : obstacles) {
+            this.objects.put("objects", obstacle);
         }
     }
 
@@ -316,7 +328,6 @@ public class BaseMaze implements Maze {
 
     public void createObjects(JSONObject jsonObject){
         JSONParser parser = new JSONParser();
-
         JSONArray jsonArray = (JSONArray) jsonObject.get("objects");
 
         for (Object o : jsonArray) {
@@ -339,6 +350,29 @@ public class BaseMaze implements Maze {
         }
     }
 
+    public void deleteObjects(JSONObject jsonObject) {
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray = (JSONArray) jsonObject.get("objects");
+
+        for (Object o : jsonArray) {
+            JSONObject json = (JSONObject) o;
+            JSONArray position = (JSONArray) json.get("position");
+            int x = Integer.parseInt(position.get(0).toString());
+            int y = Integer.parseInt(position.get(1).toString());
+
+            switch (json.get("type").toString()) {
+                case "OBSTACLE":
+                    deleteObstacle(new Position(x, y));
+                    break;
+                case "PIT":
+                    deletePit(new Position(x, y));
+                    break;
+                case "MINE":
+                    deleteMine(new Position(x, y));
+                    break;
+            }
+        }
+    }
 
     /**
      * Converts a json string into a json object.

@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>robot-worlds-server</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.2</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -65,6 +65,43 @@
                             <archive>
                                 <manifest>
                                     <mainClass>za.co.wethinkcode.robot.server.Server.MultiServer</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                                <phase>package</phase> <!-- bind to the packaging phase -->
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>api-release-build</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>3.3.0</version>
+                        <configuration>
+                            <finalName>api-server</finalName>
+                            <outputDirectory>../output</outputDirectory>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <archive>
+                                <manifest>
+                                    <mainClass>za.co.wethinkcode.robot.api.WorldApiServer</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

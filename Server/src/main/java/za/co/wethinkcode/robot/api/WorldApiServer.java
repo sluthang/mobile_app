@@ -35,15 +35,16 @@ public class WorldApiServer {
         this.server.get("/admin/robots", context -> worldApiHandler.getListOfRobots(context, world));
         this.server.delete("/admin/robot/{name}", context -> worldApiHandler.killRobot(context, world));
         this.server.post("/admin/obstacles", context -> worldApiHandler.addObstaclesToWorld(context, world));
+        this.server.delete("/admin/obstacles", context -> worldApiHandler.deleteListOfObstacles(context, world));
     }
 
     private OpenApiOptions getApiOptions(){
         Info applicationInfo = new Info()
-                .version("1.0")
+                .version("1.3")
                 .description("My Application");
         return new OpenApiOptions(applicationInfo).path("/swagger-docs")
                 .swagger(new SwaggerOptions("/swagger")
-                        .title("My swagger thing"));
+                        .title("Uss Victory API Documentation"));
     }
 
     public static void main(String[] args) {

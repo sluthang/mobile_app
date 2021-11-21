@@ -30,7 +30,7 @@ run_reference_server_2x2_world_with_obstacle_tests: run_reference_server_2x2_wor
 # VARIABLES
 reference_server:= reference-server-0.2.1.jar
 uss_victory_api:= api-server-jar-with-dependencies.jar
-uss_victory_server := robot-worlds-server-0.3.0-jar-with-dependencies.jar
+uss_victory_server := robot-worlds-server-0.4.2-jar-with-dependencies.jar
 2x2_world_port:= 6666
 2x2_world_with_obstacle_port:= 7676
 1x1_world_port:= 6767
@@ -50,6 +50,10 @@ development_build:
 api_development_build:
 	@echo "Building the release jar file..."
 	cd Server ; mvn package -Papi-server-development-build
+
+api_release_build:
+	@echo "Building the api server release jar file..."
+	cd Server ; mvn package -Papi-release-build -DskipTests
 
 run_dev_build_2x2_world:
 	@echo "Running Dev build jar file..."

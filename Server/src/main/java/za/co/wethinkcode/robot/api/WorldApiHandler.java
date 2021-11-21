@@ -73,14 +73,16 @@ public class WorldApiHandler {
 
     public static void addObstaclesToWorld(Context context, World world) throws ParseException{
         JSONObject request = (JSONObject)JSONValue.parse(context.body());
-
         world.getMaze().createObjects(request);
         context.result("Success");
         context.status(HttpCode.CREATED);
     }
 
     public static void deleteListOfObstacles(Context context, World world){
-
+        JSONObject request = (JSONObject)JSONValue.parse(context.body());
+        world.getMaze().deleteObjects(request);
+        context.result("Success");
+        context.status(HttpCode.OK);
     }
 
     public static void saveWorldMap(Context context, World world){

@@ -12,6 +12,7 @@ default:
 
   before_script:
     - apt-get update && apt install make
+    - apt-get install docker.io -y
     - make add_eodsql
     - mvn clean install -U -DskipTests
     - mvn verify -DskipTests
@@ -57,18 +58,30 @@ compile:
   script:
     - make compile
 
+uss-victory-api-server-acceptance-tests:
+  stage: test
+
+  script:
+    - make run_api_acceptance_tests
+
 release_multiserver:
   
   stage: deploy
 
-  before_script:
-    - apt-get update -y && apt install make
-    - apt-get install docker.io -y
+  script:
+    - make release_build
     - docker login -u sluthang -p QBytvCSqKQ1uXbPefsNW gitlab.wethinkco.de:5050
+    - docker build -t uss-victory-server:0.4.2 -f docker/socker-server/Dockerfile .
+    - docker tag uss-victory-server:0.4.2 gitlab.wethinkco.de:5050/sprocopo/uss-victory
+    - docker push gitlab.wethinkco.de:5050/sprocopo/uss-victory
+
+release_api:
+
+  stage: deploy
 
   script:
-    - make add_eodsql
-    - make release_build
-    - docker build -t uss-victory-server:0.4.0 .
-    - docker tag uss-victory-server:0.4.0 gitlab.wethinkco.de:5050/sprocopo/uss-victory
+    - make api_release_build
+    - docker login -u sluthang -p QBytvCSqKQ1uXbPefsNW gitlab.wethinkco.de:5050
+    - docker build -t uss-victory-server:1.3 -f docker/api/Dockerfile .
+    - docker tag uss-victory-api:1.3 gitlab.wethinkco.de:5050/sprocopo/uss-victory
     - docker push gitlab.wethinkco.de:5050/sprocopo/uss-victory

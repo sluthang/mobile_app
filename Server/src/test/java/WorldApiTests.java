@@ -1,4 +1,3 @@
-import io.swagger.util.Json;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.UnirestException;
@@ -70,6 +69,11 @@ public class WorldApiTests {
 
         assertNotNull(responseData.getObject());
         assertEquals("OK", responseData.getObject().get("result"));
+
+        HttpResponse<JsonNode> deleteResponse = Unirest.delete("http://localhost:6000/admin/robot/HAL").
+                header("Content-Type", "application/json")
+                .asJson();
+        assertEquals(200, deleteResponse.getStatus());
     }
 
     @Test
@@ -102,6 +106,11 @@ public class WorldApiTests {
         assertNotNull(responseData.getObject());
         assertEquals("{\"robots\":[\"HAL\"]}", responseData.getObject().toString());
 
+        HttpResponse<JsonNode> deleteResponse = Unirest.delete("http://localhost:6000/admin/robot/HAL").
+                header("Content-Type", "application/json")
+                .asJson();
+        assertEquals(200, deleteResponse.getStatus());
+
     }
 
     @Test
@@ -129,5 +138,15 @@ public class WorldApiTests {
                 .asJson();
         assertEquals(201, response.getStatus());
         assertEquals(2, world.getMaze().getObstacles().size());
+    }
+
+    @Test
+    public void deleteObstaclesFromWorldEndpointTest(){
+        HttpResponse<JsonNode> response = Unirest.delete("http://localhost:6000/admin/obstacles")
+                .header("Content-Type", "application/json")
+                .body("{\"objects\":[{\"position\": [1,1],\"type\":\"OBSTACLE\"}]}")
+                .asJson();
+        assertEquals(200, response.getStatus());
+        assertEquals(0, world.getMaze().getObstacles().size());
     }
 }
