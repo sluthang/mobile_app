@@ -13,6 +13,7 @@ default:
   before_script:
     - apt-get update && apt install make
     - apt-get install docker.io -y
+    - docker image prune
     - make add_eodsql
     - mvn clean install -U -DskipTests
     - mvn verify -DskipTests
