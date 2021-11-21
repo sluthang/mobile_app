@@ -13,11 +13,8 @@ default:
   before_script:
     - apt-get update && apt install make
     - apt-get install docker.io -y
-    - docker image prune
-    - docker images
     - make add_eodsql
     - mvn clean install -U -DskipTests
-    - mvn verify -DskipTests
     - make development_build
 
 unittests-job:
@@ -77,6 +74,7 @@ release_multiserver:
     - docker build -t uss-victory-server:0.4.2 -f docker/socket-server/Dockerfile .
     - docker tag uss-victory-server:0.4.2 gitlab.wethinkco.de:5050/sprocopo/uss-victory
     - docker push gitlab.wethinkco.de:5050/sprocopo/uss-victory
+    - docker image rm uss-victory-server:0.4.2 -f
 
 release_api:
 
@@ -88,3 +86,4 @@ release_api:
     - docker build -t uss-victory-api-server:1.3 -f docker/api/Dockerfile .
     - docker tag uss-victory-api-server:1.3 gitlab.wethinkco.de:5050/sprocopo/uss-victory
     - docker push gitlab.wethinkco.de:5050/sprocopo/uss-victory
+    - docker image rm uss-victory-api-server:1.3 -f
