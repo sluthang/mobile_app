@@ -14,7 +14,7 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
   late TextEditingController text;
-  late final List _commandList = [];
+  late final List <String>_commandList = <String>[];
 
   @override
   void initState(){
@@ -26,6 +26,17 @@ class _AdminScreenState extends State<AdminScreen> {
   void dispose(){
     text.dispose();
     super.dispose();
+  }
+
+  void addCommand(){
+    if(text.text == ' '){
+      _showTextBox(context);
+    }else{
+      setState(() {
+        _commandList.add(text.text);
+      });
+      print(_commandList);
+    }
   }
 
  void _showTextBox(BuildContext ctx){
@@ -47,15 +58,16 @@ class _AdminScreenState extends State<AdminScreen> {
                   hintText: 'Type Command here!',
                   border: OutlineInputBorder(),
                 ),
-
               ),
               const SizedBox(
                 height: 15,
               ),
               ElevatedButton(onPressed: (){
                 Navigator.pop(ctx);
+                addCommand();
                 text.clear();
               }, child: const Text('Execute!'))
+
             ],
           ),
         ));
@@ -69,7 +81,17 @@ class _AdminScreenState extends State<AdminScreen> {
         title: const Text('Admin Page'),
         backgroundColor: Colors.blue,
       ),
-      //body:,
+      body: ListView.builder(
+          //padding: const EdgeInsets.all(20),
+          itemCount: _commandList.length,
+          itemBuilder: (BuildContext context, int index) => ListTile(
+            title: Text(_commandList[index],
+              style: const TextStyle(fontSize: 20, color: Colors.black),
+              textAlign: TextAlign.start,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )),
 
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.edit),
