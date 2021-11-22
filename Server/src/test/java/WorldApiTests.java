@@ -149,4 +149,25 @@ public class WorldApiTests {
         assertEquals(200, response.getStatus());
         assertEquals(0, world.getMaze().getObstacles().size());
     }
+
+    @Test
+    public void loadWorldMapEndpointTest(){
+        HttpResponse<JsonNode> response = Unirest.get("http://localhost:6000/admin/load/beau")
+                .header("Content-Type", "application/json")
+                .asJson();
+
+        assertEquals(200, response.getStatus());
+        assertEquals(1, world.getMaze().getObstacles().size());
+        assertEquals(1, world.getMaze().getPits().size());
+    }
+
+    @Test
+    public void saveWorldMapEndpointTest(){
+        HttpResponse<JsonNode> response = Unirest.post("http://localhost:6000/admin/save/test1")
+                .header("Content-Type", "application/json")
+                .asJson();
+
+        assertEquals(1, world.getMaze().getObstacles().size());
+        assertEquals(201, response.getStatus());
+    }
 }

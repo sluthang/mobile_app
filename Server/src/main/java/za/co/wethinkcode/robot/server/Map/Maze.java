@@ -1,5 +1,6 @@
 package za.co.wethinkcode.robot.server.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import za.co.wethinkcode.robot.server.Robot.Position;
@@ -23,6 +24,8 @@ public interface Maze {
     Vector<Obstacle> getMines();
 
     JSONObject getObjects();
+
+    JSONArray getJsonObjects();
 
     void resetAllObstacles();
 

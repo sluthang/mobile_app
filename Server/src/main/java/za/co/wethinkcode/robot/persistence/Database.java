@@ -50,8 +50,8 @@ public class Database {
     }
 
     public void saveWorld(World world, String name) throws SQLException {
-        world.getMaze().addAllObstacles(world);
         connection.connect();
+        world.getMaze().addAllObstacles(world);
 
         this.productQuery.saveWorld(world.maze.getObjects().toString(), name, world.BOTTOM_RIGHT.getX() * 2);
 

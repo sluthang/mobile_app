@@ -21,6 +21,8 @@ public class BaseMaze implements Maze {
     Vector<Obstacle> minesList = new Vector<>();
     public JSONObject objects = new JSONObject();
     public JSONArray obstacles = new JSONArray();
+    public JSONArray jsonObjects = new JSONArray();
+
 
 
     /**
@@ -48,6 +50,10 @@ public class BaseMaze implements Maze {
 
     public JSONObject getObjects() {
         return this.objects;
+    }
+
+    public JSONArray getJsonObjects() {
+        return jsonObjects;
     }
 
     /**
@@ -297,6 +303,14 @@ public class BaseMaze implements Maze {
         }
     }
 
+//    public void addObstacleListType(Vector<Obstacle> objects, String type) {
+//        for (Obstacle obstacle: objects){
+//            this.obstacles.put(new JSONObject().put("type", type).put("position",
+//                    new JSONArray().put(obstacle.getBottomLeftX()).put(obstacle.getBottomLeftY())));
+//        }
+//    }
+
+
     public void addObstacleListType(Vector<Obstacle> objects, String type) {
 
         for (Obstacle obstacle: objects){
@@ -306,18 +320,20 @@ public class BaseMaze implements Maze {
             jsonArray.add(obstacle.getBottomLeftY());
             jsonObject.put("type", type);
             jsonObject.put("position", jsonArray);
+            this.obstacles.add(jsonObject);
         }
     }
-
 
     public void addAllObstacles(World world) {
         addObstacleListType(world.getMaze().getObstacles(), "OBSTACLE");
         addObstacleListType(world.getMaze().getPits(), "PIT");
         addObstacleListType(world.getMaze().getMines(), "MINE");
 
-        for (Object obstacle : obstacles) {
-            this.objects.put("objects", obstacle);
+        for (int i = 0; i < this.obstacles.size(); i++){
+            this.objects.put("objects", this.obstacles.get(i));
+            this.jsonObjects.add(this.objects.put("objects", this.obstacles.get(i)));
         }
+        this.objects.put("objects", this.jsonObjects);
     }
 
     public void clearObjects(){

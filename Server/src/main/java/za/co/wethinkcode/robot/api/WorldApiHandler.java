@@ -85,11 +85,23 @@ public class WorldApiHandler {
         context.status(HttpCode.OK);
     }
 
-    public static void saveWorldMap(Context context, World world){
-
+    public static void saveWorldMap(Context context, World world) throws SQLException {
+        String name = context.pathParamAsClass("world-name", String.class).get();
+        context.header("Location", "/admin/save/" + name);
+        database.saveWorld(world, name);
+        context.result("Success");
+        context.status(HttpCode.CREATED);
     }
 
-    public static void loadAndSetMap(Context context, World world){
-
+    public static void loadAndSetWorldMap(Context context, World world){
+        String name = context.pathParamAsClass("world-name", String.class).get();
+        context.header("Location", "/admin/load/" + name);
+        try {
+            database.readWorld(world, name);
+            context.result("Success");
+        } catch (Exception e){
+            context.result("World does not exist");
+            context.status(HttpCode.BAD_REQUEST);
+        }
     }
 }

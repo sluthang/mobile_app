@@ -36,6 +36,8 @@ public class WorldApiServer {
         this.server.delete("/admin/robot/{name}", context -> worldApiHandler.killRobot(context, world));
         this.server.post("/admin/obstacles", context -> worldApiHandler.addObstaclesToWorld(context, world));
         this.server.delete("/admin/obstacles", context -> worldApiHandler.deleteListOfObstacles(context, world));
+        this.server.post("/admin/save/{world-name}", context -> worldApiHandler.saveWorldMap(context, world));
+        this.server.get("/admin/load/{world-name}", context -> worldApiHandler.loadAndSetWorldMap(context, world));
     }
 
     private OpenApiOptions getApiOptions(){
