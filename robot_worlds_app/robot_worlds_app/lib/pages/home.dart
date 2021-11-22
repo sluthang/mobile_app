@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:robot_worlds_app/model/player.dart';
 import 'admin.dart';
 //import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 
@@ -13,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +26,10 @@ class _HomePageState extends State<HomePage> {
 
 final GlobalKey<FormState> _formkeyPlayer = GlobalKey<FormState>();
 final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-RegExp ipExp = RegExp(r"^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$", caseSensitive: false, multiLine: false);
+RegExp ipExp = RegExp(
+    r"^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$",
+    caseSensitive: false,
+    multiLine: false);
 RegExp _portNumberRegex = RegExp("[0-9]+");
 RegExp _pinNumberRegex = RegExp("[0-9]+");
 
@@ -37,70 +40,68 @@ Future<void> showLoginDialog(BuildContext context) async {
         final TextEditingController _textController = TextEditingController();
         return AlertDialog(
           content: Form(
-              autovalidateMode: AutovalidateMode.disabled, key: _formkey,
-              child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        validator:(value){
-                          if(value!.isEmpty || !ipExp.hasMatch(value)){
-                            return "Please enter IP address";
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'Enter IP Address',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      TextFormField(
-                        validator:(value){
-                          if(value!.isEmpty || !_portNumberRegex.hasMatch(value)){
-                            return "Please enter Port Number";
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Port Number',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _textController,
-                        validator: (value){
-                          if(value!.isEmpty || !_pinNumberRegex.hasMatch(value)){
-                            return 'Please enter a correct pin';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Admin Pin',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ],
-                  )
-              ),
-              ),
-            actions:<Widget> [
-              TextButton(
+            autovalidateMode: AutovalidateMode.disabled,
+            key: _formkey,
+            child: SingleChildScrollView(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty || !ipExp.hasMatch(value)) {
+                      return "Please enter IP address";
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Enter IP Address',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty || !_portNumberRegex.hasMatch(value)) {
+                      return "Please enter Port Number";
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Enter Port Number',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                TextFormField(
+                  controller: _textController,
+                  validator: (value) {
+                    if (value!.isEmpty || !_pinNumberRegex.hasMatch(value)) {
+                      return 'Please enter a correct pin';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Enter Admin Pin',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ],
+            )),
+          ),
+          actions: <Widget>[
+            TextButton(
                 child: const Text('Login'),
-                onPressed: (){
-                  if(_formkey.currentState!.validate()){
+                onPressed: () {
+                  if (_formkey.currentState!.validate()) {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (ctx) =>
-                        const AdminScreen())
-                    );
-                  }else{
+                        MaterialPageRoute(
+                            builder: (ctx) => const AdminScreen()));
+                  } else {
                     return;
                   }
-                }
-              )
-            ],
-          );
-        });
+                })
+          ],
+        );
+      });
 }
 
 Widget buttonLayout(BuildContext context) {
@@ -121,7 +122,7 @@ Widget buttonLayout(BuildContext context) {
             "Admin",
             style: TextStyle(fontSize: 20.0, color: Colors.white),
           ),
-          onPressed: (){
+          onPressed: () {
             showLoginDialog(context);
           },
         ),
@@ -136,6 +137,8 @@ final TextEditingController _robotNameController = TextEditingController();
 final TextEditingController _robotTypeController = TextEditingController();
 
 Future<void> playerForm(BuildContext context) async {
+  PlayerModel player = PlayerModel();
+
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -170,6 +173,7 @@ Future<void> playerForm(BuildContext context) async {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a valid IP address';
                             }
+                            player.ipAddress = value;
                             return null;
                           },
                           maxLines: 1,
@@ -188,6 +192,7 @@ Future<void> playerForm(BuildContext context) async {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a valid PORT';
                             }
+                            player.portNumber = value;
                             return null;
                           },
                           maxLines: 1,
@@ -206,6 +211,7 @@ Future<void> playerForm(BuildContext context) async {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a name for your robot';
                             }
+                            player.robotName = value;
                             return null;
                           },
                           maxLines: 1,
@@ -224,6 +230,7 @@ Future<void> playerForm(BuildContext context) async {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a valid robot type';
                             }
+                            player.robotType = value;
                             return null;
                           },
                           maxLines: 1,
