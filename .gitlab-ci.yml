@@ -16,7 +16,7 @@ default:
     - make add_eodsql
     - mvn clean install -U -DskipTests
     - make development_build
-    - sudo docker system prune -a -f
+    - docker system prune -a -f
 
 unittests-job:
   stage: test
