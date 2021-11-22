@@ -251,6 +251,10 @@ Future<void> playerForm(BuildContext context) async {
                           onPressed: () {
                             if (_formkeyPlayer.currentState!.validate()) {
                               _formkeyPlayer.currentState!.save();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                  builder: (ctx) => const PlayerScreen()));
                             }
                           },
                         ),
