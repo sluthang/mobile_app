@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:joystick/joystick.dart';
 
 class PlayerScreen extends StatefulWidget {
   const PlayerScreen({Key? key}) : super(key: key);
@@ -19,7 +20,43 @@ class _PlayerScreenState extends State<PlayerScreen> {
         title: const Text('Player Page'),
         backgroundColor: Colors.blue,
       ),
-     // body:,
+      body: Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Joystick(
+            size: 130,
+            isDraggable: false,
+            iconColor: Colors.blue,
+            backgroundColor: Colors.black,
+            opacity: 0.5,
+            joystickMode: JoystickModes.all,
+            onUpPressed: () {
+              // if (selectedGallery - 1 > 0)
+              //   setState(() {
+              //     selectedGallery -= 1;
+              //   });
+            },
+            onLeftPressed: () {
+              // if (selectedImage - 1 > 0)
+              //   setState(() {
+              //     selectedImage -= 1;
+              //   });
+            },
+            onRightPressed: () {
+              // if (selectedImage + 1 < galleryList[selectedGallery].length)
+              //   setState(() {
+              //     selectedImage += 1;
+              // });
+            },
+            onDownPressed: () {
+              // if (selectedGallery + 1 < galleryList.length)
+              //   setState(() {
+              //     selectedGallery += 1;
+              //   });
+            },
+            onPressed: (_direction) {
+              // print("pressed $_direction");
+            }),
+      ),
     );
   }
 }
