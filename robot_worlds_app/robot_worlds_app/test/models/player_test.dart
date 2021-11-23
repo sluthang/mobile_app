@@ -3,7 +3,7 @@ import 'package:robot_worlds_app/model/player.dart';
 
 void main() {
   group('Testing Player', () {
-    var player = PlayerModel();
+    var player = PlayerModel(robotName: '', ipAddress: '', robotType: '', portNumber: '');
 
     test('IP Address getter and setter', () {
       var ipAddress = "20.10.11.47";

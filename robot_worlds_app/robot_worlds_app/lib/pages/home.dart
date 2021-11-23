@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:robot_worlds_app/model/player.dart';
 import 'admin.dart';
 import 'player.dart';
-//import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
+import 'package:robot_worlds_app/model/admin.dart';
+import 'package:robot_worlds_app/controller/player_response.dart';
+import 'package:robot_worlds_app/controller/admin_response.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -35,11 +40,15 @@ RegExp ipExp = RegExp(
 RegExp _portNumberRegex = RegExp("[0-9]+");
 RegExp _pinNumberRegex = RegExp("[0-9]+");
 
+final TextEditingController _ipAdminController = TextEditingController();
+final TextEditingController _porAdminController = TextEditingController();
+final TextEditingController _pinAdminController = TextEditingController();
+
 Future<void> showLoginDialog(BuildContext context) async {
+  AdminModel admin = AdminModel(adminPin: '', adminPorNumber: '', adminIpAddress: '');
   return await showDialog(
       context: context,
       builder: (context) {
-        final TextEditingController _textController = TextEditingController();
         return AlertDialog(
           content: Form(
             autovalidateMode: AutovalidateMode.disabled,
@@ -49,10 +58,12 @@ Future<void> showLoginDialog(BuildContext context) async {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
+                  controller: _ipAdminController,
                   validator: (value) {
                     if (value!.isEmpty || !ipExp.hasMatch(value)) {
-                      return "Please enter IP address";
+                      return "Please enter a correct IP address";
                     }
+                    admin.adminIpAddress = value;
                     return null;
                   },
                   decoration: const InputDecoration(
@@ -61,10 +72,12 @@ Future<void> showLoginDialog(BuildContext context) async {
                   ),
                 ),
                 TextFormField(
+                  controller: _porAdminController,
                   validator: (value) {
                     if (value!.isEmpty || !_portNumberRegex.hasMatch(value)) {
-                      return "Please enter Port Number";
+                      return "Please enter a correct Port Number";
                     }
+                    admin.adminPorNumber = value;
                     return null;
                   },
                   decoration: const InputDecoration(
@@ -73,11 +86,12 @@ Future<void> showLoginDialog(BuildContext context) async {
                   ),
                 ),
                 TextFormField(
-                  controller: _textController,
+                  controller: _pinAdminController,
                   validator: (value) {
                     if (value!.isEmpty || !_pinNumberRegex.hasMatch(value)) {
                       return 'Please enter a correct pin';
                     }
+                    admin.adminPin = value;
                     return null;
                   },
                   decoration: const InputDecoration(
@@ -89,10 +103,16 @@ Future<void> showLoginDialog(BuildContext context) async {
             )),
           ),
           actions: <Widget>[
-            TextButton(
+            ElevatedButton(
+                child: const Text('Cancel'),
+                onPressed: (){
+                  Navigator.pop(context);
+                }, ),
+            ElevatedButton(
                 child: const Text('Login'),
                 onPressed: () {
                   if (_formkey.currentState!.validate()) {
+                    getAdminJsonData(admin.adminIpAddress, admin.adminPorNumber);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -105,6 +125,8 @@ Future<void> showLoginDialog(BuildContext context) async {
         );
       });
 }
+
+
 
 Widget buttonLayout(BuildContext context) {
   return Center(
@@ -139,7 +161,7 @@ final TextEditingController _robotNameController = TextEditingController();
 final TextEditingController _robotTypeController = TextEditingController();
 
 Future<void> playerForm(BuildContext context) async {
-  PlayerModel player = PlayerModel();
+  PlayerModel player = PlayerModel(robotName: '', ipAddress: '', robotType: '', portNumber: '');
 
   return showDialog(
       context: context,
@@ -177,7 +199,6 @@ Future<void> playerForm(BuildContext context) async {
                             }
                             player.ipAddress = value;
                             return null;
-                               return null;
                           },
                           maxLines: 1,
                           maxLength: 20,
@@ -247,10 +268,11 @@ Future<void> playerForm(BuildContext context) async {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
-                          child: const Text("Connect"),
+                          child: const Text("Launch"),
                           onPressed: () {
                             if (_formkeyPlayer.currentState!.validate()) {
                               _formkeyPlayer.currentState!.save();
+                              getPlayerJsonData(player.ipAddress, player.portNumber,player.robotName,player.robotType);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

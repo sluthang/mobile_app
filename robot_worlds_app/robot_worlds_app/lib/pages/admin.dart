@@ -67,11 +67,9 @@ class _AdminScreenState extends State<AdminScreen> {
                 addCommand();
                 text.clear();
               }, child: const Text('Execute!'))
-
             ],
           ),
         ));
-
   }
 
   @override
@@ -82,7 +80,6 @@ class _AdminScreenState extends State<AdminScreen> {
         backgroundColor: Colors.blue,
       ),
       body: ListView.builder(
-          //padding: const EdgeInsets.all(20),
           itemCount: _commandList.length,
           itemBuilder: (BuildContext context, int index) => ListTile(
             title: Text(_commandList[index],
