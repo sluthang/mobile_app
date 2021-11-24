@@ -9,7 +9,6 @@ import 'package:robot_worlds_app/model/admin.dart';
 import 'package:robot_worlds_app/controller/player_response.dart';
 import 'package:robot_worlds_app/controller/admin_response.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
 
@@ -20,7 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +43,8 @@ final TextEditingController _porAdminController = TextEditingController();
 final TextEditingController _pinAdminController = TextEditingController();
 
 Future<void> showLoginDialog(BuildContext context) async {
-  AdminModel admin = AdminModel(adminPin: '', adminPorNumber: '', adminIpAddress: '');
+  AdminModel admin =
+      AdminModel(adminPin: '', adminPorNumber: '', adminIpAddress: '');
   return await showDialog(
       context: context,
       builder: (context) {
@@ -104,15 +103,17 @@ Future<void> showLoginDialog(BuildContext context) async {
           ),
           actions: <Widget>[
             ElevatedButton(
-                child: const Text('Cancel'),
-                onPressed: (){
-                  Navigator.pop(context);
-                }, ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             ElevatedButton(
                 child: const Text('Login'),
                 onPressed: () {
                   if (_formkey.currentState!.validate()) {
-                    getAdminJsonData(admin.adminIpAddress, admin.adminPorNumber);
+                    getAdminJsonData(
+                        admin.adminIpAddress, admin.adminPorNumber);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -125,8 +126,6 @@ Future<void> showLoginDialog(BuildContext context) async {
         );
       });
 }
-
-
 
 Widget buttonLayout(BuildContext context) {
   return Center(
@@ -161,7 +160,8 @@ final TextEditingController _robotNameController = TextEditingController();
 final TextEditingController _robotTypeController = TextEditingController();
 
 Future<void> playerForm(BuildContext context) async {
-  PlayerModel player = PlayerModel(robotName: '', ipAddress: '', robotType: '', portNumber: '');
+  PlayerModel player =
+      PlayerModel(robotName: '', ipAddress: '', robotType: '', portNumber: '');
 
   return showDialog(
       context: context,
@@ -272,11 +272,17 @@ Future<void> playerForm(BuildContext context) async {
                           onPressed: () {
                             if (_formkeyPlayer.currentState!.validate()) {
                               _formkeyPlayer.currentState!.save();
-                              getPlayerJsonData(player.ipAddress, player.portNumber,player.robotName,player.robotType);
+                              getPlayerJsonData(
+                                  player.ipAddress,
+                                  player.portNumber,
+                                  player.robotName,
+                                  player.robotType);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                  builder: (ctx) => const PlayerScreen()));
+                                      builder: (ctx) => PlayerScreen(
+                                            player: player,
+                                          )));
                             }
                           },
                         ),

@@ -4,9 +4,15 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:joystick/joystick.dart';
+import 'package:robot_worlds_app/model/player.dart';
+
+PlayerModel playerInfo =
+    PlayerModel(ipAddress: '', portNumber: '', robotName: '', robotType: '');
 
 class PlayerScreen extends StatefulWidget {
-  const PlayerScreen({Key? key}) : super(key: key);
+  PlayerScreen({Key? key, required PlayerModel player}) : super(key: key) {
+    playerInfo = player;
+  }
 
   @override
   _PlayerScreenState createState() => _PlayerScreenState();
@@ -55,6 +61,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
             },
             onPressed: (_direction) {
               // print("pressed $_direction");
+              print(playerInfo.robotName);
             }),
       ),
     );
