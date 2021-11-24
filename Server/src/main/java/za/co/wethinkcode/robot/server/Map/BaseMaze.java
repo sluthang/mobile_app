@@ -303,14 +303,6 @@ public class BaseMaze implements Maze {
         }
     }
 
-//    public void addObstacleListType(Vector<Obstacle> objects, String type) {
-//        for (Obstacle obstacle: objects){
-//            this.obstacles.put(new JSONObject().put("type", type).put("position",
-//                    new JSONArray().put(obstacle.getBottomLeftX()).put(obstacle.getBottomLeftY())));
-//        }
-//    }
-
-
     public void addObstacleListType(Vector<Obstacle> objects, String type) {
 
         for (Obstacle obstacle: objects){

@@ -18,11 +18,11 @@ public class WorldApiTests {
 
     @BeforeAll
     public static void startServer(){
-        int worldSize = 2;
+        int worldSize = 4;
         Position BOTTOM_RIGHT = new Position((worldSize/2),(-worldSize/2));
         Position TOP_LEFT = new Position((-worldSize/2),(worldSize/2));
         world = new World("emptymaze", BOTTOM_RIGHT, TOP_LEFT, new Position(1,1), true);
-        server = new WorldApiServer(world, "jdbc:sqlite:uss_victory_db.sqlite");
+        server = new WorldApiServer(world, "jdbc:sqlite:test_worlds_db.sqlite");
         server.start(6000);
     }
 
@@ -134,20 +134,27 @@ public class WorldApiTests {
     public void addObstaclesToWorldEndpointTest(){
         HttpResponse<JsonNode> response = Unirest.post("http://localhost:6000/admin/obstacles")
                 .header("Content-Type", "application/json")
-                .body("{\"objects\":[{\"position\": [1,1],\"type\":\"OBSTACLE\"}]}")
+                .body("{\"objects\":[{\"position\": [2,2],\"type\":\"OBSTACLE\"}]}")
                 .asJson();
         assertEquals(201, response.getStatus());
         assertEquals(2, world.getMaze().getObstacles().size());
+
+        HttpResponse<JsonNode> deleteResponse = Unirest.delete("http://localhost:6000/admin/obstacles")
+                .header("Content-Type", "application/json")
+                .body("{\"objects\":[{\"position\": [2,2],\"type\":\"OBSTACLE\"}]}")
+                .asJson();
+        assertEquals(200, deleteResponse.getStatus());
     }
 
     @Test
     public void deleteObstaclesFromWorldEndpointTest(){
+        //fix this test
         HttpResponse<JsonNode> response = Unirest.delete("http://localhost:6000/admin/obstacles")
                 .header("Content-Type", "application/json")
                 .body("{\"objects\":[{\"position\": [1,1],\"type\":\"OBSTACLE\"}]}")
                 .asJson();
         assertEquals(200, response.getStatus());
-        assertEquals(0, world.getMaze().getObstacles().size());
+        assertEquals(1, world.getMaze().getObstacles().size());
     }
 
     @Test

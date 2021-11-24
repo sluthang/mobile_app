@@ -156,3 +156,12 @@ add_eodsql:
 	@echo "Adding eodsql to .m2/repository"
 	chmod +x add_eodsql.sh
 	./add_eodsql.sh
+
+create_test_database:
+	@echo "Creating test database..."
+	chmod +x create_test_db.sh
+	./create_test_db.sh
+
+delete_test_database:
+	@echo "Deleting test database..."
+	rm Server/test_worlds_db.sqlite
