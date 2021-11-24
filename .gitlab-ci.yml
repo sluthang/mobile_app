@@ -13,6 +13,7 @@ default:
   before_script:
     - apt-get update && apt install make
     - apt-get install docker.io -y
+    - apt-get install sqlite3 -y
     - make add_eodsql
     - mvn clean install -U -DskipTests
     - make development_build
