@@ -62,7 +62,9 @@ uss-victory-api-server-acceptance-tests:
   stage: test
 
   script:
+    - make create_test_database
     - make run_api_acceptance_tests
+    - make delete_test_database
 
 release_multiserver:
   
