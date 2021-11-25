@@ -4,10 +4,14 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:joystick/joystick.dart';
+import 'package:robot_worlds_app/controllers/commands.dart';
+import 'package:robot_worlds_app/model/command.dart';
 import 'package:robot_worlds_app/model/player.dart';
 
 PlayerModel playerInfo =
     PlayerModel(ipAddress: '', portNumber: '', robotName: '', robotType: '');
+
+Commands commands = Commands();
 
 class PlayerScreen extends StatefulWidget {
   PlayerScreen({Key? key, required PlayerModel player}) : super(key: key) {
@@ -46,7 +50,14 @@ Widget commandButtons(BuildContext context) {
               "Look",
               style: TextStyle(fontSize: 20.0, color: Colors.white),
             ),
-            onPressed: () async {}),
+            onPressed: () async {
+              Command response = await commands.issueCommand(
+                  playerInfo.robotName,
+                  "look",
+                  [],
+                  playerInfo.ipAddress,
+                  playerInfo.portNumber);
+            }),
       ]));
 }
 
@@ -60,29 +71,25 @@ Widget joystick(BuildContext context) {
         backgroundColor: Colors.black,
         opacity: 0.1,
         joystickMode: JoystickModes.all,
-        onUpPressed: () {
-          // if (selectedGallery - 1 > 0)
-          //   setState(() {
-          //     selectedGallery -= 1;
-          //   });
+        onUpPressed: () async {
+          Command response = await commands.issueCommand(playerInfo.robotName,
+              "forward", ["1"], playerInfo.ipAddress, playerInfo.portNumber);
+          print(response.data);
         },
-        onLeftPressed: () {
-          // if (selectedImage - 1 > 0)
-          //   setState(() {
-          //     selectedImage -= 1;
-          //   });
+        onLeftPressed: () async {
+          Command response = await commands.issueCommand(playerInfo.robotName,
+              "turn", ["left"], playerInfo.ipAddress, playerInfo.portNumber);
+          print(response.data);
         },
-        onRightPressed: () {
-          // if (selectedImage + 1 < galleryList[selectedGallery].length)
-          //   setState(() {
-          //     selectedImage += 1;
-          // });
+        onRightPressed: () async {
+          Command response = await commands.issueCommand(playerInfo.robotName,
+              "turn", ["right"], playerInfo.ipAddress, playerInfo.portNumber);
+          print(response.data);
         },
-        onDownPressed: () {
-          // if (selectedGallery + 1 < galleryList.length)
-          //   setState(() {
-          //     selectedGallery += 1;
-          //   });
+        onDownPressed: () async {
+          Command response = await commands.issueCommand(playerInfo.robotName,
+              "back", ["1"], playerInfo.ipAddress, playerInfo.portNumber);
+          print(response.data);
         },
         onPressed: (_direction) {
           // print("pressed $_direction");
