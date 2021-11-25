@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:robot_worlds_app/model/player.dart';
@@ -8,6 +6,8 @@ import 'player.dart';
 import 'package:robot_worlds_app/model/admin.dart';
 import 'package:robot_worlds_app/controller/player_response.dart';
 import 'package:robot_worlds_app/controller/admin_response.dart';
+
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -19,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +54,7 @@ Future<void> showLoginDialog(BuildContext context) async {
             autovalidateMode: AutovalidateMode.disabled,
             key: _formkey,
             child: SingleChildScrollView(
-                child: Column(
+              child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
@@ -110,22 +111,29 @@ Future<void> showLoginDialog(BuildContext context) async {
             ),
             ElevatedButton(
                 child: const Text('Login'),
-                onPressed: () {
+                onPressed: () async{
                   if (_formkey.currentState!.validate()) {
-                    getAdminJsonData(
+                   await getAdminJsonData(
                         admin.adminIpAddress, admin.adminPorNumber);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (ctx) => const AdminScreen()));
+                  //  successAlert;
                   } else {
-                    return;
+                    Navigator.of(context).pop();
+                  //  unsuccessfulAlert;
+                   // print('FAILED TO CONNECT');
                   }
                 })
           ],
         );
       });
 }
+
+
+
+
 
 Widget buttonLayout(BuildContext context) {
   return Center(
@@ -269,20 +277,25 @@ Future<void> playerForm(BuildContext context) async {
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                           child: const Text("Launch"),
-                          onPressed: () {
+                          onPressed:  () async {
                             if (_formkeyPlayer.currentState!.validate()) {
-                              _formkeyPlayer.currentState!.save();
-                              getPlayerJsonData(
+                              //_formkeyPlayer.currentState!.save();
+                              await getPlayerJsonData(
                                   player.ipAddress,
                                   player.portNumber,
                                   player.robotName,
                                   player.robotType);
+                              //successAlert;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (ctx) => PlayerScreen(
                                             player: player,
                                           )));
+
+                            }else{
+                              Navigator.of(context).pop();
+                             // unsuccessfulAlert;
                             }
                           },
                         ),
