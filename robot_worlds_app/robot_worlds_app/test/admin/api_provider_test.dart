@@ -16,7 +16,7 @@ void main(){
       return Response(json.encode(mapJson), 200);
     });
 
-    final item = await apiProvider.issueCommand("hal", "launch", ["sniper","999","1"]);
+    final item = await apiProvider.issueCommand("hal", "launch", ["sniper","999","1"], "", "");
     expect(item.result, "OK");
     expect(item.shields, 5);
   });

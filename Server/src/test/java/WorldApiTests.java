@@ -77,7 +77,7 @@ public class WorldApiTests {
     }
 
     @Test
-    public void GetListOfRobotsTest(){
+    public void getListOfRobotsTest(){
         HttpResponse<JsonNode> response = Unirest.get("http://localhost:6000/admin/robots").asJson();
 
         assertEquals(200, response.getStatus());
