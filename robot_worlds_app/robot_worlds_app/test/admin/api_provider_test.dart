@@ -13,7 +13,7 @@ void main(){
                        'state': {"shields":5,"position":[0,0],"shots":1,"direction":"NORTH","status":"NORMAL"},
                        'data' :{"mine":10,"repair":10,"shields":5,"reload":10,"visibility":10,"position":[0,0]}
       };
-      return Response(json.encode(mapJson), 200);
+      return Response(json.encode(mapJson), 201);
     });
 
     final item = await apiProvider.issueCommand("hal", "launch", ["sniper","999","1"], "", "");

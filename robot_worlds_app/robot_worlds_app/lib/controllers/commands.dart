@@ -1,5 +1,4 @@
 import 'dart:convert';
-// import 'dart:html';
 import 'package:http/http.dart' show Client;
 import 'package:robot_worlds_app/model/command.dart';
 
@@ -15,13 +14,13 @@ class Commands {
     });
     final response = await client.post(
       Uri.parse(
-          'http://' + ipAddress + ':' + portNumber + '/robot/{$robotName}'),
+          'http://' + ipAddress + ':' + portNumber + '/robot/$robotName'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: body,
     );
-    print(body);
+
     if (response.statusCode == 201) {
       return Command.fromJson(jsonDecode(response.body));
     }

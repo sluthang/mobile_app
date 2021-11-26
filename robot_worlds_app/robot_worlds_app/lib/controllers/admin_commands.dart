@@ -1,10 +1,23 @@
 import 'dart:convert';
 import 'package:http/http.dart' show Client;
 
-
 class AdminController {
 
   Client client = Client();
+
+  Future<String> getRobots() async {
+    final response = await client.get(
+      Uri.parse("http://192.168.2.135:5000/admin/robots"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if(response.statusCode == 200){
+      return response.body.toString();
+    }
+    throw Exception('Failed to get robots');
+  }
 
   Future<String> addObstacles(List<String> obstacleList) async {
     final response = await client.post(
@@ -43,7 +56,7 @@ class AdminController {
 
   Future<String> killRobot(String robotName) async {
     final response = await client.delete(
-      Uri.parse("http://127.0.0.1:5000/admin/robot/$robotName"),
+      Uri.parse("http://192.168.2.135:5000/admin/robot/$robotName"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -52,12 +65,12 @@ class AdminController {
     if(response.statusCode == 200){
       return "Success";
     }
-    throw Exception('Failed to delete robot.');
+    throw Exception('Failed to kill robot.');
   }
 
   Future<String> saveWorldMap(String worldName) async {
     final response = await client.post(
-      Uri.parse("http://127.0.0.1:5000/admin/save/$worldName"),
+      Uri.parse("http://192.168.2.135:5000/admin/save/$worldName"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -71,7 +84,7 @@ class AdminController {
 
   Future<String> loadWorldMap(String worldName) async {
     final response = await client.get(
-      Uri.parse("http://127.0.0.1:5000/admin/load/$worldName"),
+      Uri.parse("http://192.168.2.135:5000/admin/load/$worldName"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

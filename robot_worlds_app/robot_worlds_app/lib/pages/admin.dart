@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:robot_worlds_app/controllers/admin_commands.dart';
 
 
 
@@ -16,6 +17,8 @@ class _AdminScreenState extends State<AdminScreen> {
   late TextEditingController text;
   late final List <String>_commandList = <String>[];
 
+  AdminController adminController = AdminController();
+
   @override
   void initState(){
     super.initState();
@@ -28,12 +31,29 @@ class _AdminScreenState extends State<AdminScreen> {
     super.dispose();
   }
 
-  void addCommand(){
+  void addCommand() async {
+    String commandOut = '';
+
+    List<String> arguments = text.text.split(" ");
+    switch(arguments[0]){
+      case 'robots': {
+          commandOut = await adminController.getRobots();
+      } break;
+      case 'save': {
+        commandOut = await adminController.saveWorldMap(arguments[1]);
+      } break;
+      case 'load': {
+        commandOut = await adminController.loadWorldMap(arguments[1]);
+      } break;
+      case 'delete': {
+        commandOut = await adminController.killRobot(arguments[1]);
+      } break;
+    }
     if(text.text == ' '){
       _showTextBox(context);
     }else{
       setState(() {
-        _commandList.add(text.text);
+        _commandList.add(commandOut);
       });
       print(_commandList);
     }
