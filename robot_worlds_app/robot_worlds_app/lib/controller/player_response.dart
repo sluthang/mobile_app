@@ -3,12 +3,10 @@ import 'package:robot_worlds_app/model/player.dart';
 import 'package:http/http.dart' as http;
 
 Future<PlayerModel>getPlayerJsonData(String ipAddress, String portNumber, robotName,robotType) async{
-  //var _auth = '';
   var response = await http
-      .post(Uri.parse('http://'+ ipAddress + ':'+ portNumber + '/robot/{$robotName}'),
+      .post(Uri.parse('http://'+ ipAddress + ':'+ portNumber + '/robot/$robotName'),
     headers: <String, String>{
       'Content-type' : 'application/json; charset=UTF-8',
-      //'Authorization' : 'Bearer $_auth',
     },
     body: jsonEncode(<String, dynamic>{
       'robot': robotName,
@@ -17,7 +15,7 @@ Future<PlayerModel>getPlayerJsonData(String ipAddress, String portNumber, robotN
     }),
   );
   if(response.statusCode == 201){
-    //print(response.statusCode);
+    print(response.statusCode);
     return PlayerModel.fromJson(jsonDecode(response.body));
   }else{
     throw Exception('Failed to create connection');

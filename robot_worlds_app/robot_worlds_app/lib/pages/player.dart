@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:convert';
-import 'package:http/http.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:joystick/joystick.dart';
 import 'package:robot_worlds_app/controllers/commands.dart';
@@ -57,6 +55,7 @@ Widget commandButtons(BuildContext context) {
                   [],
                   playerInfo.ipAddress,
                   playerInfo.portNumber);
+              print(response.data);
             }),
       ]));
 }

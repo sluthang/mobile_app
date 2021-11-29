@@ -43,95 +43,116 @@ final TextEditingController _ipAdminController = TextEditingController();
 final TextEditingController _porAdminController = TextEditingController();
 final TextEditingController _pinAdminController = TextEditingController();
 
-Future<void> showLoginDialog(BuildContext context) async {
+Future<void> showLoginDialog(BuildContext context) async{
   AdminModel admin =
       AdminModel(adminPin: '', adminPorNumber: '', adminIpAddress: '');
-  return await showDialog(
+  return showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Form(
-            autovalidateMode: AutovalidateMode.disabled,
-            key: _formkey,
-            child: SingleChildScrollView(
-              child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: _ipAdminController,
-                  validator: (value) {
-                    if (value!.isEmpty || !ipExp.hasMatch(value)) {
-                      return "Please enter a correct IP address";
-                    }
-                    admin.adminIpAddress = value;
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: 'Enter IP Address',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                TextFormField(
-                  controller: _porAdminController,
-                  validator: (value) {
-                    if (value!.isEmpty || !_portNumberRegex.hasMatch(value)) {
-                      return "Please enter a correct Port Number";
-                    }
-                    admin.adminPorNumber = value;
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: 'Enter Port Number',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                TextFormField(
-                  controller: _pinAdminController,
-                  validator: (value) {
-                    if (value!.isEmpty || !_pinNumberRegex.hasMatch(value)) {
-                      return 'Please enter a correct pin';
-                    }
-                    admin.adminPin = value;
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: 'Enter Admin Pin',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+      builder: (BuildContext context){
+        return SingleChildScrollView(
+          child: AlertDialog(
+            content: Stack(
+              clipBehavior: Clip.none,
+              children: <Widget>[
+                Form(
+                    key: _formkey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: _ipAdminController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty || !ipExp.hasMatch(value)) {
+                                return 'Please enter a valid IP address';
+                              }
+                              admin.adminIpAddress = value;
+                              return null;
+                            },
+                            maxLines: 1,
+                            maxLength: 20,
+                            decoration: const InputDecoration(
+                              hintText: 'IP ADDRESS',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: _porAdminController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty || !_portNumberRegex.hasMatch(value)) {
+                                return 'Please enter a valid Port Number';
+                              }
+                              admin.adminPorNumber = value;
+                              return null;
+                            },
+                            maxLines: 1,
+                            maxLength: 10,
+                            decoration: const InputDecoration(
+                              hintText: 'PORT NUMBER',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: _pinAdminController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty || !_pinNumberRegex.hasMatch(value)) {
+                                return 'Please enter a valid Pin Number';
+                              }
+                              admin.adminPin = value;
+                              return null;
+                            },
+                            maxLines: 1,
+                            maxLength: 5,
+                            decoration: const InputDecoration(
+                              hintText: 'PIN NUMBER',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                child: const Text('CANCEL'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              ElevatedButton(
+                                  child: const Text('LOGIN'),
+                                  onPressed: () async{
+                                    if (_formkey.currentState!.validate()) {
+                                      await getAdminJsonData(
+                                          admin.adminIpAddress, admin.adminPorNumber);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (ctx) => const AdminScreen()));
+                                    } else {
+                                      Navigator.of(context).pop();
+                                    }
+                                  })
+                            ],
+                          ),
+                        ),
+                      ],
+                    )),
               ],
-            )),
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
             ),
-            ElevatedButton(
-                child: const Text('Login'),
-                onPressed: () async{
-                  if (_formkey.currentState!.validate()) {
-                   await getAdminJsonData(
-                        admin.adminIpAddress, admin.adminPorNumber);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (ctx) => const AdminScreen()));
-                  //  successAlert;
-                  } else {
-                    Navigator.of(context).pop();
-                  //  unsuccessfulAlert;
-                   // print('FAILED TO CONNECT');
-                  }
-                })
-          ],
+          ),
         );
-      });
+      },
+  );
 }
-
-
 
 
 
@@ -142,7 +163,7 @@ Widget buttonLayout(BuildContext context) {
       children: <Widget>[
         ElevatedButton(
             child: const Text(
-              "Player",
+              "PLAYER",
               style: TextStyle(fontSize: 20.0, color: Colors.white),
             ),
             onPressed: () async {
@@ -150,7 +171,7 @@ Widget buttonLayout(BuildContext context) {
             }),
         ElevatedButton(
           child: const Text(
-            "Admin",
+            "ADMIN",
             style: TextStyle(fontSize: 20.0, color: Colors.white),
           ),
           onPressed: () {
@@ -179,19 +200,6 @@ Future<void> playerForm(BuildContext context) async {
             content: Stack(
               clipBehavior: Clip.none,
               children: <Widget>[
-                Positioned(
-                  right: -40.0,
-                  top: -40.0,
-                  child: InkResponse(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const CircleAvatar(
-                      child: Icon(Icons.close),
-                      backgroundColor: Colors.red,
-                    ),
-                  ),
-                ),
                 Form(
                   key: _formkeyPlayer,
                   child: Column(
@@ -275,29 +283,34 @@ Future<void> playerForm(BuildContext context) async {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          child: const Text("Launch"),
-                          onPressed:  () async {
-                            if (_formkeyPlayer.currentState!.validate()) {
-                              //_formkeyPlayer.currentState!.save();
-                              await getPlayerJsonData(
-                                  player.ipAddress,
-                                  player.portNumber,
-                                  player.robotName,
-                                  player.robotType);
-                              //successAlert;
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (ctx) => PlayerScreen(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              child: const Text('CANCEL'),
+                              onPressed: (){
+                                Navigator.pop(context);
+                              },
+                            ),
+                            ElevatedButton(
+                              child: const Text("LAUNCH"),
+                              onPressed:  () async {
+                                if (_formkeyPlayer.currentState!.validate()) {
+                                  await getPlayerJsonData(
+                                      player.ipAddress,
+                                      player.portNumber,
+                                      player.robotName,
+                                      player.robotType);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (ctx) => PlayerScreen(
                                             player: player,
                                           )));
-
-                            }else{
-                              Navigator.of(context).pop();
-                             // unsuccessfulAlert;
-                            }
-                          },
+                                }
+                              },
+                            ),
+                          ],
                         ),
                       )
                     ],

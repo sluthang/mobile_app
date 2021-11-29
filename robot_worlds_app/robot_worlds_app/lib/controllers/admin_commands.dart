@@ -7,7 +7,7 @@ class AdminController {
 
   Future<String> getRobots() async {
     final response = await client.get(
-      Uri.parse("http://192.168.2.135:5000/admin/robots"),
+      Uri.parse("http://172.17.0.1:5000/admin/robots"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -21,7 +21,7 @@ class AdminController {
 
   Future<String> addObstacles(List<String> obstacleList) async {
     final response = await client.post(
-      Uri.parse("http://127.0.0.1:5000/admin/obstacles"),
+      Uri.parse("http://20.10.11.124:5000/admin/obstacles"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
